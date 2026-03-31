@@ -1,0 +1,494 @@
+/**
+ * ITDashboard.css
+ * ---------------
+ */
+
+/* ===========================================================================
+   PAGE CONTAINER
+   =========================================================================== */
+
+.it-dash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ---- Welcome header ---- */
+.it-dash__welcome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.it-dash__greeting {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.it-dash__sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.it-dash__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   STAT CARDS ROW — 3 equal columns
+   =========================================================================== */
+
+.it-dash__stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+/* Individual IT stat card */
+.it-stat-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  animation: fadeInUp var(--transition-base) ease both;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.it-stat-card:nth-child(1) { animation-delay: 0ms; }
+.it-stat-card:nth-child(2) { animation-delay: 60ms; }
+.it-stat-card:nth-child(3) { animation-delay: 120ms; }
+
+/* Alert variant — red border when locked accounts exist */
+.it-stat-card--alert {
+  border-color: rgba(220, 38, 38, 0.3);
+  background-color: rgba(220, 38, 38, 0.02);
+}
+
+/* Coloured icon bubble — same themes as HRDashboard */
+.it-stat-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: var(--space-1);
+}
+
+.it-stat-card__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.it-stat-card__icon--primary {
+  background-color: rgba(197, 255, 0, 0.15);
+  color: #5a7a00;
+}
+
+.it-stat-card__icon--success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.it-stat-card__icon--warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.it-stat-card__icon--danger {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.it-stat-card__icon--info {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+.it-stat-card__value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  animation: countUp var(--transition-slow) ease both;
+}
+
+.it-stat-card__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.it-stat-card__sublabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   SPLIT ROW — Locked Accounts (50%) + Role Breakdown (50%)
+   =========================================================================== */
+
+.it-dash__split-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* ===========================================================================
+   EMPTY STATE
+   =========================================================================== */
+
+.it-dash__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.it-dash__empty-state svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-success);
+  opacity: 0.7;
+}
+
+.it-dash__empty-state p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   LOCKED ACCOUNTS LIST
+   =========================================================================== */
+
+.it-locked-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.it-locked-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: rgba(220, 38, 38, 0.04);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  border-radius: var(--radius-lg);
+  animation: fadeInUp var(--transition-base) ease both;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.it-locked-list__item:hover {
+  background-color: rgba(220, 38, 38, 0.07);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.it-locked-list__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Avatar circle with initials — dark red tint for locked accounts */
+.it-locked-list__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.it-locked-list__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.it-locked-list__name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.it-locked-list__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.it-locked-list__id {
+  font-family: var(--font-family-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  background-color: var(--color-card);
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* ===========================================================================
+   ROLE BREAKDOWN BAR CHART
+   =========================================================================== */
+
+.it-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.it-breakdown__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.it-breakdown__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.it-breakdown__role {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.it-breakdown__count {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.it-breakdown__bar-track {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.it-breakdown__bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow) ease;
+}
+
+/* Bar colours match the role themes */
+.it-breakdown__bar-fill--primary {
+  background-color: var(--color-primary);
+}
+
+.it-breakdown__bar-fill--info {
+  background-color: var(--color-info);
+}
+
+.it-breakdown__bar-fill--warning {
+  background-color: var(--color-warning);
+}
+
+.it-breakdown__pct {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* Summary row: X active, Y locked */
+.it-breakdown__summary {
+  display: flex;
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-2);
+}
+
+.it-breakdown__summary-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.it-breakdown__summary-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   AUDIT LOG TABLE
+   =========================================================================== */
+
+.it-dash__audit-card {
+  /* Inherits dash-card base styles */
+}
+
+/* Scrollable wrapper — prevents the table from overflowing on narrow screens */
+.it-audit-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.it-audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+/* Table header */
+.it-audit-table thead tr {
+  background-color: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.it-audit-table th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* Table body rows */
+.it-audit-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.it-audit-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.it-audit-table tbody tr:hover {
+  background-color: var(--color-card);
+}
+
+/* Row variant: failed login / lock events */
+.it-audit-table__row--warning {
+  background-color: rgba(217, 119, 6, 0.04);
+}
+
+.it-audit-table__row--warning:hover {
+  background-color: rgba(217, 119, 6, 0.08);
+}
+
+.it-audit-table__row--danger {
+  background-color: rgba(220, 38, 38, 0.04);
+}
+
+.it-audit-table__row--danger:hover {
+  background-color: rgba(220, 38, 38, 0.08);
+}
+
+.it-audit-table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+
+/* Timestamp column — monospace for alignment */
+.it-audit-table__timestamp {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Employee name */
+.it-audit-table__user {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* Employee ID — monospace code style */
+.it-audit-table__id {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background-color: var(--color-card);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* Action column — truncated with full text on hover via title attribute */
+.it-audit-table__action {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empty state row */
+.it-audit-table__empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: var(--space-8) !important;
+  font-size: var(--font-size-sm);
+}
+
+/* ===========================================================================
+   RESPONSIVE
+   =========================================================================== */
+
+@media (max-width: 1100px) {
+  .it-dash__stats-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .it-dash__stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .it-dash__split-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .it-dash__stats-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,372 @@
+/**
+ * MyDetails.css
+ * -------------
+ * Styles for the My Details personal information page.
+ * Four cards: Profile (full width), Address & Contact + Employment (side-by-side),
+ * Bank Details (full width).
+ */
+
+/* ===========================================================================
+   PAGE CONTAINER
+   =========================================================================== */
+
+.my-details-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 900px;
+}
+
+/* Two-column row used for Address+Employment cards */
+.my-details-row {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.my-details-row--2col {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ===========================================================================
+   BASE CARD
+   =========================================================================== */
+
+.my-details-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  padding: var(--space-6);
+  position: relative;
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+/* Card header row — title on left, edit icon on right */
+.my-details-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.my-details-card__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.my-details-card__hr-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Field grid inside cards */
+.my-details-card__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Bank details note below the grid */
+.my-details-card__bank-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Edit icon button — positioned absolute top-right of the profile card,
+   inline in the header for other cards */
+.edit-icon-btn {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+/* In header rows the button is inline, so reset the absolute positioning */
+.my-details-card__header .edit-icon-btn {
+  position: static;
+}
+
+.edit-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.edit-icon-btn:hover {
+  background-color: var(--color-navbar);
+  border-color: var(--color-navbar);
+  color: var(--color-primary);
+}
+
+/* ===========================================================================
+   PROFILE CARD — hero section
+   =========================================================================== */
+
+.my-details-card--profile {
+  /* Extra bottom padding to give breathing room */
+  padding-bottom: var(--space-6);
+}
+
+.profile-card__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Large avatar circle with initials */
+.profile-card__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.01em;
+}
+
+.profile-card__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.profile-card__name {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.profile-card__role-line {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.profile-card__badges {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Detail rows grid inside profile card */
+.my-details-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1);
+}
+
+/* ===========================================================================
+   DETAIL ROW — label + value pair
+   =========================================================================== */
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.detail-row:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.detail-row__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  min-width: 110px;
+}
+
+.detail-row__value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: right;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  word-break: break-word;
+}
+
+.detail-row__value--mono {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.02em;
+}
+
+/* Lock icon shown beside non-editable fields */
+.detail-row__lock {
+  width: 12px;
+  height: 12px;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   CANVAS CONTENTS
+   =========================================================================== */
+
+.my-details-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Success alert */
+.my-details-canvas__success {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-success-light);
+  color: var(--color-success-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  animation: fadeInUp var(--transition-fast) ease both;
+}
+
+.my-details-canvas__success svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Error alert */
+.my-details-canvas__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  background-color: var(--color-danger-light);
+  color: var(--color-danger-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.my-details-canvas__error svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Non-editable fields section (shown for context, greyed out) */
+.my-details-canvas__locked-fields {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-4);
+}
+
+.my-details-canvas__locked-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.my-details-canvas__locked-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-1) 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.my-details-canvas__locked-row code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  background-color: var(--color-white);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+/* Bank details warning banner */
+.my-details-canvas__bank-warning {
+  display: flex;
+  gap: var(--space-3);
+  background-color: var(--color-warning-light);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  padding: var(--space-3) var(--space-4);
+}
+
+.my-details-canvas__bank-warning svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-warning);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.my-details-canvas__bank-warning-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-warning-text);
+  margin-bottom: var(--space-1);
+}
+
+.my-details-canvas__bank-warning-body {
+  font-size: var(--font-size-xs);
+  color: var(--color-warning-text);
+  opacity: 0.85;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===========================================================================
+   RESPONSIVE
+   =========================================================================== */
+
+@media (max-width: 800px) {
+  .my-details-row--2col {
+    grid-template-columns: 1fr;
+  }
+  .my-details-card__grid {
+    grid-template-columns: 1fr;
+  }
+}

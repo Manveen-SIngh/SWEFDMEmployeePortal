@@ -1,0 +1,503 @@
+/**
+ * HRDashboard.css
+ * ---------------
+ */
+
+/* ===========================================================================
+   PAGE CONTAINER
+   =========================================================================== */
+
+.hr-dash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ---- Welcome header ---- */
+.hr-dash__welcome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.hr-dash__greeting {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.hr-dash__sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.hr-dash__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   STAT CARDS ROW — 4 equal columns
+   =========================================================================== */
+
+.hr-dash__stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+/* Individual stat card */
+.hr-stat-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+/* Stagger card animations */
+.hr-stat-card:nth-child(1) { animation-delay: 0ms; }
+.hr-stat-card:nth-child(2) { animation-delay: 60ms; }
+.hr-stat-card:nth-child(3) { animation-delay: 120ms; }
+.hr-stat-card:nth-child(4) { animation-delay: 180ms; }
+
+/* Coloured icon bubble */
+.hr-stat-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: var(--space-1);
+}
+
+.hr-stat-card__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Icon colour themes — match the semantic colour system */
+.hr-stat-card__icon--primary {
+  background-color: rgba(197, 255, 0, 0.15);
+  color: #5a7a00;
+}
+
+.hr-stat-card__icon--success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.hr-stat-card__icon--warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.hr-stat-card__icon--danger {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.hr-stat-card__icon--info {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+/* Large numeric value */
+.hr-stat-card__value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  animation: countUp var(--transition-slow) ease both;
+}
+
+/* Descriptive label below the number */
+.hr-stat-card__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+}
+
+/* Optional secondary label (e.g. "of 5 total") */
+.hr-stat-card__sublabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   SPLIT ROW — Pending Leave (60%) + Open Queries (40%)
+   =========================================================================== */
+
+.hr-dash__split-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-6);
+  align-items: start; /* Cards don't stretch to match heights */
+}
+
+.hr-dash__leave-card,
+.hr-dash__queries-card {
+  /* Inherit dash-card base styles — no overrides needed for structure */
+}
+
+/* ===========================================================================
+   EMPTY STATE (shared by leave queue and query list)
+   =========================================================================== */
+
+.hr-dash__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.hr-dash__empty-state svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-success);
+  opacity: 0.7;
+}
+
+.hr-dash__empty-state p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   PENDING LEAVE QUEUE
+   =========================================================================== */
+
+.hr-leave-queue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.hr-leave-queue__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.hr-leave-queue__item:hover {
+  border-color: var(--color-text-muted);
+  box-shadow: var(--shadow-sm);
+}
+
+.hr-leave-queue__employee {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Avatar circle with initials */
+.hr-leave-queue__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.hr-leave-queue__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hr-leave-queue__name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-leave-queue__dates {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-leave-queue__type {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-warning-text);
+}
+
+/* Approve + Reject buttons side by side */
+.hr-leave-queue__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   OPEN QUERIES LIST
+   =========================================================================== */
+
+.hr-query-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.hr-query-list__item {
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  animation: fadeInUp var(--transition-base) ease both;
+  cursor: default;
+  transition: border-color var(--transition-fast);
+}
+
+.hr-query-list__item:hover {
+  border-color: var(--color-text-muted);
+}
+
+.hr-query-list__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.hr-query-list__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  flex: 1;
+  line-height: var(--line-height-base);
+}
+
+.hr-query-list__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.hr-query-list__from {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.hr-query-list__date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.hr-query-list__sep {
+  color: var(--color-border);
+  font-size: var(--font-size-xs);
+}
+
+/* ===========================================================================
+   RECENT ACTIVITY FEED (full-width timeline)
+   =========================================================================== */
+
+.hr-dash__activity-card {
+  /* Inherits dash-card base styles */
+}
+
+.hr-activity-feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.hr-activity-feed__item {
+  display: flex;
+  gap: var(--space-4);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+/* Timeline connector — vertical line + dot */
+.hr-activity-feed__connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 16px;
+}
+
+.hr-activity-feed__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-bg);
+  flex-shrink: 0;
+  margin-top: 4px; /* Optical alignment with first line of text */
+}
+
+.hr-activity-feed__line {
+  width: 2px;
+  flex: 1;
+  background-color: var(--color-border);
+  margin: var(--space-1) 0;
+  min-height: 20px;
+}
+
+/* Event text content */
+.hr-activity-feed__content {
+  padding-bottom: var(--space-4);
+  flex: 1;
+}
+
+.hr-activity-feed__action {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-base);
+  margin: 0;
+}
+
+.hr-activity-feed__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.hr-activity-feed__user {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.hr-activity-feed__time {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+}
+
+.hr-activity-feed__sep {
+  color: var(--color-border);
+  font-size: var(--font-size-xs);
+}
+
+/* ===========================================================================
+   REJECTION CANVAS CONTENTS
+   =========================================================================== */
+
+.reject-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Summary box showing the leave request details being rejected */
+.reject-canvas__summary {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+}
+
+.reject-canvas__summary-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+}
+
+/* Definition list grid for the summary key/value pairs */
+.reject-canvas__summary-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+}
+
+.reject-canvas__summary-grid dt {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  align-self: center;
+}
+
+.reject-canvas__summary-grid dd {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Contextual hint above the rejection reason textarea */
+.reject-canvas__reason-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-2);
+}
+
+/* Character count guidance below the textarea */
+.reject-canvas__char-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+  margin-top: calc(-1 * var(--space-2));
+}
+
+/* ===========================================================================
+   RESPONSIVE
+   =========================================================================== */
+
+@media (max-width: 1200px) {
+  .hr-dash__stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .hr-dash__split-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .hr-dash__stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}

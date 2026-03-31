@@ -1,0 +1,392 @@
+/**
+ * EmployeeDirectory.css
+ * ---------------------
+ * Styles for the HR Employee Directory page.
+ */
+
+.emp-dir {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ---- Top bar ---- */
+.emp-dir__topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.emp-dir__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+/* Search input */
+.emp-dir__search-wrap {
+  position: relative;
+  min-width: 220px;
+  max-width: 340px;
+  flex: 1;
+}
+
+.emp-dir__search-icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.emp-dir__search {
+  width: 100%;
+  padding: var(--space-2) var(--space-3) var(--space-2) 2.25rem;
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.emp-dir__search:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(197, 255, 0, 0.15);
+}
+
+.emp-dir__filter-select {
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  min-width: 130px;
+  transition: border-color var(--transition-fast);
+}
+
+.emp-dir__filter-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Result count */
+.emp-dir__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: calc(-1 * var(--space-2));
+}
+
+/* ===========================================================================
+   EMPLOYEE TABLE
+   =========================================================================== */
+
+.emp-dir__table-wrap {
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.emp-dir__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.emp-dir__table thead tr {
+  background-color: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.emp-dir__table th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.emp-dir__row {
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.emp-dir__row:last-child { border-bottom: none; }
+
+.emp-dir__row:hover { background-color: var(--color-card); }
+
+.emp-dir__table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+
+.emp-dir__id {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  background-color: var(--color-card);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.emp-dir__name-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.emp-dir__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.emp-dir__full-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.emp-dir__email {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.emp-dir__region { color: var(--color-text-secondary); }
+.emp-dir__start-date { white-space: nowrap; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+
+.emp-dir__empty-cell {
+  text-align: center;
+  padding: var(--space-10) !important;
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   VIEW/EDIT CANVAS CONTENTS
+   =========================================================================== */
+
+.emp-dir-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.emp-dir-canvas__profile {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.emp-dir-canvas__avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.emp-dir-canvas__name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.emp-dir-canvas__job {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.emp-dir-canvas__badges {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.emp-dir-canvas__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.emp-dir-canvas__section--edit {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+
+.emp-dir-canvas__section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.emp-dir-canvas__editable-note {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-text);
+  background-color: var(--color-primary);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.emp-dir-canvas__fields { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.emp-dir-canvas__field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.emp-dir-canvas__field-row:nth-child(odd) { background-color: rgba(0,0,0,0.02); }
+
+.emp-dir-canvas__field-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.emp-dir-canvas__field-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+.emp-dir-canvas__field-value--mono {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+}
+
+.emp-dir-canvas__success {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-success-light);
+  color: var(--color-success-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  animation: fadeInUp var(--transition-fast) ease both;
+}
+.emp-dir-canvas__success svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.emp-dir-canvas__error {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+/* Create success state */
+.emp-dir-canvas__create-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.emp-dir-canvas__create-success svg {
+  width: 52px;
+  height: 52px;
+  color: var(--color-success);
+}
+
+.emp-dir-canvas__create-success h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.emp-dir-canvas__create-success p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+.emp-dir-canvas__create-success code {
+  font-family: var(--font-family-mono);
+  background-color: var(--color-card);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* Create form canvas */
+.emp-dir-create-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.emp-dir-create-canvas__note {
+  display: flex;
+  gap: var(--space-3);
+  background-color: var(--color-info-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  font-size: var(--font-size-xs);
+  color: var(--color-info-text);
+  line-height: var(--line-height-relaxed);
+}
+
+.emp-dir-create-canvas__note svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--color-info); margin-top: 1px; }
+
+.required-marker { color: var(--color-danger); font-weight: var(--font-weight-bold); }

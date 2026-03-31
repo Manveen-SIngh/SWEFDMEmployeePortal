@@ -1,0 +1,473 @@
+/**
+ * AbsenceHolidays.css
+ * -------------------
+ * Styles for the Absence & Holidays page.
+ */
+
+/* ===========================================================================
+   TWO-COLUMN PAGE LAYOUT
+   =========================================================================== */
+
+.absence-page {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.absence-page__left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.absence-page__right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-8));
+}
+
+/* ===========================================================================
+   ENTITLEMENT CARD
+   =========================================================================== */
+
+.absence-entitlement {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.absence-entitlement__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Progress bar */
+.absence-entitlement__bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.absence-entitlement__bar-track {
+  width: 100%;
+  height: 10px;
+  background-color: var(--color-white);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.absence-entitlement__bar-fill {
+  height: 100%;
+  background-color: var(--color-danger);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow) ease;
+}
+
+.absence-entitlement__bar-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* 4 stat pills */
+.absence-entitlement__pills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.absence-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+/* Highlighted pill — the balance (remaining days) */
+.absence-pill--highlight {
+  background-color: var(--color-navbar);
+  border-color: var(--color-navbar);
+}
+
+.absence-pill--highlight .absence-pill__value {
+  color: var(--color-primary);
+}
+
+.absence-pill--highlight .absence-pill__label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.absence-pill__value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.absence-pill__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* ===========================================================================
+   LEAVE HISTORY
+   =========================================================================== */
+
+.absence-history {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  padding: var(--space-5);
+  animation: fadeInUp var(--transition-base) ease 100ms both;
+}
+
+.absence-history__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.absence-history__empty {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.absence-history__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.absence-history__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  animation: fadeInUp var(--transition-base) ease both;
+  transition: border-color var(--transition-fast);
+}
+
+.absence-history__item:hover {
+  border-color: var(--color-text-muted);
+}
+
+.absence-history__item-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.absence-history__dates {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.absence-history__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  flex-wrap: wrap;
+}
+
+.absence-history__sep {
+  color: var(--color-border);
+}
+
+.absence-history__id {
+  font-family: var(--font-family-mono);
+}
+
+/* Rejection reason — shown beneath rejected requests */
+.absence-history__rejection-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-danger-text);
+  background-color: var(--color-danger-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  margin-top: var(--space-1);
+  line-height: var(--line-height-relaxed);
+}
+
+.absence-history__rejection-reason svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ===========================================================================
+   RIGHT COLUMN — BOOK LEAVE CARD
+   =========================================================================== */
+
+.absence-book-card {
+  background-color: var(--color-navbar);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  text-align: center;
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.absence-book-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background-color: rgba(197, 255, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.absence-book-card__icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.absence-book-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+.absence-book-card__body {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.65);
+  line-height: var(--line-height-relaxed);
+}
+
+.absence-book-card__body strong {
+  color: var(--color-primary);
+}
+
+.absence-book-card__btn {
+  width: 100%;
+}
+
+/* Balance summary card */
+.absence-balance-summary {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.absence-balance-summary__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.absence-balance-summary__num {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.absence-balance-summary__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.absence-balance-summary__divider {
+  width: 1px;
+  height: 36px;
+  background-color: var(--color-border);
+}
+
+/* ===========================================================================
+   BOOKING CANVAS CONTENTS
+   =========================================================================== */
+
+.absence-canvas__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Remaining balance badge at top of canvas */
+.absence-canvas__balance-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.absence-canvas__balance-badge svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.absence-canvas__balance-badge strong {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Error alert */
+.absence-canvas__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  background-color: var(--color-danger-light);
+  color: var(--color-danger-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.absence-canvas__error svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Live day-count display */
+.absence-canvas__day-count {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background-color: var(--color-success-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.absence-canvas__day-count--warn {
+  background-color: var(--color-warning-light);
+  border-color: rgba(217, 119, 6, 0.2);
+}
+
+.absence-canvas__day-count-num {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-success);
+  line-height: 1;
+}
+
+.absence-canvas__day-count--warn .absence-canvas__day-count-num {
+  color: var(--color-warning);
+}
+
+.absence-canvas__day-count-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-success-text);
+}
+
+.absence-canvas__day-count--warn .absence-canvas__day-count-label {
+  color: var(--color-warning-text);
+}
+
+/* Balance warning text */
+.absence-canvas__balance-warn {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  background-color: var(--color-danger-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Success state inside the canvas */
+.absence-canvas__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.absence-canvas__success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-success-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-success);
+}
+
+.absence-canvas__success-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.absence-canvas__success h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.absence-canvas__success p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===========================================================================
+   RESPONSIVE
+   =========================================================================== */
+
+@media (max-width: 1000px) {
+  .absence-page {
+    grid-template-columns: 1fr;
+  }
+  .absence-page__right {
+    position: static;
+    order: -1; /* Book Leave card appears above calendar on mobile */
+  }
+  .absence-entitlement__pills {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

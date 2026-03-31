@@ -1,0 +1,90 @@
+/**
+ * RightCanvas.css
+ * ---------------
+ * Slide-in panel styling. Used across the entire portal for forms.
+ */
+
+/* Dark overlay behind canvas */
+.right-canvas__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: var(--z-overlay);
+  animation: fadeIn var(--transition-base) ease both;
+}
+
+/* Canvas panel — slides in from right */
+.right-canvas {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--canvas-width);
+  background-color: var(--color-white);
+  z-index: var(--z-canvas);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
+  animation: slideInRight var(--transition-canvas) cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Fixed header */
+.right-canvas__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.right-canvas__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.right-canvas__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.right-canvas__close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.right-canvas__close:hover {
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+}
+
+/* Scrollable body */
+.right-canvas__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+}
+
+/* Fixed footer */
+.right-canvas__footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  background-color: var(--color-white);
+}
+
+.right-canvas__footer .btn {
+  flex: 1;
+}

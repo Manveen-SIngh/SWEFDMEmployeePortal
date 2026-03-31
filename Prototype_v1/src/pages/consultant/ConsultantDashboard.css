@@ -1,0 +1,418 @@
+/**
+ * ConsultantDashboard.css
+ * -----------------------
+ * Styles for the consultant dashboard page.
+ */
+
+.consultant-dash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ---- Welcome header ---- */
+.consultant-dash__welcome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.consultant-dash__greeting {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.consultant-dash__sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.consultant-dash__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ---- Grid rows ---- */
+.consultant-dash__row {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.consultant-dash__row--2col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.consultant-dash__row--3col {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* ===========================================================================
+   DASH CARD — base card component
+   =========================================================================== */
+
+.dash-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  transition: box-shadow var(--transition-base);
+  animation: fadeInUp var(--transition-base) ease both;
+}
+
+.dash-card--wide {
+  /* Full width card — used for Weekly Planner */
+}
+
+.dash-card--span2 {
+  grid-column: span 2;
+}
+
+/* ---- Card header row ---- */
+.dash-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dash-card__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+
+.dash-card__header-aside {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Coloured icon circle */
+.dash-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-card__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dash-card__icon--primary {
+  background-color: rgba(197, 255, 0, 0.15);
+  color: #5a7a00;
+}
+
+.dash-card__icon--success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.dash-card__icon--warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.dash-card__icon--info {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+/* ---- Card values ---- */
+.dash-card__value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.dash-card__value--muted {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.dash-card__sub {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: calc(-1 * var(--space-1));
+}
+
+.dash-card__empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ---- "View …" link at card bottom ---- */
+.dash-card__link {
+  margin-top: auto;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: color var(--transition-fast);
+  letter-spacing: 0.01em;
+}
+
+.dash-card__link:hover {
+  color: var(--color-text-primary);
+}
+
+/* ===========================================================================
+   WEEKLY PLANNER STRIP
+   =========================================================================== */
+
+.weekly-planner {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
+}
+
+.weekly-planner__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.weekly-planner__day--today {
+  border-color: var(--color-text-primary);
+}
+
+.weekly-planner__day--leave {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+}
+
+.weekly-planner__day--pending {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning);
+}
+
+.weekly-planner__day--off {
+  background-color: var(--color-card);
+  border-color: var(--color-border);
+  opacity: 0.6;
+}
+
+.weekly-planner__day-name {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.weekly-planner__day-num {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.weekly-planner__day--today .weekly-planner__day-num {
+  color: var(--color-navbar);
+}
+
+.weekly-planner__day-status {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.weekly-planner__day--leave .weekly-planner__day-status {
+  color: var(--color-success-text);
+}
+
+.weekly-planner__day--pending .weekly-planner__day-status {
+  color: var(--color-warning-text);
+}
+
+/* ===========================================================================
+   PAYSLIP LIST
+   =========================================================================== */
+
+.payslip-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.payslip-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  gap: var(--space-4);
+}
+
+.payslip-list__period {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payslip-list__month {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.payslip-list__tax-year {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.payslip-list__amounts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.payslip-list__gross {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-mono);
+}
+
+.payslip-list__net {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+}
+
+/* ===========================================================================
+   TRAINING PROGRESS
+   =========================================================================== */
+
+.training-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.training-summary__counts {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.training-summary__done {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.training-summary__total {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.training-summary__bar-track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.training-summary__bar-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow) ease;
+}
+
+.training-summary__pct {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.training-modules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.training-modules__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.training-modules__name {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  flex: 1;
+  line-height: var(--line-height-base);
+}
+
+/* ===========================================================================
+   RESPONSIVE
+   =========================================================================== */
+
+@media (max-width: 1100px) {
+  .consultant-dash__row--3col {
+    grid-template-columns: 1fr 1fr;
+  }
+  .dash-card--span2 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .consultant-dash__row--2col,
+  .consultant-dash__row--3col {
+    grid-template-columns: 1fr;
+  }
+  .dash-card--span2 {
+    grid-column: span 1;
+  }
+  .weekly-planner {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-1);
+  }
+}

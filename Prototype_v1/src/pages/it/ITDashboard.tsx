@@ -13,9 +13,7 @@ import { getRegistry } from "../../services/Registry";
 import { Role } from "../../models/enums";
 import "./ITDashboard.css";
 
-// ---------------------------------------------------------------------------
-// Helper: time-of-day greeting
-// ---------------------------------------------------------------------------
+/* returns a greeting based on the time of day */
 function getGreeting(): string {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -23,9 +21,7 @@ function getGreeting(): string {
   return "Good evening";
 }
 
-// ---------------------------------------------------------------------------
-// Helper: format a Date to "29 Mar 2026, 08:45"
-// ---------------------------------------------------------------------------
+/* formats a date into a short readable string */
 function formatDateTime(date: Date): string {
   return new Date(date).toLocaleString("en-GB", {
     day: "numeric",
@@ -36,9 +32,7 @@ function formatDateTime(date: Date): string {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Helper: human-readable role label
-// ---------------------------------------------------------------------------
+/* turns a role value into a human-readable label */
 function roleLabel(role: Role): string {
   switch (role) {
     case Role.CONSULTANT:      return "Consultant";
@@ -55,9 +49,6 @@ export default function ITDashboard() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  // -------------------------------------------------------------------------
-  // Re-render trigger — same pattern used in HRDashboard
-  // -------------------------------------------------------------------------
   /**
    * Incrementing this counter forces useMemo to re-derive all dashboard data
    * from the Registry singleton. Used after unlock actions so the locked
@@ -66,9 +57,7 @@ export default function ITDashboard() {
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
-  // -------------------------------------------------------------------------
-  // Fetch all dashboard data from Registry
-  // -------------------------------------------------------------------------
+  /* pull everything we need from the registry */
   const { stats, lockedAccounts, allUsers, recentLogs } = useMemo(() => {
     const registry = getRegistry();
     return {
@@ -82,19 +71,7 @@ export default function ITDashboard() {
 
   if (!currentUser) return null;
 
-  // -------------------------------------------------------------------------
-  // Unlock an account
-  // -------------------------------------------------------------------------
-  /**
-   * Calls Registry.unlockAccount() which:
-   *   1. Sets the target user's isLocked flag to false
-   *   2. Resets their failedLoginAttempts counter to 0
-   *   3. Logs "Account unlocked by IT Support" in the audit trail
-   *
-   * The locked accounts card and stat cards re-derive after refresh.
-   *
-   * @param userID - The employeeID of the account to unlock 
-   */
+  /* unlocks an account and refreshes the page data */
   const handleUnlock = useCallback(
     (userID: string) => {
       const registry = getRegistry();
@@ -104,13 +81,7 @@ export default function ITDashboard() {
     [triggerRefresh]
   );
 
-  // -------------------------------------------------------------------------
-  // Role breakdown data for the visual bar chart
-  // -------------------------------------------------------------------------
-  /**
-   * Counts users per role for the bar chart card.
-   * Used to give IT Support a quick overview of the account distribution.
-   */
+  /* counts how many users are in each role for the bar chart */
   const roleBreakdown = useMemo(() => {
     const counts = {
       [Role.CONSULTANT]:      0,
@@ -128,14 +99,7 @@ export default function ITDashboard() {
     }));
   }, [allUsers]);
 
-  // -------------------------------------------------------------------------
-  // Resolve audit log user IDs to names
-  // -------------------------------------------------------------------------
-  /**
-   * Memoised lookup map from employeeID → "FirstName LastName".
-   * Built once from allUsers so each audit row doesn't call getUserByID
-   * individually (O(n) per row would be O(n²) total — unnecessary here).
-   */
+  /* map of employee ID to full name, used when rendering audit log rows */
   const userNameMap = useMemo(() => {
     const map: Record<string, string> = {};
     allUsers.forEach((u) => {
@@ -144,18 +108,13 @@ export default function ITDashboard() {
     return map;
   }, [allUsers]);
 
-  // -------------------------------------------------------------------------
-  // Role colour theme for the breakdown chart
-  // -------------------------------------------------------------------------
+  /* colours for each role in the breakdown chart */
   const roleTheme: Record<Role, string> = {
     [Role.CONSULTANT]:      "primary",
     [Role.HUMAN_RESOURCES]: "info",
     [Role.IT_SUPPORT]:      "warning",
   };
 
-  // -------------------------------------------------------------------------
-  // Render
-  // -------------------------------------------------------------------------
   return (
     <div className="it-dash">
 
@@ -178,7 +137,7 @@ export default function ITDashboard() {
       {/* ---- Row 1: 3 stat cards ---- */}
       <div className="it-dash__stats-row">
 
-        {/* Total Accounts */}
+        {/* Total accounts across all roles */}
         <div className="it-stat-card">
           <div className="it-stat-card__icon it-stat-card__icon--primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -196,7 +155,7 @@ export default function ITDashboard() {
           </button>
         </div>
 
-        {/* Locked Accounts — danger highlight if any are locked */}
+        {/* Locked accounts — turns red if any exist */}
         <div
           className={`it-stat-card ${
             stats.lockedAccounts > 0 ? "it-stat-card--alert" : ""
@@ -224,7 +183,7 @@ export default function ITDashboard() {
           </div>
         </div>
 
-        {/* Logins in last 24 hours */}
+        {/* Successful logins in the last 24 hours */}
         <div className="it-stat-card">
           <div className="it-stat-card__icon it-stat-card__icon--info">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -246,7 +205,7 @@ export default function ITDashboard() {
       {/* ---- Row 2: Locked Accounts + Role Breakdown ---- */}
       <div className="it-dash__split-row">
 
-        {/* Locked accounts card */}
+        {/* List of locked accounts with unlock buttons */}
         <div className="dash-card it-dash__locked-card">
           <div className="dash-card__header">
             <div className="dash-card__icon dash-card__icon--danger">
@@ -263,7 +222,7 @@ export default function ITDashboard() {
           </div>
 
           {lockedAccounts.length === 0 ? (
-            /* All clear — no locked accounts */
+            /* shown when no accounts are locked */
             <div className="it-dash__empty-state">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
@@ -271,13 +230,13 @@ export default function ITDashboard() {
               <p>No locked accounts — all users can sign in.</p>
             </div>
           ) : (
-            /* Locked account list with inline unlock button */
+            /* list each locked account with a button to unlock it */
             <div className="it-locked-list">
               {lockedAccounts.map((user) => (
                 <div key={user.employeeID} className="it-locked-list__item">
                   {/* Account info */}
                   <div className="it-locked-list__info">
-                    {/* Avatar */}
+                    {/* Initials avatar */}
                     <div className="it-locked-list__avatar">
                       {user.firstName[0]}{user.lastName[0]}
                     </div>
@@ -299,7 +258,7 @@ export default function ITDashboard() {
                     </div>
                   </div>
 
-                  {/* Unlock button (RQ6) */}
+                  {/* Unlock button */}
                   <button
                     className="btn btn--primary btn--sm"
                     onClick={() => handleUnlock(user.employeeID)}
@@ -320,7 +279,7 @@ export default function ITDashboard() {
           </button>
         </div>
 
-        {/* Account role breakdown — visual bar chart */}
+        {/* Bar chart showing how many users are in each role */}
         <div className="dash-card it-dash__breakdown-card">
           <div className="dash-card__header">
             <div className="dash-card__icon dash-card__icon--primary">
@@ -332,17 +291,17 @@ export default function ITDashboard() {
             <span className="dash-card__header-aside">{allUsers.length} total</span>
           </div>
 
-          {/* Role bars */}
+          {/* One bar per role */}
           <div className="it-breakdown">
             {roleBreakdown.map(({ role, count, percentage }) => (
               <div key={role} className="it-breakdown__row">
-                {/* Role label + count */}
+                {/* Role name and count */}
                 <div className="it-breakdown__label-row">
                   <span className="it-breakdown__role">{roleLabel(role)}</span>
                   <span className="it-breakdown__count">{count}</span>
                 </div>
 
-                {/* Progress bar */}
+                {/* The coloured bar */}
                 <div className="it-breakdown__bar-track">
                   <div
                     className={`it-breakdown__bar-fill it-breakdown__bar-fill--${roleTheme[role]}`}
@@ -355,13 +314,13 @@ export default function ITDashboard() {
                   />
                 </div>
 
-                {/* Percentage label */}
+                {/* Percentage on the right */}
                 <span className="it-breakdown__pct">{percentage}%</span>
               </div>
             ))}
           </div>
 
-          {/* Active vs locked summary */}
+          {/* Summary of active vs locked */}
           <div className="it-breakdown__summary">
             <div className="it-breakdown__summary-item">
               <span
@@ -395,7 +354,7 @@ export default function ITDashboard() {
           <span className="dash-card__header-aside">Last 10 events (RQ40)</span>
         </div>
 
-        {/* Audit log table */}
+        {/* Table of the 10 most recent audit entries */}
         <div className="it-audit-table-wrap">
           <table className="it-audit-table" aria-label="Recent audit log entries">
             <thead>
@@ -416,7 +375,7 @@ export default function ITDashboard() {
               ) : (
                 recentLogs.map((log, index) => {
                   const name = userNameMap[log.userID] ?? log.userID;
-                  /* Highlight login failure entries */
+                  /* colour the row differently for failures and locks */
                   const isFailure = log.action.toLowerCase().includes("failed");
                   const isLock    = log.action.toLowerCase().includes("locked");
 
@@ -431,19 +390,19 @@ export default function ITDashboard() {
                         .join(" ")}
                       style={{ animationDelay: `${index * 30}ms` }}
                     >
-                      {/* Timestamp in monospace for easy scanning */}
+                      {/* When it happened */}
                       <td className="it-audit-table__timestamp">
                         <time dateTime={new Date(log.timeStamp).toISOString()}>
                           {formatDateTime(log.timeStamp)}
                         </time>
                       </td>
-                      {/* Employee name */}
+                      {/* Who it was */}
                       <td className="it-audit-table__user">{name}</td>
-                      {/* Employee ID in monospace */}
+                      {/* Their ID */}
                       <td>
                         <code className="it-audit-table__id">{log.userID}</code>
                       </td>
-                      {/* Action description — truncated with tooltip on hover */}
+                      {/* What they did */}
                       <td
                         className="it-audit-table__action"
                         title={log.action}

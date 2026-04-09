@@ -15,9 +15,7 @@ import { Role, EmploymentStatus } from "../../models/enums";
 import type { AppUser } from "../../models/interfaces";
 import "./UserManagement.css";
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+/* returns the badge class to use for a given role */
 function roleBadgeCls(role: string): string {
   switch (role) {
     case Role.CONSULTANT:      return "badge--info";
@@ -27,6 +25,7 @@ function roleBadgeCls(role: string): string {
   }
 }
 
+/* turns a role value into a readable label */
 function roleLabel(role: string): string {
   switch (role) {
     case Role.CONSULTANT:      return "Consultant";
@@ -42,6 +41,7 @@ function roleLabel(role: string): string {
 export default function UserManagement() {
   const { currentUser } = useAuth();
 
+  /* search text and a key used to force a re-render after changes */
   const [searchTerm,    setSearchTerm]    = useState("");
   const [refreshKey,    setRefreshKey]    = useState(0);
   const triggerRefresh = useCallback(() => setRefreshKey((k) => k + 1), []);
@@ -52,9 +52,7 @@ export default function UserManagement() {
   const registry = getRegistry();
   const regions  = registry.getRegions();
 
-  // -------------------------------------------------------------------------
-  // Fetch users with search
-  // -------------------------------------------------------------------------
+  /* fetch all users, filtered down by the search term */
   const users = useMemo(() => {
     const all = registry.getAllUsers();
     if (!searchTerm.trim()) return all;
@@ -69,9 +67,7 @@ export default function UserManagement() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, refreshKey]);
 
-  // -------------------------------------------------------------------------
-  // Inline lock / unlock 
-  // -------------------------------------------------------------------------
+  /* lock or unlock the account depending on its current state */
   const handleToggleLock = useCallback((user: AppUser) => {
     if (user.isLocked) {
       registry.unlockAccount(user.employeeID);
@@ -81,9 +77,7 @@ export default function UserManagement() {
     triggerRefresh();
   }, [registry, triggerRefresh]);
 
-  // -------------------------------------------------------------------------
-  // Inline role assignment 
-  // -------------------------------------------------------------------------
+  /* change a user's role and log the action */
   const handleRoleChange = useCallback((userID: string, newRole: string) => {
     registry.assignRole(userID, newRole, currentUser.employeeID);
     triggerRefresh();
@@ -91,13 +85,10 @@ export default function UserManagement() {
 
 
 
-  // -------------------------------------------------------------------------
-  // ACtual Rendering
-  // -------------------------------------------------------------------------
   return (
     <div className="user-mgmt">
 
-      {/* ---- Top bar ---- */}
+      {/* ---- Search bar and create button ---- */}
       <div className="user-mgmt__topbar">
         <div className="user-mgmt__search-wrap">
           <svg className="user-mgmt__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -111,6 +102,7 @@ export default function UserManagement() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+        {/* disabled in the prototype */}
         <button
           className="btn btn--primary"
           title="Create Account functionality has been removed"
@@ -122,12 +114,13 @@ export default function UserManagement() {
         </button>
       </div>
 
+      {/* how many accounts are showing */}
       <p className="user-mgmt__count">
         {users.length} account{users.length !== 1 ? "s" : ""}
         {searchTerm && ` matching "${searchTerm}"`}
       </p>
 
-      {/* ---- User table ---- */}
+      {/* ---- Main user table ---- */}
       <div className="user-mgmt__table-wrap">
         <table className="user-mgmt__table" aria-label="User accounts">
           <thead>
@@ -142,6 +135,7 @@ export default function UserManagement() {
           </thead>
           <tbody>
             {users.length === 0 ? (
+              /* shown when the search returns nothing */
               <tr>
                 <td colSpan={6} className="user-mgmt__empty-cell">
                   No accounts match your search.
@@ -154,7 +148,7 @@ export default function UserManagement() {
                   className={`user-mgmt__row ${user.isLocked ? "user-mgmt__row--locked" : ""}`}
                   style={{ animationDelay: `${i * 20}ms` }}
                 >
-                  {/* Employee info */}
+                  {/* Name and employee ID */}
                   <td className="user-mgmt__name-cell">
                     <div className={`user-mgmt__avatar ${user.isLocked ? "user-mgmt__avatar--locked" : ""}`}>
                       {user.firstName[0]}{user.lastName[0]}
@@ -167,12 +161,12 @@ export default function UserManagement() {
                     </div>
                   </td>
 
-                  {/* Username */}
+                  {/* Login username */}
                   <td>
                     <code className="user-mgmt__username">{user.username}</code>
                   </td>
 
-                  {/* Role — inline select*/}
+                  {/* Role dropdown — changes take effect straight away */}
                   <td>
                     <select
                       className="user-mgmt__role-select"
@@ -186,7 +180,7 @@ export default function UserManagement() {
                     </select>
                   </td>
 
-                  {/* Employment status */}
+                  {/* Employment status badge */}
                   <td>
                     <span className={`badge ${
                       user.employmentStatus === EmploymentStatus.ACTIVE ? "badge--success" :
@@ -197,7 +191,7 @@ export default function UserManagement() {
                     </span>
                   </td>
 
-                  {/* Lock status */}
+                  {/* Whether the account is locked */}
                   <td>
                     {user.isLocked ? (
                       <span className="badge badge--danger">🔒 Locked</span>
@@ -206,10 +200,10 @@ export default function UserManagement() {
                     )}
                   </td>
 
-                  {/* Action buttons */}
+                  {/* Lock/unlock and reset password buttons */}
                   <td>
                     <div className="user-mgmt__actions">
-                      {/* Lock / Unlock*/}
+                      {/* toggles the lock state */}
                       <button
                         className={`btn btn--sm ${user.isLocked ? "btn--success" : "btn--secondary"}`}
                         onClick={() => handleToggleLock(user)}
@@ -218,7 +212,7 @@ export default function UserManagement() {
                         {user.isLocked ? "Unlock" : "Lock"}
                       </button>
 
-                      {/* Reset Password (Left out for prototype) */}
+                      {/* not implemented in the prototype */}
                       <button
                         className="btn btn--secondary btn--sm"
                         title="Reset Password"

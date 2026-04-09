@@ -1,12 +1,12 @@
 /**
- * AuditLog.css
- * ------------
  * Styles for the IT Support Audit Log full-page view.
  */
 
+
+/* overall page layout */
 .audit-log { display: flex; flex-direction: column; gap: var(--space-5); }
 
-/* Filter bar */
+/* area that holds all the filter controls */
 .audit-log__filters {
   display: flex;
   align-items: center;
@@ -14,6 +14,7 @@
   flex-wrap: wrap;
 }
 
+/* wrapper around the search box */
 .audit-log__search-wrap {
   position: relative;
   min-width: 220px;
@@ -21,6 +22,7 @@
   flex: 1;
 }
 
+/* small icon sitting inside the search box */
 .audit-log__search-icon {
   position: absolute;
   left: var(--space-3);
@@ -32,6 +34,7 @@
   pointer-events: none;
 }
 
+/* the search input itself */
 .audit-log__search {
   width: 100%;
   padding: var(--space-2) var(--space-3) var(--space-2) 2.25rem;
@@ -44,12 +47,14 @@
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+/* search box when clicked on */
 .audit-log__search:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(197, 255, 0, 0.15);
 }
 
+/* dropdown to filter by a specific person */
 .audit-log__select {
   padding: var(--space-2) var(--space-3);
   background-color: var(--color-white);
@@ -64,7 +69,7 @@
 
 .audit-log__select:focus { outline: none; border-color: var(--color-primary); }
 
-/* Quick filter toggle */
+/* group of quick filter buttons */
 .audit-log__quick-filters {
   display: flex;
   border: 1.5px solid var(--color-border);
@@ -72,6 +77,7 @@
   overflow: hidden;
 }
 
+/* each individual quick filter button */
 .audit-log__quick-btn {
   padding: var(--space-2) var(--space-3);
   background: var(--color-white);
@@ -85,15 +91,17 @@
   white-space: nowrap;
 }
 
+/* divider line between buttons */
 .audit-log__quick-btn + .audit-log__quick-btn { border-left: 1.5px solid var(--color-border); }
 
+/* the currently selected quick filter */
 .audit-log__quick-btn--active {
   background-color: var(--color-navbar);
   color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
 }
 
-/* Meta */
+/* row showing result count and requirement note */
 .audit-log__meta {
   display: flex;
   align-items: center;
@@ -101,9 +109,10 @@
   gap: var(--space-4);
 }
 
+/* how many results are showing */
 .audit-log__count { font-size: var(--font-size-sm); color: var(--color-text-muted); }
 
-/* Table */
+/* container around the whole table */
 .audit-log__table-wrap {
   background-color: var(--color-white);
   border-radius: var(--radius-xl);
@@ -112,17 +121,20 @@
   animation: fadeInUp var(--transition-base) ease both;
 }
 
+/* the table itself */
 .audit-log__table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--font-size-sm);
 }
 
+/* header row at the top of the table */
 .audit-log__table thead tr {
   background-color: var(--color-card);
   border-bottom: 1px solid var(--color-border);
 }
 
+/* column header cells */
 .audit-log__table th {
   padding: var(--space-3) var(--space-4);
   text-align: left;
@@ -133,14 +145,18 @@
   letter-spacing: 0.05em;
 }
 
+/* a single log entry row */
 .audit-log__row {
   border-bottom: 1px solid var(--color-border);
   transition: background-color var(--transition-fast);
   animation: fadeInUp var(--transition-base) ease both;
 }
 
+/* last row has no bottom border */
 .audit-log__row:last-child { border-bottom: none; }
+/* subtle highlight on hover */
 .audit-log__row:hover { background-color: var(--color-card); }
+/* row colour variants based on event severity */
 .audit-log__row--warning { background-color: rgba(217, 119, 6, 0.04); }
 .audit-log__row--warning:hover { background-color: rgba(217, 119, 6, 0.08); }
 .audit-log__row--danger  { background-color: rgba(220, 38, 38, 0.04); }
@@ -148,12 +164,14 @@
 .audit-log__row--success { background-color: rgba(22, 163, 74, 0.04); }
 .audit-log__row--success:hover { background-color: rgba(22, 163, 74, 0.08); }
 
+/* general table cell */
 .audit-log__table td {
   padding: var(--space-3) var(--space-4);
   color: var(--color-text-secondary);
   vertical-align: middle;
 }
 
+/* when the event happened */
 .audit-log__timestamp {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
@@ -161,12 +179,14 @@
   white-space: nowrap;
 }
 
+/* employee name */
 .audit-log__emp {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   white-space: nowrap;
 }
 
+/* employee id badge */
 .audit-log__id {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
@@ -177,6 +197,7 @@
   border: 1px solid var(--color-border);
 }
 
+/* description of what happened */
 .audit-log__action {
   max-width: 500px;
   overflow: hidden;
@@ -187,7 +208,7 @@
   gap: var(--space-2);
 }
 
-/* Severity dot */
+/* small coloured dot showing severity */
 .audit-log__event-dot {
   width: 7px;
   height: 7px;
@@ -198,13 +219,14 @@
 .audit-log__event-dot--warning { background-color: var(--color-warning); }
 .audit-log__event-dot--success { background-color: var(--color-success); }
 
+/* shown when there are no results */
 .audit-log__empty-cell {
   text-align: center;
   padding: var(--space-10) !important;
   color: var(--color-text-muted);
 }
 
-/* Pagination */
+/* pagination controls at the bottom */
 .audit-log__pagination {
   display: flex;
   align-items: center;
@@ -214,11 +236,13 @@
   padding: var(--space-2) 0;
 }
 
+/* row of page number buttons */
 .audit-log__page-numbers {
   display: flex;
   gap: var(--space-1);
 }
 
+/* individual page number button */
 .audit-log__page-btn {
   width: 34px;
   height: 34px;
@@ -237,6 +261,7 @@
 
 .audit-log__page-btn:hover { background-color: var(--color-card); }
 
+/* the currently active page */
 .audit-log__page-btn--active {
   background-color: var(--color-navbar);
   border-color: var(--color-navbar);
@@ -244,6 +269,7 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* small text showing page x of y */
 .audit-log__page-info {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);

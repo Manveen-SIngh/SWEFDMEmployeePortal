@@ -148,9 +148,6 @@ export default function AuditLog() {
           {filteredLogs.length.toLocaleString()} event{filteredLogs.length !== 1 ? "s" : ""}
           {searchTerm && ` matching "${searchTerm}"`}
         </p>
-        <p className="audit-log__rq-note">
-          System audit trail — RQ39 / RQ40
-        </p>
       </div>
 
       {/* ---- The main log table ---- */}

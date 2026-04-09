@@ -1,5 +1,5 @@
 /**
- * Styles for the IT Support Audit Log full-page view (RQ40).
+ * Styles for the IT Support Audit Log full-page view.
  */
 
 
@@ -111,17 +111,6 @@
 
 /* how many results are showing */
 .audit-log__count { font-size: var(--font-size-sm); color: var(--color-text-muted); }
-
-/* small tag showing the requirement reference */
-.audit-log__rq-note {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  font-family: var(--font-family-mono);
-  background-color: var(--color-card);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-}
 
 /* container around the whole table */
 .audit-log__table-wrap {

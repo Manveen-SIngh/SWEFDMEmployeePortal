@@ -24,7 +24,7 @@ function getGreeting(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Helper: format a Date to "Mon 30 Mar"
+// Helper: format a Date to something like "Mon 30 Mar"
 // ---------------------------------------------------------------------------
 function formatShortDate(date: Date): string {
   return date.toLocaleDateString("en-GB", {
@@ -209,7 +209,7 @@ export default function ConsultantDashboard() {
       : 0;
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual rendering
   // -------------------------------------------------------------------------
   return (
     <div className="consultant-dash">

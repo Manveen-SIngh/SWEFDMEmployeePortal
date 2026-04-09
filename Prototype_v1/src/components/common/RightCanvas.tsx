@@ -2,35 +2,8 @@
  * RightCanvas.tsx
  * ---------------
  * A reusable slide-in overlay panel that appears from the right edge of the screen.
- * Used consistently across the portal for all form submissions and editing flows:
+ * Used consistently across the portal for all form submissions and editing flows.
  *
- *   - Submit leave request (Absence & Holidays)
- *   - Edit personal/bank details (My Details)
- *   - Submit a query (Queries)
- *   - Post an announcement (Announcements — HR only)
- *   - Reject leave with reason (HR Leave Management)
- *   - Create/edit employee profile (HR Employee Directory)
- *   - Respond to a query (Queries — HR/IT)
- *   - Create user account (IT User Management)
- *
- * BEHAVIOUR:
- *   - Slides in from the right with a CSS animation (slideInRight keyframe)
- *   - A dark semi-transparent overlay covers the rest of the page
- *   - Clicking the overlay or the ✕ button closes the canvas
- *   - Escape key also closes the canvas (keyboard accessible)
- *   - Scrollable content area for long forms
- *   - Fixed header with title + close button
- *   - Fixed footer area for action buttons (passed as `footer` prop)
- *
- * USAGE:
- *   <RightCanvas
- *     isOpen={canvasOpen}
- *     onClose={() => setCanvasOpen(false)}
- *     title="Submit Leave Request"
- *     footer={<button onClick={handleSubmit}>Submit</button>}
- *   >
- *     <form>...</form>
- *   </RightCanvas>
  *
  * @param isOpen    - Whether the canvas is currently visible
  * @param onClose   - Callback invoked when the user closes the canvas

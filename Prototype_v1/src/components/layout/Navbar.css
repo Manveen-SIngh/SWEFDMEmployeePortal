@@ -1,0 +1,400 @@
+/**
+ * Navbar.css
+ * ----------
+ * Styles for the left-side navigation sidebar.
+ * Dark FDM-branded design with acid yellow-green active states.
+ */
+
+/* ===========================================================================
+   NAVBAR CONTAINER
+   Fixed left column, full viewport height, dark background.
+   =========================================================================== */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--navbar-width);
+  height: 100vh;
+  background-color: var(--color-navbar);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--z-navbar);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+}
+
+.navbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari — hide the navbar scrollbar */
+}
+
+/* ===========================================================================
+   LOGO SECTION
+   =========================================================================== */
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.navbar__logo-mark {
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.01em;
+}
+
+/* ===========================================================================
+   NAV ITEMS LIST
+   Takes up the main body of the sidebar, grows to fill available space.
+   =========================================================================== */
+
+.navbar__items {
+  flex: 1;
+  padding: var(--space-3) var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Individual item wrapper — contains the button and optional children list */
+.navbar__item-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===========================================================================
+   NAV ITEM BUTTON
+   =========================================================================== */
+
+.navbar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+  position: relative;
+}
+
+.navbar__item:hover {
+  background-color: var(--color-navbar-hover);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Active state — yellow-green background, dark text */
+.navbar__item--active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.navbar__item--active:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-text);
+}
+
+/* Parent item with an active child — subtle highlight */
+.navbar__item--parent-active {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(197, 255, 0, 0.08);
+}
+
+/* Icon wrapper */
+.navbar__item-icon-wrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navbar__item-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Label */
+.navbar__item-label {
+  flex: 1;
+  line-height: 1;
+}
+
+/* Chevron for expandable sections */
+.navbar__item-chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+  opacity: 0.6;
+}
+
+.navbar__item-chevron--open {
+  transform: rotate(90deg);
+}
+
+/* ===========================================================================
+   CHILD ITEMS (sub-nav)
+   Indented under expandable parents, no icons.
+   =========================================================================== */
+
+.navbar__children {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: calc(var(--space-3) + 18px + var(--space-3)); /* Align with parent label */
+  margin-top: 2px;
+  margin-bottom: var(--space-1);
+}
+
+.navbar__child {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.navbar__child:hover {
+  background-color: var(--color-navbar-hover);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar__child--active {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.navbar__child--active:hover {
+  color: var(--color-primary);
+}
+
+/* Dot indicator replacing icon for child items */
+.navbar__child-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.navbar__child--active .navbar__child-dot {
+  opacity: 1;
+}
+
+/* ===========================================================================
+   PROFILE SECTION (bottom of navbar)
+   =========================================================================== */
+
+.navbar__profile-section {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.navbar__profile-wrapper {
+  position: relative;
+}
+
+.navbar__profile-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.navbar__profile-btn:hover {
+  background-color: var(--color-navbar-hover);
+}
+
+/* Avatar circle with user initials */
+.navbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.navbar__profile-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.navbar__profile-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+}
+
+.navbar__profile-role {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1;
+}
+
+.navbar__profile-chevron {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform var(--transition-fast);
+}
+
+.navbar__profile-chevron--open {
+  transform: rotate(90deg);
+}
+
+/* ===========================================================================
+   PROFILE DROPDOWN
+   Floats upward from the profile button.
+   =========================================================================== */
+
+.navbar__profile-dropdown {
+  position: absolute;
+  bottom: calc(100% + var(--space-2));
+  left: 0;
+  right: 0;
+  background-color: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-dropdown);
+  animation: fadeInUp var(--transition-fast) ease both;
+}
+
+.navbar__profile-dropdown-header {
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.navbar__profile-dropdown-id {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.navbar__profile-dropdown-email {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar__profile-dropdown-divider {
+  border-color: rgba(255, 255, 255, 0.08);
+  margin: 0;
+}
+
+.navbar__profile-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.navbar__profile-dropdown-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.navbar__profile-dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.navbar__profile-dropdown-item--danger {
+  color: var(--color-danger);
+}
+
+.navbar__profile-dropdown-item--danger:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #f87171;
+}
+
+/* ===========================================================================
+   CLICK-OUTSIDE OVERLAY
+   Transparent fullscreen layer to close dropdown on outside click.
+   =========================================================================== */
+
+.navbar__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-dropdown) - 1);
+  cursor: default;
+}

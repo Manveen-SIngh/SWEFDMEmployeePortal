@@ -1,0 +1,465 @@
+/**
+ * LoginPage.css
+ * -------------
+ * Styles for the FDM Employee Portal login page.
+ */
+
+/* ===========================================================================
+   PAGE CONTAINER
+   Full viewport height, side-by-side two-panel layout.
+   =========================================================================== */
+
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--font-family);
+}
+
+/* ===========================================================================
+   LEFT PANEL — BRANDING
+   =========================================================================== */
+
+.login-page__brand {
+  /* Takes up 55% of the page on desktop */
+  flex: 0 0 55%;
+  background-color: var(--color-navbar);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-10) var(--space-12);
+  overflow: hidden;
+
+  /* Subtle grain texture overlay for depth */
+  isolation: isolate;
+}
+
+/* Animated entry for the brand panel */
+.login-page__brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(197, 255, 0, 0.03) 0%,
+    transparent 50%,
+    rgba(197, 255, 0, 0.02) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- Logo ---- */
+.login-page__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  position: relative;
+  z-index: var(--z-base);
+  animation: fadeInUp var(--transition-slow) ease both;
+}
+
+.login-page__logo-mark {
+  /* The FDM logo box — dark text on primary yellow-green */
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  line-height: 1;
+}
+
+.login-page__logo-group {
+  color: var(--color-text-on-dark);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.01em;
+  opacity: 0.9;
+}
+
+/* ---- Tagline ---- */
+.login-page__tagline {
+  position: relative;
+  z-index: var(--z-base);
+  animation: fadeInUp var(--transition-slow) ease 150ms both;
+}
+
+.login-page__tagline-heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-on-dark);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+}
+
+.login-page__tagline-heading span {
+  /* Accent word in the heading */
+  color: var(--color-primary);
+}
+
+.login-page__tagline-sub {
+  font-size: var(--font-size-base);
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 400px;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ---- Decorative circles ---- */
+.login-page__brand-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-page__brand-circle {
+  position: absolute;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(197, 255, 0, 0.08);
+}
+
+.login-page__brand-circle--1 {
+  width: 500px;
+  height: 500px;
+  bottom: -150px;
+  right: -150px;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+.login-page__brand-circle--2 {
+  width: 350px;
+  height: 350px;
+  bottom: -50px;
+  right: -50px;
+  border-color: rgba(197, 255, 0, 0.12);
+  animation: pulse 8s ease-in-out 1s infinite;
+}
+
+.login-page__brand-circle--3 {
+  width: 200px;
+  height: 200px;
+  bottom: 50px;
+  right: 50px;
+  background: radial-gradient(
+    circle,
+    rgba(197, 255, 0, 0.05) 0%,
+    transparent 70%
+  );
+  border: none;
+  animation: pulse 6s ease-in-out 2s infinite;
+}
+
+/* ===========================================================================
+   RIGHT PANEL — FORM
+   =========================================================================== */
+
+.login-page__form-panel {
+  /* Takes up the remaining 45% */
+  flex: 1;
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+  min-height: 100vh;
+}
+
+/* ===========================================================================
+   LOGIN CARD
+   The white form container floating in the right panel.
+   =========================================================================== */
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-8);
+  animation: fadeInUp var(--transition-slow) ease both;
+}
+
+/* ---- Card header ---- */
+.login-card__header {
+  margin-bottom: var(--space-6);
+}
+
+.login-card__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+  letter-spacing: -0.01em;
+}
+
+.login-card__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ---- Form ---- */
+.login-card__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1); /* form-group has its own bottom margin */
+}
+
+/* ---- Error / Locked alert ---- */
+.login-card__alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-2);
+  animation: fadeInUp var(--transition-fast) ease both;
+}
+
+.login-card__alert--error {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger-text);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.login-card__alert--locked {
+  /* Locked accounts get a more severe, darker red styling */
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  border: none;
+}
+
+.login-card__alert-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px; /* Optical alignment with text */
+}
+
+/* ---- Password field row (label + forgot password link) ---- */
+.login-card__password-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+}
+
+/* Forgot password link — sits in the label row */
+.login-card__forgot-link {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+  /* Override the margin from .form-label — this is a button, not a label */
+  margin: 0;
+  padding: 0;
+}
+
+.login-card__forgot-link:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ---- Password field with visibility toggle ---- */
+.login-card__password-field {
+  position: relative;
+}
+
+.login-card__password-field .form-input {
+  /* Make room for the toggle button on the right */
+  padding-right: 2.75rem;
+}
+
+.login-card__show-password {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.login-card__show-password:hover {
+  color: var(--color-text-primary);
+}
+
+.login-card__show-password svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---- Submit button ---- */
+.login-card__submit {
+  width: 100%;
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+  letter-spacing: 0.01em;
+  position: relative;
+}
+
+/* Loading spinner inside button */
+.login-card__spinner {
+  width: 18px;
+  height: 18px;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   DEMO CREDENTIALS HINT
+   Shows demo account usernames and shared password for marker convenience.
+   =========================================================================== */
+
+.login-card__demo-hint {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background-color: var(--color-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.login-card__demo-hint-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-3);
+}
+
+.login-card__demo-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.login-card__demo-account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.login-card__demo-role {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  min-width: 80px;
+}
+
+.login-card__demo-account code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  background-color: var(--color-white);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.login-card__demo-password {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+}
+
+.login-card__demo-password code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  background-color: var(--color-white);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* ===========================================================================
+   FOOTER
+   =========================================================================== */
+
+.login-page__footer {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+.login-page__footer-sub {
+  opacity: 0.7;
+}
+
+/* ===========================================================================
+   RESPONSIVE — MOBILE (< 768px)
+   On mobile the brand panel is hidden and the form takes full width.
+   =========================================================================== */
+
+@media (max-width: 767px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-page__brand {
+    flex: 0 0 auto;
+    padding: var(--space-6) var(--space-4);
+    /* Show a compact version of the brand panel on mobile */
+    min-height: auto;
+  }
+
+  .login-page__tagline {
+    display: none; /* Hide tagline on mobile — space is too limited */
+  }
+
+  .login-page__brand-decoration {
+    display: none; /* Hide decorative elements on mobile */
+  }
+
+  .login-page__form-panel {
+    flex: 1;
+    padding: var(--space-6) var(--space-4);
+    justify-content: flex-start;
+    padding-top: var(--space-8);
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* ===========================================================================
+   RESPONSIVE — TABLET (768px - 1023px)
+   Brand panel shrinks slightly, form fills remaining space.
+   =========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .login-page__brand {
+    flex: 0 0 45%;
+    padding: var(--space-8);
+  }
+
+  .login-page__tagline-heading {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,369 @@
+/**
+ * MonthCalendar.css
+ * -----------------
+ * Styles for the shared MonthCalendar component.
+ * Used in Absence & Holidays and Schedule → Planner.
+ */
+
+/* ===========================================================================
+   CALENDAR CONTAINER
+   =========================================================================== */
+
+.month-cal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  padding: var(--space-5);
+}
+
+/* ===========================================================================
+   HEADER — prev arrow, month title, quick-jump, next arrow
+   =========================================================================== */
+
+.month-cal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Prev / Next navigation arrows */
+.month-cal__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: 1.5px solid var(--color-border);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.month-cal__nav-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.month-cal__nav-btn:hover {
+  background-color: var(--color-navbar);
+  border-color: var(--color-navbar);
+  color: var(--color-primary);
+}
+
+/* Month + year title + 3-dot quick jump button */
+.month-cal__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.month-cal__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* Quick-jump trigger button (⋯) */
+.month-cal__quickjump-wrap {
+  position: relative;
+}
+
+.month-cal__quickjump-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.month-cal__quickjump-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.month-cal__quickjump-btn:hover {
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+}
+
+/* Quick-jump dropdown menu */
+.month-cal__quickjump-menu {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-dropdown);
+  overflow: hidden;
+  min-width: 180px;
+  animation: fadeInUp var(--transition-fast) ease both;
+}
+
+.month-cal__quickjump-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: left;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.month-cal__quickjump-item:hover {
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+}
+
+.month-cal__quickjump-item--active {
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.month-cal__quickjump-item--active:hover {
+  background-color: var(--color-navbar-hover);
+}
+
+/* Click-outside overlay for the dropdown */
+.month-cal__quickjump-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-dropdown) - 1);
+}
+
+/* ===========================================================================
+   DAY-OF-WEEK HEADERS
+   =========================================================================== */
+
+.month-cal__day-headers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+}
+
+.month-cal__day-header {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-1) 0;
+}
+
+/* ===========================================================================
+   DAY CELL GRID
+   =========================================================================== */
+
+.month-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+}
+
+/* Base day cell */
+.month-cal__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  aspect-ratio: 1;        /* Square cells */
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  padding: var(--space-1);
+  min-height: 44px;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+  user-select: none;
+}
+
+/* Day number */
+.month-cal__day-num {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+/* Dots row under the day number */
+.month-cal__day-dots {
+  display: flex;
+  gap: 3px;
+  min-height: 6px;
+}
+
+/* Individual state dot */
+.month-cal__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.month-cal__dot--approved { background-color: var(--color-success); }
+.month-cal__dot--pending  { background-color: var(--color-warning); }
+.month-cal__dot--working  { background-color: var(--color-info); }
+
+/* ===========================================================================
+   DAY STATE VARIANTS
+   Applied via the getDayStates() function from the parent page.
+   Multiple states can apply simultaneously (e.g. today + approved).
+   =========================================================================== */
+
+/* OTHER MONTH — days from the previous/next month filling partial rows */
+.month-cal__day--other {
+  opacity: 0.3;
+}
+
+.month-cal__day--other .month-cal__day-num {
+  color: var(--color-text-muted);
+}
+
+/* TODAY — the actual current date */
+.month-cal__day--today {
+  border-color: var(--color-text-primary);
+}
+
+.month-cal__day--today .month-cal__day-num {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+/* APPROVED LEAVE — green background */
+.month-cal__day--approved {
+  background-color: var(--color-success-light);
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+.month-cal__day--approved .month-cal__day-num {
+  color: var(--color-success-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* PENDING LEAVE — amber background */
+.month-cal__day--pending {
+  background-color: var(--color-warning-light);
+  border-color: rgba(217, 119, 6, 0.25);
+}
+
+.month-cal__day--pending .month-cal__day-num {
+  color: var(--color-warning-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* REJECTED LEAVE — faint red, not dominant (shown in history, not full cell) */
+.month-cal__day--rejected {
+  background-color: rgba(220, 38, 38, 0.05);
+}
+
+.month-cal__day--rejected .month-cal__day-num {
+  color: var(--color-danger);
+  text-decoration: line-through;
+}
+
+/* CANCELLED LEAVE — grey strikethrough */
+.month-cal__day--cancelled .month-cal__day-num {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+/* WORKING DAY (planner view) — subtle info-blue tint */
+.month-cal__day--working {
+  background-color: var(--color-info-light);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+.month-cal__day--working .month-cal__day-num {
+  color: var(--color-info-text);
+}
+
+/* CLICKABLE — shows pointer cursor and hover lift */
+.month-cal__day--clickable {
+  cursor: pointer;
+}
+
+.month-cal__day--clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-text-muted);
+}
+
+.month-cal__day--clickable:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===========================================================================
+   LEGEND
+   =========================================================================== */
+
+.month-cal__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.month-cal__legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Coloured swatch matching the cell state colours */
+.month-cal__legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.month-cal__legend-swatch--approved {
+  background-color: var(--color-success-light);
+  border: 1px solid rgba(22, 163, 74, 0.4);
+}
+
+.month-cal__legend-swatch--pending {
+  background-color: var(--color-warning-light);
+  border: 1px solid rgba(217, 119, 6, 0.4);
+}
+
+.month-cal__legend-swatch--working {
+  background-color: var(--color-info-light);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.month-cal__legend-swatch--today {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-text-primary);
+}

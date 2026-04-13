@@ -208,6 +208,7 @@ export default function ConsultantDashboard() {
       ? Math.round((completedTraining / totalTraining) * 100)
       : 0;
 
+
   // -------------------------------------------------------------------------
   // Render
   // -------------------------------------------------------------------------
@@ -481,7 +482,7 @@ export default function ConsultantDashboard() {
               </div>
             ))}
           </div>
-
+              
           <button
             className="dash-card__link"
             onClick={() => navigate("/learning")}

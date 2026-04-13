@@ -1,0 +1,42 @@
+.learning-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+    color: #333;
+}
+
+.learning-container h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.learning-container h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+
+.course-item {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.course-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.course-item h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+

@@ -1105,3 +1105,27 @@ export const seedNotifications: Notification[] = [
   /* Tom — IT: query assigned */
   { notificationID: "N011", userID: "FDM008", message: "IT query QRY002 assigned to IT Support (Aisha Patel — portal access).", timestamp: new Date("2026-03-18T14:31:00"), isRead: false, type: "warning" },
 ];
+
+export const LearningData = {
+    upcoming: [
+      {
+        trainingID: "TR001",
+        userID: "FDM001",
+        moduleName: "Cloud Computing Essentials (AWS)",
+        trainingStatus: TrainingStatus.IN_PROGRESS,
+      },
+      { trainingID: "TR002", userID: "FDM002", moduleName: "Business Intelligence & Power BI", trainingStatus: TrainingStatus.NOT_STARTED },
+      { trainingID: "TR003", userID: "FDM004", moduleName: "Data Protection & GDPR Awareness", trainingStatus: TrainingStatus.IN_PROGRESS },
+      { trainingID: "TR004", userID: "FDM004", moduleName: "Java Spring Boot Development", trainingStatus: TrainingStatus.NOT_STARTED },
+      { trainingID: "TR005", userID: "FDM004", moduleName: "DevOps & CI/CD Pipelines", trainingStatus: TrainingStatus.NOT_STARTED },
+    ],
+    completed: [
+      { trainingID: "TR006", userID: "FDM001", moduleName: "Introduction to FDM Processes", trainingStatus: TrainingStatus.COMPLETED, completionDate: new Date("2023-09-15") },
+      { trainingID: "TR007", userID: "FDM001", moduleName: "Data Protection & GDPR Awareness", trainingStatus: TrainingStatus.COMPLETED, completionDate: new Date("2023-10-01") },
+      { trainingID: "TR008", userID: "FDM001", moduleName: "Agile & Scrum Fundamentals", trainingStatus: TrainingStatus.COMPLETED, completionDate: new Date("2024-01-20") },
+      { trainingID: "TR009", userID: "FDM002", moduleName: "Introduction to FDM Processes", trainingStatus: TrainingStatus.COMPLETED, completionDate: new Date("2024-01-25") },
+      { trainingID: "TR010", userID: "FDM002", moduleName: "Data Protection & GDPR Awareness", trainingStatus: TrainingStatus.COMPLETED, completionDate: new Date("2024-02-10")},
+    ],
+};
+
+

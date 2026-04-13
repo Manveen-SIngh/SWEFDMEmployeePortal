@@ -65,7 +65,7 @@ import AuditLog from "./pages/it/AuditLog";
 import Queries from "./pages/consultant/Queries"; 
 import Payslip from "./pages/consultant/Payslip";
 import Performance from "./pages/consultant/Performance";
-
+import Learning from "./pages/consultant/Learning";
 
 // ---------------------------------------------------------------------------
 // ProtectedRoute
@@ -268,6 +268,10 @@ const router = createBrowserRouter([
           {
             path: "/queries",
             element: <Queries />,
+          },
+          {
+            path: "/learning",
+            element: <Learning />,
           },
           {
             path: "/documents",

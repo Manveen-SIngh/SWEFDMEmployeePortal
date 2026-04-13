@@ -49,6 +49,7 @@ import {
   auditLogs as seedAuditLogs,
   seedNotifications,
   regions as seedRegions,
+  LearningData,
 } from "../data/mockData";
 
 import type {
@@ -814,6 +815,12 @@ class Registry {
   // =========================================================================
   // TRAINING RECORD METHODS
   // =========================================================================
+
+  public getLearningCoursesForUser(userID: string) {
+    const upcoming = LearningData.upcoming.filter(course => course.userID === userID);
+    const completed = LearningData.completed.filter(course => course.userID === userID);
+    return { upcoming, completed };
+  }
 
   /**
    * Returns all training records for a specific consultant.

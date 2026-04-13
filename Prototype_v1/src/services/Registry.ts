@@ -1,5 +1,5 @@
 // singleton data store for portal data
-// modified for hr features: performance reviews, activate/deactivate accounts
+// updated with bulk assignment, audit reasons, and visual calendar queries
 
 import {
   allUsers,
@@ -234,9 +234,9 @@ class Registry {
     return true;
   }
 
-  // hr account deactivation
+  // hr account deactivation with mandatory reasoning
   
-  public deactivateAccount(userID: string, deactivatorID: string): boolean {
+  public deactivateAccount(userID: string, deactivatorID: string, reason?: string): boolean {
     const index = this.users.findIndex((u) => u.employeeID === userID);
     if (index === -1) return false;
 
@@ -245,7 +245,11 @@ class Registry {
       isLocked: true,
     };
 
-    this.addAuditLog(deactivatorID, `Account ${userID} deactivated by HR`);
+    const auditMessage = reason 
+      ? `Account ${userID} deactivated by HR. Reason: ${reason}`
+      : `Account ${userID} deactivated by HR`;
+
+    this.addAuditLog(deactivatorID, auditMessage);
 
     this.pushNotification({
       userID,
@@ -260,7 +264,7 @@ class Registry {
     return [...this.users];
   }
 
-  // regions
+  // regions and bulk actions
   
   public getRegions(): Region[] {
     return [...this.regions];
@@ -268,6 +272,25 @@ class Registry {
 
   public getRegionByID(regionID: string): Region | undefined {
     return this.regions.find((r) => r.regionID === regionID);
+  }
+
+  public bulkAssignRegion(userIDs: string[], regionID: string, updaterID: string): boolean {
+    let updatedCount = 0;
+    
+    this.users = this.users.map((user) => {
+      if (userIDs.includes(user.employeeID)) {
+        updatedCount++;
+        return { ...user, regionID };
+      }
+      return user;
+    });
+
+    if (updatedCount > 0) {
+      this.addAuditLog(updaterID, `Bulk region assignment: moved ${updatedCount} users to region ${regionID}`);
+      return true;
+    }
+    
+    return false;
   }
 
   // announcements

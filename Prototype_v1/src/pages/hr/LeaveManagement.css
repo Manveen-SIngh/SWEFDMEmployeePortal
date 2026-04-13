@@ -1,237 +1,117 @@
-/**
- * LeaveManagement.css
- * -------------------
- * Styles for the HR Leave Management page.
- */
+/* leave management and visual calendar styles */
 
 .leave-mgmt {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-6);
 }
 
-/* ---- Summary pills ---- */
-.leave-mgmt__summary {
+/* calendar grid */
+.leave-cal {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.leave-cal__header {
   display: flex;
-  gap: var(--space-4);
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-card);
 }
 
-.leave-mgmt__pill {
+.leave-cal__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.leave-cal__nav {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.leave-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--color-border);
+  gap: 1px;
+}
+
+.leave-cal__day-header {
+  background-color: var(--color-card);
+  padding: var(--space-2);
+  text-align: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.leave-cal__cell {
+  background-color: var(--color-white);
+  min-height: 100px;
+  padding: var(--space-2);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-4) var(--space-6);
-  background-color: var(--color-card);
-  border-radius: var(--radius-xl);
-  border: 1.5px solid var(--color-border);
-  min-width: 100px;
-  cursor: default;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
-  animation: fadeInUp var(--transition-base) ease both;
+  gap: 4px;
 }
 
-.leave-mgmt__pill[role="button"] { cursor: pointer; }
-.leave-mgmt__pill[role="button"]:hover { transform: translateY(-1px); border-color: var(--color-text-muted); }
-
-.leave-mgmt__pill--active { border-color: var(--color-navbar); background-color: var(--color-navbar); }
-.leave-mgmt__pill--active .leave-mgmt__pill-value { color: var(--color-primary); }
-.leave-mgmt__pill--active .leave-mgmt__pill-label { color: rgba(255,255,255,0.5); }
-
-.leave-mgmt__pill-value {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-.leave-mgmt__pill--warning .leave-mgmt__pill-value { color: var(--color-warning); }
-.leave-mgmt__pill--success .leave-mgmt__pill-value { color: var(--color-success); }
-.leave-mgmt__pill--danger  .leave-mgmt__pill-value { color: var(--color-danger); }
-
-.leave-mgmt__pill-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.leave-cal__cell--empty {
+  background-color: var(--color-navbar);
 }
 
-/* ---- Tabs ---- */
-.leave-mgmt__tabs {
-  display: flex;
-  border-bottom: 2px solid var(--color-border);
-  gap: 0;
-}
-
-.leave-mgmt__tab {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-5);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font-family);
+.leave-cal__date {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.leave-mgmt__tab:hover { color: var(--color-text-primary); }
-
-.leave-mgmt__tab--active {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-semibold);
-  border-bottom-color: var(--color-navbar);
-}
-
-.leave-mgmt__tab-badge { font-size: 10px; }
-
-/* ---- Table ---- */
-.leave-mgmt__table-wrap {
-  background-color: var(--color-white);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border);
-  overflow-x: auto;
-  animation: fadeInUp var(--transition-base) ease 60ms both;
-}
-
-.leave-mgmt__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--font-size-sm);
-}
-
-.leave-mgmt__table thead tr {
-  background-color: var(--color-card);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.leave-mgmt__table th {
-  padding: var(--space-3) var(--space-4);
-  text-align: left;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-.leave-mgmt__row {
-  border-bottom: 1px solid var(--color-border);
-  transition: background-color var(--transition-fast);
-  animation: fadeInUp var(--transition-base) ease both;
-}
-
-.leave-mgmt__row:last-child { border-bottom: none; }
-.leave-mgmt__row:hover { background-color: var(--color-card); }
-
-.leave-mgmt__table td {
-  padding: var(--space-3) var(--space-4);
   color: var(--color-text-secondary);
-  vertical-align: middle;
+  margin-bottom: var(--space-1);
 }
 
-.leave-mgmt__employee-cell {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.leave-mgmt__avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-navbar);
+.leave-cal__cell--today .leave-cal__date {
   color: var(--color-primary);
-  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
-.leave-mgmt__emp-name {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
-}
-
-.leave-mgmt__emp-id {
-  font-family: var(--font-family-mono);
+.leave-cal__block {
   font-size: 10px;
-  color: var(--color-text-muted);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-info-light);
+  color: var(--color-info-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
-.leave-mgmt__dates { white-space: nowrap; font-size: var(--font-size-xs); }
-.leave-mgmt__days { text-align: center; }
-.leave-mgmt__submitted { white-space: nowrap; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+/* pending requests table */
+.leave-mgmt__section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
 
-.leave-mgmt__reason-hint {
-  margin-left: var(--space-1);
-  font-size: var(--font-size-xs);
+.leave-mgmt__empty {
+  padding: var(--space-8);
+  text-align: center;
   color: var(--color-text-muted);
-  cursor: help;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+/* utility classes to replace inline styles */
+.leave-mgmt__date-range {
+  font-size: 12px;
+  color: var(--color-text-secondary);
 }
 
 .leave-mgmt__actions {
   display: flex;
-  gap: var(--space-2);
-  flex-wrap: nowrap;
-}
-
-.leave-mgmt__empty-cell {
-  text-align: center;
-  padding: var(--space-10) !important;
-  color: var(--color-text-muted);
-}
-
-/* ---- Rejection canvas ---- */
-.leave-mgmt-reject-canvas {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.leave-mgmt-reject-canvas__summary {
-  background-color: var(--color-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  padding: var(--space-4);
-}
-
-.leave-mgmt-reject-canvas__summary-title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--space-3);
-}
-
-.leave-mgmt-reject-canvas__summary-grid {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-2) var(--space-4);
-}
-
-.leave-mgmt-reject-canvas__summary-grid dt {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  align-self: center;
-}
-
-.leave-mgmt-reject-canvas__summary-grid dd {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
+  gap: 8px;
 }

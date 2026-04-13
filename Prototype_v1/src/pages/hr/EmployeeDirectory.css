@@ -1,9 +1,11 @@
 /* styles for hr employee directory */
+/* updated for bulk selection and review due badges */
 
 .emp-dir {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+  padding-bottom: 80px;
 }
 
 /* top bar */
@@ -114,6 +116,11 @@
   white-space: nowrap;
 }
 
+.emp-dir__table th.emp-dir__checkbox-col {
+  width: 40px;
+  padding-right: 0;
+}
+
 .emp-dir__row {
   border-bottom: 1px solid var(--color-border);
   cursor: pointer;
@@ -138,6 +145,76 @@
   vertical-align: middle;
 }
 
+.emp-dir__table td.emp-dir__checkbox-col {
+  padding-right: 0;
+}
+
+/* bulk action bar */
+.emp-dir__bulk-bar {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-primary);
+  color: var(--color-white);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-fixed);
+  animation: fadeInUp var(--transition-fast) ease both;
+}
+
+.emp-dir__bulk-count {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.emp-dir__bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: var(--space-4);
+}
+
+.emp-dir__bulk-select {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--color-white);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  outline: none;
+}
+
+.emp-dir__bulk-select option {
+  color: var(--color-text-primary);
+}
+
+/* review due badge */
+.emp-dir__review-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.emp-dir__review-due svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* general components */
 .emp-dir__id {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
@@ -590,4 +667,26 @@
 
 .emp-dir__row-anim {
   animation: fadeInUp var(--transition-base) ease both;
+}
+
+/* new utility classes to remove inline styles */
+
+.emp-dir__review-filter {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.emp-dir__review-filter-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.emp-dir__bulk-clear {
+  color: var(--color-white);
+  opacity: 0.8;
+}
+
+.emp-dir__review-id {
+  font-size: 10px;
 }

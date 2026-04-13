@@ -1,7 +1,9 @@
-// reusable confirmation dialog for destructive actions
-// renders as a centred modal overlay
+// reusable confirmation dialog
+// updated to support mandatory text input for audit logging
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
+// @ts-ignore
 import "./ConfirmDialog.css";
 
 interface ConfirmDialogProps {
@@ -9,7 +11,9 @@ interface ConfirmDialogProps {
   message: string;
   danger?: boolean;
   confirmLabel: string;
-  onConfirm: () => void;
+  requireInput?: boolean;
+  inputPlaceholder?: string;
+  onConfirm: (inputValue?: string) => void;
   onCancel: () => void;
 }
 
@@ -18,9 +22,13 @@ export default function ConfirmDialog({
   message,
   danger = false,
   confirmLabel,
+  requireInput = false,
+  inputPlaceholder = "enter reason...",
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const [inputValue, setInputValue] = useState("");
+
   // close on escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -29,6 +37,11 @@ export default function ConfirmDialog({
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [onCancel]);
+
+  const handleConfirm = () => {
+    if (requireInput && !inputValue.trim()) return;
+    onConfirm(inputValue.trim());
+  };
 
   return (
     <>
@@ -74,12 +87,28 @@ export default function ConfirmDialog({
           </div>
 
           <div className="confirm-dialog__text">
-            <h3 id="confirm-title" className="confirm-dialog__title">
+            <h3 
+              id="confirm-title" 
+              className="confirm-dialog__title"
+            >
               {title}
             </h3>
             <p className="confirm-dialog__message">
               {message}
             </p>
+            
+            {requireInput && (
+              <div className="confirm-dialog__input-wrap">
+                <input
+                  type="text"
+                  className="confirm-dialog__input"
+                  placeholder={inputPlaceholder}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  autoFocus
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -92,7 +121,8 @@ export default function ConfirmDialog({
           </button>
           <button
             className={`btn ${danger ? "btn--danger" : "btn--primary"}`}
-            onClick={onConfirm}
+            onClick={handleConfirm}
+            disabled={requireInput && !inputValue.trim()}
           >
             {confirmLabel}
           </button>

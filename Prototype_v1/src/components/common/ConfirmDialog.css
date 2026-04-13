@@ -71,6 +71,26 @@
   line-height: var(--line-height-relaxed);
 }
 
+/* new input for mandatory reasoning */
+.confirm-dialog__input-wrap {
+  margin-top: var(--space-4);
+}
+
+.confirm-dialog__input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.confirm-dialog__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
 .confirm-dialog__actions {
   display: flex;
   gap: var(--space-3);

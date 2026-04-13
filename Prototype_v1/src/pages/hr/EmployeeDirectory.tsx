@@ -1,5 +1,5 @@
 // hr employee directory page
-// includes create profile, performance reviews, account toggles
+// updated with bulk assignment and review due alerts
 
 import React, { useState, useMemo, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
@@ -62,6 +62,19 @@ function formatDate(date: Date): string {
   });
 }
 
+// check if consultant review is older than 6 months
+function isReviewDue(emp: AppUser, registry: any): boolean {
+  if (emp.role !== Role.CONSULTANT) return false;
+  
+  const reviews = registry.getPerformanceReviewsForUser(emp.employeeID);
+  if (reviews.length === 0) return true;
+  
+  const lastReviewDate = reviews[0].reviewPeriodEnd.getTime();
+  const sixMonthsInMs = 180 * 24 * 60 * 60 * 1000;
+  
+  return new Date().getTime() - lastReviewDate > sixMonthsInMs;
+}
+
 // star rating display
 function Stars({ rating }: { rating: number }) {
   return (
@@ -89,6 +102,8 @@ export default function EmployeeDirectory() {
   const { currentUser } = useAuth();
   const { refreshNotifications } = useNotifications();
   const { toasts, pushToast } = useToasts();
+  const registry = getRegistry();
+  const regions = registry.getRegions();
 
   // filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -96,9 +111,14 @@ export default function EmployeeDirectory() {
   const [filterRole, setFilterRole] = useState("");
   const [filterRegion, setFilterRegion] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  const [filterReviewDue, setFilterReviewDue] = useState(false);
 
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = useCallback(() => setRefreshKey((k) => k + 1), []);
+
+  // bulk actions state
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [bulkRegionTarget, setBulkRegionTarget] = useState("");
 
   // view and edit canvas
   const [viewTarget, setViewTarget] = useState<AppUser | null>(null);
@@ -136,13 +156,12 @@ export default function EmployeeDirectory() {
     message: string;
     danger: boolean;
     confirmLabel: string;
-    onConfirm: () => void;
+    requireInput?: boolean;
+    inputPlaceholder?: string;
+    onConfirm: (val?: string) => void;
   } | null>(null);
 
   if (!currentUser) return null;
-
-  const registry = getRegistry();
-  const regions = registry.getRegions();
 
   // fetch and filter employees
   const employees = useMemo(() => {
@@ -151,19 +170,14 @@ export default function EmployeeDirectory() {
 
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
-      
       if (searchField === "id") {
-        result = result.filter((u) => 
-          u.employeeID.toLowerCase().includes(term)
-        );
+        result = result.filter((u) => u.employeeID.toLowerCase().includes(term));
       } else if (searchField === "name") {
-        result = result.filter((u) =>
+        result = result.filter((u) => 
           (u.firstName + " " + u.lastName).toLowerCase().includes(term)
         );
       } else if (searchField === "email") {
-        result = result.filter((u) => 
-          u.email.toLowerCase().includes(term)
-        );
+        result = result.filter((u) => u.email.toLowerCase().includes(term));
       } else {
         result = result.filter((u) =>
           u.firstName.toLowerCase().includes(term) ||
@@ -185,17 +199,35 @@ export default function EmployeeDirectory() {
     if (filterRegion) {
       result = result.filter((u) => u.regionID === filterRegion);
     }
+    
+    if (filterReviewDue) {
+      result = result.filter((u) => isReviewDue(u, registry));
+    }
 
     return result;
-  }, [
-    searchTerm, 
-    searchField, 
-    filterRole, 
-    filterRegion, 
-    filterStatus, 
-    refreshKey, 
-    registry
-  ]);
+  }, [searchTerm, searchField, filterRole, filterRegion, filterStatus, filterReviewDue, refreshKey, registry]);
+
+  const toggleSelectUser = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setSelectedUsers(prev => 
+      prev.includes(id) ? prev.filter(u => u !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkAssign = () => {
+    if (!bulkRegionTarget || selectedUsers.length === 0) return;
+    
+    registry.bulkAssignRegion(
+      selectedUsers, 
+      bulkRegionTarget, 
+      currentUser.employeeID
+    );
+    
+    triggerRefresh();
+    pushToast(`successfully updated region for ${selectedUsers.length} employees`, "success");
+    setSelectedUsers([]);
+    setBulkRegionTarget("");
+  };
 
   const openViewCanvas = useCallback((user: AppUser) => {
     setViewTarget(user);
@@ -235,23 +267,16 @@ export default function EmployeeDirectory() {
           refreshNotifications();
 
           let msgs: string[] = [];
-          
           if (viewTarget.employmentStatus !== editStatus) {
             msgs.push(`status → ${editStatus.replace("_", " ")}`);
           }
-          
           if (viewTarget.regionID !== editRegion) {
-            const rName = regions.find((r) => r.regionID === editRegion)?.regionName;
-            msgs.push(`region → ${rName || editRegion}`);
+            msgs.push(`region updated`);
           }
           
-          if (editJobTitle && editJobTitle !== (viewTarget as ConsultantUser).jobTitle) {
-            msgs.push("job title updated");
-          }
-
           const actionMsg = msgs.length ? msgs.join(", ") : "record saved";
           pushToast(
-            `${viewTarget.firstName} ${viewTarget.lastName} — ${actionMsg}.`,
+            `${viewTarget.firstName} ${viewTarget.lastName} — ${actionMsg}.`, 
             "success"
           );
         }
@@ -274,39 +299,32 @@ export default function EmployeeDirectory() {
     } else {
       doSave();
     }
-  }, [
-    viewTarget, 
-    editStatus, 
-    editRegion, 
-    editJobTitle, 
-    editDepartment,
-    currentUser.employeeID, 
-    registry, 
-    triggerRefresh, 
-    refreshNotifications, 
-    pushToast, 
-    regions
-  ]);
+  }, [viewTarget, editStatus, editRegion, editJobTitle, editDepartment, currentUser.employeeID, registry, triggerRefresh, refreshNotifications, pushToast, regions]);
 
-  // activate / deactivate account
+  // activate / deactivate account with mandatory audit reasoning
   const handleToggleAccount = useCallback((emp: AppUser) => {
     const isCurrentlyActive = !emp.isLocked;
     const action = isCurrentlyActive ? "deactivate" : "activate";
 
     setConfirmDialog({
       title: `${isCurrentlyActive ? "Deactivate" : "Activate"} account`,
-      message: `Are you sure you want to ${action} the account for ${emp.firstName} ${emp.lastName} (${emp.employeeID})? ${
-        isCurrentlyActive
-          ? "They will no longer be able to log in to the portal."
-          : "They will be able to log in to the portal again."
-      }`,
+      message: `Are you sure you want to ${action} the account for ${emp.firstName} ${emp.lastName} (${emp.employeeID})?`,
       danger: isCurrentlyActive,
       confirmLabel: isCurrentlyActive ? "Deactivate account" : "Activate account",
-      onConfirm: () => {
+      requireInput: isCurrentlyActive,
+      inputPlaceholder: "mandatory: provide a reason for the audit log...",
+      onConfirm: (reasonVal?: string) => {
         if (isCurrentlyActive) {
-          registry.deactivateAccount(emp.employeeID, currentUser.employeeID);
+          registry.deactivateAccount(
+            emp.employeeID, 
+            currentUser.employeeID, 
+            reasonVal
+          );
         } else {
-          registry.activateAccount(emp.employeeID, currentUser.employeeID);
+          registry.activateAccount(
+            emp.employeeID, 
+            currentUser.employeeID
+          );
         }
         
         const refreshed = registry.getUserByID(emp.employeeID);
@@ -377,10 +395,7 @@ export default function EmployeeDirectory() {
     } else {
       setCrErr(result.error || "Failed to create profile.");
     }
-  }, [
-    crFn, crLn, crUser, crRole, crRegion, crJob, crGender, crDob,
-    currentUser.employeeID, registry, triggerRefresh, refreshNotifications, pushToast
-  ]);
+  }, [crFn, crLn, crUser, crRole, crRegion, crJob, crGender, crDob, currentUser.employeeID, registry, triggerRefresh, refreshNotifications, pushToast]);
 
   // performance review
   const openReviewCanvas = useCallback((emp: AppUser) => {
@@ -438,10 +453,7 @@ export default function EmployeeDirectory() {
     } else {
       setRvErr(result.error || "Failed to submit review.");
     }
-  }, [
-    reviewTarget, rvPs, rvPe, rvRating, rvText, currentUser.employeeID,
-    registry, triggerRefresh, refreshNotifications, pushToast
-  ]);
+  }, [reviewTarget, rvPs, rvPe, rvRating, rvText, currentUser.employeeID, registry, triggerRefresh, refreshNotifications, pushToast]);
 
   // render
   return (
@@ -454,6 +466,8 @@ export default function EmployeeDirectory() {
           message={confirmDialog.message}
           danger={confirmDialog.danger}
           confirmLabel={confirmDialog.confirmLabel}
+          requireInput={confirmDialog.requireInput}
+          inputPlaceholder={confirmDialog.inputPlaceholder}
           onConfirm={confirmDialog.onConfirm}
           onCancel={() => setConfirmDialog(null)}
         />
@@ -530,25 +544,29 @@ export default function EmployeeDirectory() {
           >
             <option value="">All regions</option>
             {regions.map((r) => (
-              <option key={r.regionID} value={r.regionID}>
+              <option 
+                key={r.regionID} 
+                value={r.regionID}
+              >
                 {r.regionName}
               </option>
             ))}
           </select>
 
-          <select
-            id="filter-status"
-            title="Status filter"
-            className="emp-dir__filter-select"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            aria-label="Filter by status"
-          >
-            <option value="">All statuses</option>
-            <option value={EmploymentStatus.ACTIVE}>Active</option>
-            <option value={EmploymentStatus.ON_LEAVE}>On Leave</option>
-            <option value={EmploymentStatus.TERMINATED}>Terminated</option>
-          </select>
+          <div className="emp-dir__review-filter">
+            <input 
+              id="filter-review-due" 
+              type="checkbox" 
+              checked={filterReviewDue} 
+              onChange={(e) => setFilterReviewDue(e.target.checked)} 
+            />
+            <label 
+              htmlFor="filter-review-due" 
+              className="emp-dir__review-filter-label"
+            >
+              Review Due (6mo+)
+            </label>
+          </div>
         </div>
 
         <button 
@@ -556,13 +574,13 @@ export default function EmployeeDirectory() {
           onClick={openCreateCanvas}
         >
           <svg 
-            className="emp-dir__icon-sm"
+            className="emp-dir__icon-sm" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="currentColor" 
             strokeWidth="2.5" 
             strokeLinecap="round" 
-            strokeLinejoin="round" 
+            strokeLinejoin="round"
           >
             <path d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
@@ -571,22 +589,24 @@ export default function EmployeeDirectory() {
       </div>
 
       <p className="emp-dir__count">
-        {employees.length} employee{employees.length !== 1 ? "s" : ""}
-        {searchTerm && ` matching "${searchTerm}"`}
+        {employees.length} employee{employees.length !== 1 ? "s" : ""} matching criteria
       </p>
 
       {/* directory table */}
       <div className="emp-dir__table-wrap">
-        <table className="emp-dir__table" aria-label="Employee directory">
+        <table 
+          className="emp-dir__table" 
+          aria-label="Employee directory"
+        >
           <thead>
             <tr>
+              <th className="emp-dir__checkbox-col"></th>
               <th>ID</th>
               <th>Name</th>
               <th>Role</th>
               <th>Region</th>
               <th>Status</th>
               <th>Account</th>
-              <th>Start Date</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -599,8 +619,11 @@ export default function EmployeeDirectory() {
               </tr>
             ) : (
               employees.map((emp) => {
-                const regionName = regions.find((r) => r.regionID === emp.regionID)?.regionName ?? emp.regionID;
+                const regionName = regions.find(
+                  (r) => r.regionID === emp.regionID
+                )?.regionName ?? emp.regionID;
                 const isDeactivated = emp.isLocked;
+                const reviewDue = isReviewDue(emp, registry);
 
                 return (
                   <tr
@@ -609,6 +632,14 @@ export default function EmployeeDirectory() {
                     onClick={() => openViewCanvas(emp)}
                     title={`View profile: ${emp.firstName} ${emp.lastName}`}
                   >
+                    <td className="emp-dir__checkbox-col">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedUsers.includes(emp.employeeID)}
+                        onClick={(e) => toggleSelectUser(e, emp.employeeID)}
+                        aria-label={`Select ${emp.firstName}`}
+                      />
+                    </td>
                     <td>
                       <code className="emp-dir__id">
                         {emp.employeeID}
@@ -623,9 +654,17 @@ export default function EmployeeDirectory() {
                         <div className="emp-dir__full-name">
                           {emp.firstName} {emp.lastName}
                         </div>
-                        <div className="emp-dir__email">
-                          {emp.email}
-                        </div>
+                        {reviewDue && (
+                          <div className="emp-dir__review-due">
+                            <svg 
+                              viewBox="0 0 24 24" 
+                              fill="currentColor"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            Review Due
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td>
@@ -643,13 +682,14 @@ export default function EmployeeDirectory() {
                     </td>
                     <td>
                       {isDeactivated ? (
-                        <span className="badge badge--danger">Deactivated</span>
+                        <span className="badge badge--danger">
+                          Deactivated
+                        </span>
                       ) : (
-                        <span className="badge badge--success">Active</span>
+                        <span className="badge badge--success">
+                          Active
+                        </span>
                       )}
-                    </td>
-                    <td className="emp-dir__start-date">
-                      {formatDate(emp.startDate)}
                     </td>
                     <td>
                       <button
@@ -670,6 +710,48 @@ export default function EmployeeDirectory() {
           </tbody>
         </table>
       </div>
+
+      {/* bulk action bar */}
+      {selectedUsers.length > 0 && (
+        <div className="emp-dir__bulk-bar">
+          <span className="emp-dir__bulk-count">
+            {selectedUsers.length} selected
+          </span>
+          <div className="emp-dir__bulk-actions">
+            <select 
+              className="emp-dir__bulk-select"
+              value={bulkRegionTarget}
+              onChange={(e) => setBulkRegionTarget(e.target.value)}
+              aria-label="Select target region for bulk assignment"
+            >
+              <option value="">
+                Move to region...
+              </option>
+              {regions.map((r) => (
+                <option 
+                  key={r.regionID} 
+                  value={r.regionID}
+                >
+                  {r.regionName}
+                </option>
+              ))}
+            </select>
+            <button 
+              className="btn btn--primary btn--sm" 
+              onClick={handleBulkAssign}
+              disabled={!bulkRegionTarget}
+            >
+              Apply
+            </button>
+            <button 
+              className="btn btn--ghost btn--sm emp-dir__bulk-clear" 
+              onClick={() => setSelectedUsers([])}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* view and edit profile */}
       <RightCanvas
@@ -705,7 +787,9 @@ export default function EmployeeDirectory() {
                       {emp.employmentStatus.replace("_", " ")}
                     </span>
                     {isDeactivated && (
-                      <span className="badge badge--danger">Deactivated</span>
+                      <span className="badge badge--danger">
+                        Deactivated
+                      </span>
                     )}
                   </div>
                 </div>
@@ -718,8 +802,8 @@ export default function EmployeeDirectory() {
                     Account {isDeactivated ? "deactivated" : "active"}
                   </div>
                   <div className="emp-dir-canvas__account-hint">
-                    {isDeactivated
-                      ? "This employee cannot log in to the portal."
+                    {isDeactivated 
+                      ? "This employee cannot log in to the portal." 
                       : "This employee can log in to the portal."}
                   </div>
                 </div>
@@ -731,43 +815,25 @@ export default function EmployeeDirectory() {
                 </button>
               </div>
 
-              <div className="emp-dir-canvas__section">
-                <h4 className="emp-dir-canvas__section-title">Personal Details</h4>
-                <div className="emp-dir-canvas__fields">
-                  {[
-                    ["Employee ID", emp.employeeID, true],
-                    ["Email", emp.email, false],
-                    ["Phone", emp.phone || "—", false],
-                    ["Mobile", emp.mobile || "—", false],
-                    ["Start Date", formatDate(emp.startDate), false],
-                    ["NI Number", emp.niNumber || "—", true],
-                  ].map(([label, value, mono]) => (
-                    <div key={String(label)} className="emp-dir-canvas__field-row">
-                      <span className="emp-dir-canvas__field-label">
-                        {label}
-                      </span>
-                      <span className={`emp-dir-canvas__field-value ${mono ? "emp-dir-canvas__field-value--mono" : ""}`}>
-                        {String(value)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               <div className="emp-dir-canvas__section emp-dir-canvas__section--edit">
                 <h4 className="emp-dir-canvas__section-title">
-                  Employment Record
-                  <span className="emp-dir-canvas__editable-note">Editable</span>
+                  Employment Record 
+                  <span className="emp-dir-canvas__editable-note">
+                    Editable
+                  </span>
                 </h4>
 
                 <div className="form-group">
-                  <label htmlFor="edit-emp-status" className="form-label">
+                  <label 
+                    htmlFor="edit-emp-status" 
+                    className="form-label"
+                  >
                     Employment Status
                   </label>
                   <select 
                     id="edit-emp-status" 
                     className="form-select" 
-                    value={editStatus}
+                    value={editStatus} 
                     onChange={(e) => setEditStatus(e.target.value)} 
                     disabled={editSaving}
                   >
@@ -778,18 +844,24 @@ export default function EmployeeDirectory() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="edit-region" className="form-label">
+                  <label 
+                    htmlFor="edit-region" 
+                    className="form-label"
+                  >
                     Region
                   </label>
                   <select 
                     id="edit-region" 
                     className="form-select" 
-                    value={editRegion}
+                    value={editRegion} 
                     onChange={(e) => setEditRegion(e.target.value)} 
                     disabled={editSaving}
                   >
                     {regions.map((r) => (
-                      <option key={r.regionID} value={r.regionID}>
+                      <option 
+                        key={r.regionID} 
+                        value={r.regionID}
+                      >
                         {r.regionName}
                       </option>
                     ))}
@@ -798,31 +870,37 @@ export default function EmployeeDirectory() {
 
                 {isCon ? (
                   <div className="form-group">
-                    <label htmlFor="edit-job-title" className="form-label">
+                    <label 
+                      htmlFor="edit-job-title" 
+                      className="form-label"
+                    >
                       Job Title
                     </label>
                     <input 
                       id="edit-job-title" 
                       type="text" 
                       className="form-input" 
-                      value={editJobTitle}
+                      value={editJobTitle} 
                       onChange={(e) => setEditJobTitle(e.target.value)} 
-                      disabled={editSaving}
+                      disabled={editSaving} 
                       placeholder="e.g. Software Engineer" 
                     />
                   </div>
                 ) : (
                   <div className="form-group">
-                    <label htmlFor="edit-department" className="form-label">
+                    <label 
+                      htmlFor="edit-department" 
+                      className="form-label"
+                    >
                       Department
                     </label>
                     <input 
                       id="edit-department" 
                       type="text" 
                       className="form-input" 
-                      value={editDepartment}
+                      value={editDepartment} 
                       onChange={(e) => setEditDepartment(e.target.value)} 
-                      disabled={editSaving}
+                      disabled={editSaving} 
                       placeholder="e.g. Human Resources" 
                     />
                   </div>
@@ -830,8 +908,8 @@ export default function EmployeeDirectory() {
 
                 <button 
                   className="btn btn--primary emp-dir__full-width-btn" 
-                  onClick={handleSaveEmploymentRecord}
-                  disabled={editSaving} 
+                  onClick={handleSaveEmploymentRecord} 
+                  disabled={editSaving}
                 >
                   {editSaving ? "Saving…" : "Save Employment Record"}
                 </button>
@@ -853,7 +931,6 @@ export default function EmployeeDirectory() {
 
                   {(() => {
                     const reviews = registry.getPerformanceReviewsForUser(emp.employeeID);
-                    
                     if (reviews.length === 0) {
                       return (
                         <div className="emp-dir-canvas__no-reviews">
@@ -864,18 +941,19 @@ export default function EmployeeDirectory() {
                     
                     return reviews.map((r) => {
                       const reviewer = registry.getUserByID(r.reviewerID);
-                      const reviewerName = reviewer
-                        ? `${reviewer.firstName} ${reviewer.lastName}`
+                      const reviewerName = reviewer 
+                        ? `${reviewer.firstName} ${reviewer.lastName}` 
                         : r.reviewerID;
-                      const periodStart = formatDate(r.reviewPeriodStart);
-                      const periodEnd = formatDate(r.reviewPeriodEnd);
-
+                      
                       return (
-                        <div key={r.reviewID} className="emp-dir-canvas__review-card">
+                        <div 
+                          key={r.reviewID} 
+                          className="emp-dir-canvas__review-card"
+                        >
                           <div className="emp-dir-canvas__review-top">
                             <div>
                               <div className="emp-dir-canvas__review-period">
-                                {periodStart} — {periodEnd}
+                                {formatDate(r.reviewPeriodStart)} — {formatDate(r.reviewPeriodEnd)}
                               </div>
                               <div className="emp-dir-canvas__review-sub">
                                 Review period
@@ -887,9 +965,13 @@ export default function EmployeeDirectory() {
                             {r.writtenEvaluation}
                           </div>
                           <div className="emp-dir-canvas__review-meta">
-                            <span>Reviewed by {reviewerName}</span>
-                            <span className="emp-dir-canvas__review-sep">·</span>
-                            <span className="badge badge--info" style={{ fontSize: 10 }}>
+                            <span>
+                              Reviewed by {reviewerName}
+                            </span>
+                            <span className="emp-dir-canvas__review-sep">
+                              ·
+                            </span>
+                            <span className="badge badge--info emp-dir__review-id">
                               {r.reviewerID}
                             </span>
                           </div>
@@ -905,13 +987,13 @@ export default function EmployeeDirectory() {
       </RightCanvas>
 
       {/* create profile flow */}
-      <RightCanvas
-        isOpen={createOpen}
+      <RightCanvas 
+        isOpen={createOpen} 
         onClose={() => { 
           setCreateOpen(false); 
           setCrSuccess(null); 
-        }}
-        title="Create Consultant Profile"
+        }} 
+        title="Create Consultant Profile" 
         footer={
           !crSuccess ? (
             <>
@@ -934,11 +1016,11 @@ export default function EmployeeDirectory() {
         {crSuccess ? (
           <div className="emp-dir-canvas__create-success">
             <svg 
-              className="emp-dir__icon-md"
+              className="emp-dir__icon-md" 
               viewBox="0 0 24 24" 
               fill="none" 
               stroke="currentColor" 
-              strokeWidth="1.5" 
+              strokeWidth="1.5"
             >
               <path 
                 strokeLinecap="round" 
@@ -948,13 +1030,8 @@ export default function EmployeeDirectory() {
             </svg>
             <h3>Profile Created</h3>
             <p>
-              {crSuccess.firstName} {crSuccess.lastName} has been added as a {roleLabel(crSuccess.role)}.
-              <br />
-              Employee ID: <code>{crSuccess.employeeID}</code>
-              <br />
-              Username: <code>{(crSuccess as any).username}</code>
-              <br />
-              Default password: <code>Welcome1!</code>
+              {crSuccess.firstName} {crSuccess.lastName} added.<br/>
+              ID: <code>{crSuccess.employeeID}</code>
             </p>
             <button 
               className="btn btn--primary" 
@@ -968,125 +1045,130 @@ export default function EmployeeDirectory() {
           </div>
         ) : (
           <div className="emp-dir-create-canvas">
-            <div className="emp-dir-create-canvas__note">
-              <svg 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" 
-                />
-              </svg>
-              <span>
-                A default password (<strong>Welcome1!</strong>) will be assigned.
-                The employee should reset it on first login. The employee ID is auto-generated.
-              </span>
-            </div>
-
             {crErr && (
               <div className="emp-dir-canvas__error">
                 {crErr}
               </div>
             )}
-
+            
             <div className="emp-dir-canvas__grid-2">
               <div className="form-group">
-                <label htmlFor="create-fn" className="form-label form-label--required">First Name</label>
+                <label 
+                  htmlFor="cr-fn" 
+                  className="form-label form-label--required"
+                >
+                  First Name
+                </label>
                 <input 
-                  id="create-fn"
+                  id="cr-fn" 
                   type="text" 
                   className="form-input" 
                   value={crFn} 
-                  placeholder="e.g. Jordan"
-                  onChange={(e) => { 
-                    setCrFn(e.target.value); 
-                    setCrErr(""); 
-                  }} 
+                  onChange={(e) => setCrFn(e.target.value)} 
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="create-ln" className="form-label form-label--required">Last Name</label>
+                <label 
+                  htmlFor="cr-ln" 
+                  className="form-label form-label--required"
+                >
+                  Last Name
+                </label>
                 <input 
-                  id="create-ln"
+                  id="cr-ln" 
                   type="text" 
                   className="form-input" 
                   value={crLn} 
-                  placeholder="e.g. Smith"
-                  onChange={(e) => { 
-                    setCrLn(e.target.value); 
-                    setCrErr(""); 
-                  }} 
+                  onChange={(e) => setCrLn(e.target.value)} 
                 />
               </div>
             </div>
-
+            
             <div className="form-group">
-              <label htmlFor="create-username" className="form-label form-label--required">Username</label>
+              <label 
+                htmlFor="cr-un" 
+                className="form-label form-label--required"
+              >
+                Username
+              </label>
               <input 
-                id="create-username"
+                id="cr-un" 
                 type="text" 
                 className="form-input" 
                 value={crUser} 
-                placeholder="e.g. jordan.smith"
-                onChange={(e) => { 
-                  setCrUser(e.target.value); 
-                  setCrErr(""); 
-                }} 
+                onChange={(e) => setCrUser(e.target.value)} 
               />
             </div>
-
+            
             <div className="emp-dir-canvas__grid-2">
               <div className="form-group">
-                <label htmlFor="create-role" className="form-label form-label--required">Role</label>
+                <label 
+                  htmlFor="cr-role" 
+                  className="form-label form-label--required"
+                >
+                  Role
+                </label>
                 <select 
-                  id="create-role"
+                  id="cr-role" 
                   className="form-select" 
                   value={crRole} 
                   onChange={(e) => setCrRole(e.target.value)}
                 >
                   <option value="CONSULTANT">Consultant</option>
                   <option value="HUMAN_RESOURCES">HR Staff</option>
-                  <option value="IT_SUPPORT">IT Support</option>
                 </select>
               </div>
               <div className="form-group">
-                <label htmlFor="create-region" className="form-label form-label--required">Region</label>
+                <label 
+                  htmlFor="cr-reg" 
+                  className="form-label form-label--required"
+                >
+                  Region
+                </label>
                 <select 
-                  id="create-region"
+                  id="cr-reg" 
                   className="form-select" 
                   value={crRegion} 
                   onChange={(e) => setCrRegion(e.target.value)}
                 >
                   {regions.map((r) => (
-                    <option key={r.regionID} value={r.regionID}>
+                    <option 
+                      key={r.regionID} 
+                      value={r.regionID}
+                    >
                       {r.regionName}
                     </option>
                   ))}
                 </select>
               </div>
             </div>
-
+            
             <div className="form-group">
-              <label htmlFor="create-job" className="form-label">Job Title</label>
+              <label 
+                htmlFor="cr-job" 
+                className="form-label"
+              >
+                Job Title
+              </label>
               <input 
-                id="create-job"
+                id="cr-job" 
                 type="text" 
                 className="form-input" 
                 value={crJob} 
-                placeholder="e.g. Software Engineer"
                 onChange={(e) => setCrJob(e.target.value)} 
               />
             </div>
-
+            
             <div className="emp-dir-canvas__grid-2">
               <div className="form-group">
-                <label htmlFor="create-gender" className="form-label">Gender</label>
+                <label 
+                  htmlFor="cr-gen" 
+                  className="form-label"
+                >
+                  Gender
+                </label>
                 <select 
-                  id="create-gender"
+                  id="cr-gen" 
                   className="form-select" 
                   value={crGender} 
                   onChange={(e) => setCrGender(e.target.value)}
@@ -1099,42 +1181,33 @@ export default function EmployeeDirectory() {
                 </select>
               </div>
               <div className="form-group">
-                <label htmlFor="create-dob" className="form-label">Date of Birth</label>
+                <label 
+                  htmlFor="cr-dob" 
+                  className="form-label"
+                >
+                  Date of Birth
+                </label>
                 <input 
-                  id="create-dob"
+                  id="cr-dob" 
                   type="date" 
                   className="form-input" 
-                  value={crDob}
+                  value={crDob} 
                   onChange={(e) => setCrDob(e.target.value)} 
                 />
               </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="create-email-preview" className="form-label">Email</label>
-              <input 
-                id="create-email-preview"
-                type="text" 
-                className="form-input emp-dir-canvas__input-disabled" 
-                disabled
-                value={crUser ? crUser.trim() + "@fdmgroup.com" : ""}
-              />
-              <span className="emp-dir-canvas__char-count">
-                Auto-generated from username
-              </span>
             </div>
           </div>
         )}
       </RightCanvas>
 
       {/* write review flow */}
-      <RightCanvas
-        isOpen={!!reviewTarget}
+      <RightCanvas 
+        isOpen={!!reviewTarget} 
         onClose={() => { 
           setReviewTarget(null); 
           setRvSuccess(false); 
-        }}
-        title="Write Performance Review"
+        }} 
+        title="Write Performance Review" 
         footer={
           !rvSuccess ? (
             <>
@@ -1148,7 +1221,7 @@ export default function EmployeeDirectory() {
                 className="btn btn--primary" 
                 onClick={handleSubmitReview}
               >
-                Submit Review
+                Submit
               </button>
             </>
           ) : undefined
@@ -1158,11 +1231,11 @@ export default function EmployeeDirectory() {
           rvSuccess ? (
             <div className="emp-dir-canvas__create-success">
               <svg 
-                className="emp-dir__icon-md"
+                className="emp-dir__icon-md" 
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
-                strokeWidth="1.5" 
+                strokeWidth="1.5"
               >
                 <path 
                   strokeLinecap="round" 
@@ -1171,130 +1244,89 @@ export default function EmployeeDirectory() {
                 />
               </svg>
               <h3>Review Submitted</h3>
-              <p>
-                Performance review for {reviewTarget.firstName} {reviewTarget.lastName} has been recorded.
-                <br />
-                Rating: {rvRating}/5
-              </p>
               <button 
                 className="btn btn--primary" 
-                onClick={() => {
-                  const emp = registry.getUserByID(reviewTarget.employeeID);
-                  setReviewTarget(null);
-                  setRvSuccess(false);
-                  if (emp) setTimeout(() => openViewCanvas(emp), 100);
-                }}
+                onClick={() => setReviewTarget(null)}
               >
-                Back to Profile
+                Back
               </button>
             </div>
           ) : (
             <div className="emp-dir-create-canvas">
-              <div className="emp-dir-canvas__review-target">
-                <div className="emp-dir__avatar">
-                  {reviewTarget.firstName[0]}
-                  {reviewTarget.lastName[0]}
-                </div>
-                <div className="emp-dir-canvas__review-target-info">
-                  <div className="emp-dir-canvas__review-target-name">
-                    {reviewTarget.firstName} {reviewTarget.lastName}
-                  </div>
-                  <div className="emp-dir-canvas__review-target-sub">
-                    {reviewTarget.employeeID} · {(reviewTarget as ConsultantUser).jobTitle}
-                  </div>
-                </div>
-                <span className={`badge ${statusBadgeCls(reviewTarget.employmentStatus)}`}>
-                  {reviewTarget.employmentStatus.replace("_", " ")}
-                </span>
-              </div>
-
-              <div className="emp-dir-canvas__review-warning">
-                <svg 
-                  className="emp-dir__icon-warning"
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" 
-                  />
-                </svg>
-                <span>
-                  This review will be visible to the consultant on their Performance Reviews page.
-                  Ensure the evaluation is professional and constructive.
-                </span>
-              </div>
-
               {rvErr && (
                 <div className="emp-dir-canvas__error">
                   {rvErr}
                 </div>
               )}
-
+              
               <div className="emp-dir-canvas__grid-2">
                 <div className="form-group">
-                  <label htmlFor="review-start" className="form-label form-label--required">Review Period Start</label>
+                  <label 
+                    htmlFor="rv-start" 
+                    className="form-label form-label--required"
+                  >
+                    Start
+                  </label>
                   <input 
-                    id="review-start"
+                    id="rv-start" 
                     type="date" 
                     className="form-input" 
-                    value={rvPs}
-                    onChange={(e) => { 
-                      setRvPs(e.target.value); 
-                      setRvErr(""); 
-                    }} 
+                    value={rvPs} 
+                    onChange={(e) => setRvPs(e.target.value)} 
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="review-end" className="form-label form-label--required">Review Period End</label>
+                  <label 
+                    htmlFor="rv-end" 
+                    className="form-label form-label--required"
+                  >
+                    End
+                  </label>
                   <input 
-                    id="review-end"
+                    id="rv-end" 
                     type="date" 
                     className="form-input" 
-                    value={rvPe}
-                    onChange={(e) => { 
-                      setRvPe(e.target.value); 
-                      setRvErr(""); 
-                    }} 
+                    value={rvPe} 
+                    onChange={(e) => setRvPe(e.target.value)} 
                   />
                 </div>
               </div>
-
+              
               <div className="form-group">
-                <label htmlFor="review-rating" className="form-label form-label--required">Rating (1–5)</label>
+                <label 
+                  htmlFor="rv-rate" 
+                  className="form-label form-label--required"
+                >
+                  Rating
+                </label>
                 <select 
-                  id="review-rating"
+                  id="rv-rate" 
                   className="form-select" 
                   value={rvRating} 
                   onChange={(e) => setRvRating(e.target.value)}
                 >
-                  <option value="1">1 — Unsatisfactory</option>
-                  <option value="2">2 — Needs improvement</option>
-                  <option value="3">3 — Meets expectations</option>
-                  <option value="4">4 — Exceeds expectations</option>
-                  <option value="5">5 — Outstanding</option>
+                  <option value="1">1 - Unsatisfactory</option>
+                  <option value="2">2 - Needs improvement</option>
+                  <option value="3">3 - Meets expectations</option>
+                  <option value="4">4 - Exceeds</option>
+                  <option value="5">5 - Outstanding</option>
                 </select>
               </div>
-
+              
               <div className="form-group">
-                <label htmlFor="review-text" className="form-label form-label--required">Written Evaluation</label>
+                <label 
+                  htmlFor="rv-text" 
+                  className="form-label form-label--required"
+                >
+                  Evaluation
+                </label>
                 <textarea 
-                  id="review-text"
+                  id="rv-text" 
                   className="form-textarea" 
                   rows={6} 
-                  value={rvText}
-                  onChange={(e) => { 
-                    setRvText(e.target.value); 
-                    setRvErr(""); 
-                  }}
-                  placeholder="Provide a detailed evaluation covering technical skills, communication, areas for improvement, and recommendations..." 
+                  value={rvText} 
+                  onChange={(e) => setRvText(e.target.value)} 
                 />
-                <span className="emp-dir-canvas__char-count">
-                  {rvText.length} characters
-                </span>
               </div>
             </div>
           )

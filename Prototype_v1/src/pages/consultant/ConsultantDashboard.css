@@ -1,13 +1,12 @@
 /* consultant dashboard styles */
 
-.consultant-dash {
+.consultant-dash { /* page layout */
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-/* welcome header */
-.consultant-dash__welcome {
+.consultant-dash__welcome { /* welcome header */
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -15,28 +14,27 @@
   gap: var(--space-3);
 }
 
-.consultant-dash__greeting {
+.consultant-dash__greeting { /* main greeting */
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   letter-spacing: -0.01em;
 }
 
-.consultant-dash__sub {
+.consultant-dash__sub { /* sub greeting */
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin-top: var(--space-1);
 }
 
-.consultant-dash__meta {
+.consultant-dash__meta { /* meta info (date, role) */
   display: flex;
   align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;
 }
 
-/* grid rows */
-.consultant-dash__row {
+.consultant-dash__row { /* grid rows */
   display: grid;
   gap: var(--space-6);
 }
@@ -49,8 +47,7 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* dash card */
-.dash-card {
+.dash-card { /* base card styles */
   background-color: var(--color-card);
   border-radius: var(--radius-xl);
   padding: var(--space-5);
@@ -67,14 +64,13 @@
   grid-column: span 2;
 }
 
-/* card header */
-.dash-card__header {
+.dash-card__header { /* card header */
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
-.dash-card__label {
+.dash-card__label { /* card label */
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
@@ -88,8 +84,7 @@
   color: var(--color-text-secondary);
 }
 
-/* coloured icon */
-.dash-card__icon {
+.dash-card__icon { /* coloured icon */
   width: 36px;
   height: 36px;
   border-radius: var(--radius-md);
@@ -99,7 +94,7 @@
   flex-shrink: 0;
 }
 
-.dash-card__icon svg {
+.dash-card__icon svg { 
   width: 18px;
   height: 18px;
 }
@@ -124,8 +119,7 @@
   color: var(--color-info);
 }
 
-/* card values */
-.dash-card__value {
+.dash-card__value { /* card values */
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -133,7 +127,7 @@
   line-height: 1.1;
 }
 
-.dash-card__value--muted {
+.dash-card__value--muted { 
   color: var(--color-text-secondary);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
@@ -150,8 +144,7 @@
   color: var(--color-text-secondary);
 }
 
-/* card link */
-.dash-card__link {
+.dash-card__link { /* card link */
   margin-top: auto;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -169,14 +162,13 @@
   color: var(--color-text-primary);
 }
 
-/* weekly planner */
-.weekly-planner {
+.weekly-planner { /* weekly planner */
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: var(--space-2);
 }
 
-.weekly-planner__day {
+.weekly-planner__day { /* individual day */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -208,7 +200,7 @@
   opacity: 0.6;
 }
 
-.weekly-planner__day-name {
+.weekly-planner__day-name { /* day name */
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
@@ -227,7 +219,7 @@
   color: var(--color-primary);
 }
 
-.weekly-planner__day-status {
+.weekly-planner__day-status { /* status text */
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
@@ -243,15 +235,14 @@
   color: var(--color-warning-text);
 }
 
-/* payslips */
-.payslip-list {
+.payslip-list { /* payslips */
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
   flex: 1;
 }
 
-.payslip-list__item {
+.payslip-list__item { /* individual payslip */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -262,13 +253,13 @@
   gap: var(--space-4);
 }
 
-.payslip-list__period {
+.payslip-list__period { 
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.payslip-list__month {
+.payslip-list__month { 
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -286,7 +277,7 @@
   gap: 2px;
 }
 
-.payslip-list__gross {
+.payslip-list__gross { /* gross amount */
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -299,8 +290,7 @@
   font-family: var(--font-family-mono);
 }
 
-/* training */
-.training-summary {
+.training-summary { /* training */
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -312,7 +302,7 @@
   gap: var(--space-1);
 }
 
-.training-summary__done {
+.training-summary__done { /* completed count */
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -324,7 +314,7 @@
   color: var(--color-text-secondary);
 }
 
-.training-summary__bar-track {
+.training-summary__bar-track { /* progress bar track */
   width: 100%;
   height: 6px;
   background-color: var(--color-border);
@@ -344,14 +334,14 @@
   color: var(--color-text-secondary);
 }
 
-.training-modules {
+.training-modules { /* training modules list */
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   flex: 1;
 }
 
-.training-modules__item {
+.training-modules__item { /* individual module */
   display: flex;
   align-items: center;
   justify-content: space-between;

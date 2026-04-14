@@ -5,12 +5,10 @@ import { useAuth } from "../../context/AuthContext";
 import { getRegistry } from "../../services/Registry";
 
 export default function Learning() {
-    const { currentUser } = useAuth();
-    const registry = getRegistry();
-    const userID = currentUser ? currentUser.employeeID : "";
-    
-    // Keeping your friend's original data fetching logic
-    const { upcoming, completed } = registry.getLearningCoursesForUser(userID);
+    const { currentUser } = useAuth(); /* Get current user from auth context */
+    const registry = getRegistry(); /* Get the registry instance */
+    const userID = currentUser ? currentUser.employeeID : ""; /* Get user ID */
+    const { upcoming, completed } = registry.getLearningCoursesForUser(userID); /* Fetch learning courses for the specific user */
 
     return (
         <div className="learning-page">
@@ -25,7 +23,7 @@ export default function Learning() {
                     <div className="learning-empty">No upcoming courses assigned.</div>
                 ) : (
                     <div className="learning-grid">
-                        {upcoming.map((course: any, index: number) => (
+                        {upcoming.map((course: any, index: number) => ( /* Map through upcoming courses and display them in cards */
                             <div key={index} className="learning-card">
                                 <div className="learning-card-header">
                                     <h4>{course.moduleName}</h4>
@@ -49,7 +47,7 @@ export default function Learning() {
                     <div className="learning-empty">No completed courses yet.</div>
                 ) : (
                     <div className="learning-grid">
-                        {completed.map((course: any, index: number) => (
+                        {completed.map((course: any, index: number) => ( /* Map through completed courses and display them in cards */
                             <div key={index} className="learning-card learning-card--completed">
                                 <div className="learning-card-header">
                                     <h4>{course.moduleName}</h4>

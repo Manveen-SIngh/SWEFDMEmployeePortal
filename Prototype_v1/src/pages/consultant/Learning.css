@@ -1,6 +1,4 @@
-/* learning & development styles */
-
-.learning-page {
+.learning-page { /* page layout */
   max-width: 900px;
   margin: 0 auto;
   display: flex;
@@ -9,23 +7,23 @@
   width: 100%;
 }
 
-.learning-header h2 {
+.learning-header h2 { /* header */
   font-size: var(--font-size-2xl);
   color: var(--color-text-primary);
   margin-bottom: var(--space-2);
 }
 
-.learning-header p {
+.learning-header p { /* header */
   color: var(--color-text-secondary);
 }
 
-.learning-section {
+.learning-section { /* sections */
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
-.section-title {
+.section-title { /* section titles */
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -33,13 +31,13 @@
   padding-bottom: var(--space-2);
 }
 
-.learning-grid {
+.learning-grid { /* grid for learning items */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: var(--space-4);
 }
 
-.learning-card {
+.learning-card { /* individual learning item */
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -51,23 +49,23 @@
   transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
-.learning-card:hover {
+.learning-card:hover { /* hover effect */
   box-shadow: var(--shadow-md);
   border-color: var(--color-primary);
 }
 
-.learning-card--completed:hover {
+.learning-card--completed:hover { /* hover effect for completed items */
   border-color: var(--color-success);
 }
 
-.learning-card-header {
+.learning-card-header { /* card header */
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--space-2);
 }
 
-.learning-card-header h4 {
+.learning-card-header h4 { /* card title */
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -75,20 +73,20 @@
   margin: 0;
 }
 
-.learning-card-desc {
+.learning-card-desc { /* card description */
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
   flex: 1;
 }
 
-.learning-card-date {
+.learning-card-date { /* card date */
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   flex: 1;
 }
 
-.learning-card-action {
+.learning-card-action { /* card action */
   margin-top: auto;
   padding-top: var(--space-3);
   border-top: 1px solid var(--color-border);
@@ -96,7 +94,7 @@
   justify-content: flex-start;
 }
 
-.learning-empty {
+.learning-empty { /* empty state */
   background-color: var(--color-background);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-lg);

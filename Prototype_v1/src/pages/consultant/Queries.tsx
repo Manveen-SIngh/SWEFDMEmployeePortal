@@ -3,16 +3,15 @@ import React, { useState } from "react";
 import "./Queries.css";
 
 export default function Queries() {
-  const [query, setQuery] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [query, setQuery] = useState(""); /* State to track the query input */
+  const [submitted, setSubmitted] = useState(false); /* Track if query submitted successfully */
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      setSubmitted(true);
-      setQuery("");
-      // reset success message
-      setTimeout(() => setSubmitted(false), 3000);
+  const handleSubmit = (e: React.FormEvent) => { /* Handle form submission */
+    e.preventDefault(); /* Prevent default form submission behavior */
+    if (query.trim()) { /* Only submit if query is not empty */
+      setSubmitted(true); /* Set submitted to true to show success message */
+      setQuery(""); /* Clear the query input field */
+      setTimeout(() => setSubmitted(false), 3000); /* Hide success message after 3 seconds */
     }
   };
 
@@ -48,7 +47,7 @@ export default function Queries() {
               rows={5}
               placeholder="Please describe your issue in detail..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)} /* Update query state on input change */
             />
           </div>
 

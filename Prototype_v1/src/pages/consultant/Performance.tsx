@@ -1,9 +1,24 @@
 import React from "react";
 // @ts-ignore
 import "./Performance.css";
+import { useAuth } from "../../context/AuthContext";
+import { getRegistry } from "../../services/Registry";
 
 export default function Performance() {
-  return (
+    const { currentUser } = useAuth(); /* Get current user from auth context */
+    const registry = getRegistry(); /* Get the registry instance */
+    const userID = currentUser ? currentUser.employeeID : "";
+    const latestReview = registry.getPerformanceReviewsForUser(userID); /* Fetch the latest performance review for the specific user */
+    const latest = latestReview?.[0]; /* Get the most recent review */
+
+    const[submitted, setSubmitted] = React.useState(false); /* State to track if new review request submitted */
+    const handleRequestReview = () => { /* Handle request review */
+        setSubmitted(true); /* True to show success message */
+        setTimeout(() => setSubmitted(false), 3000); /* Hide success message after 3 seconds */
+    };
+
+    return (
+
     <div className="performance-page">
       <div className="performance-header">
         <h2>Performance Reviews</h2>
@@ -26,15 +41,21 @@ export default function Performance() {
           </div>
           <div className="detail-row">
             <span className="detail-row__label">Rating</span>
-            <span className="detail-row__value">★★★★☆ (Exceeds Expectations)</span>
+            <span className="detail-row__value">{latest.rating ? `${latest.rating}/5` : "Not rated"}</span>
           </div>
         </div>
         <div className="performance-feedback">
           <h4>Feedback Comments</h4>
-          <p>"Excellent work on the recent client deployment. Communication skills have significantly improved over the last quarter."</p>
+          <p>{latest.writtenEvaluation || "No feedback available."}</p>
         </div>
         <div className="performance-actions">
-          <button className="btn btn--primary">Request New Review</button>
+          <button className="btn btn--primary" onClick={handleRequestReview}>
+            Request New Review
+          </button>
+          {submitted && (
+            <p className="success-message"> ✓ Your review request has been submitted. Your manager will be notified.</p>
+          )
+        } 
         </div>
       </div>
     </div>

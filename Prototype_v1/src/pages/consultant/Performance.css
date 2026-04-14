@@ -1,5 +1,4 @@
-/* performance styles */
-.performance-page {
+.performance-page { /* page layout */
   max-width: 800px;
   margin: 0 auto;
   display: flex;
@@ -7,7 +6,7 @@
   gap: var(--space-6);
 }
 
-.performance-header h2 {
+.performance-header h2 { /* header */
   font-size: var(--font-size-2xl);
   color: var(--color-text-primary);
   margin-bottom: var(--space-2);
@@ -17,7 +16,7 @@
   color: var(--color-text-secondary);
 }
 
-.performance-card {
+.performance-card { /* individual performance review card */
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
@@ -25,7 +24,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-.performance-card-header {
+.performance-card-header { /* header section of the performance card */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,26 +33,26 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.performance-card-header h3 {
+.performance-card-header h3 { /* performance review title */
   font-size: var(--font-size-lg);
   color: var(--color-text-primary);
 }
 
-.performance-details {
+.performance-details { /* details section of the performance card */
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   margin-bottom: var(--space-5);
 }
 
-.performance-feedback {
+.performance-feedback { /* feedback section */
   background-color: var(--color-background);
   padding: var(--space-4);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-5);
 }
 
-.performance-feedback h4 {
+.performance-feedback h4 { /* feedback title */
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin-bottom: var(--space-2);
@@ -61,8 +60,19 @@
   letter-spacing: 0.05em;
 }
 
-.performance-feedback p {
+.performance-feedback p { /* feedback content */
   color: var(--color-text-primary);
   line-height: var(--line-height-relaxed);
   font-style: italic;
+}
+
+.success-message { /* success message after submitting a query */
+  background-color: var(--color-success-light);
+  color: var(--color-success-text);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid rgba(22, 163, 74, 0.2);
 }

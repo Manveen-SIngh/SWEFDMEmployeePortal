@@ -59,6 +59,10 @@ import EmployeeDirectory from "./pages/hr/EmployeeDirectory";
 import LeaveManagement from "./pages/hr/LeaveManagement";
 import UserManagement from "./pages/it/UserManagement";
 import AuditLog from "./pages/it/AuditLog";
+import Queries from "./pages/consultant/Queries"; 
+import Payslip from "./pages/consultant/Payslip";
+import Performance from "./pages/consultant/Performance";
+import Learning from "./pages/consultant/Learning";
 
 // ---------------------------------------------------------------------------
 // ProtectedRoute
@@ -250,11 +254,15 @@ const router = createBrowserRouter([
           },
           {
             path: "/payments/payslips",
-            element: <ComingSoon pageName="Payslips — For show" />,
+            element: <Payslip />,
           },
           {
             path: "/queries",
-            element: <ComingSoon pageName="Queries — For show" />,
+            element: <Queries />,
+          },
+          {
+            path: "/learning",
+            element: <Learning />,
           },
           {
             path: "/documents",
@@ -301,7 +309,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "/performance",
-                element: <ComingSoon pageName="Performance Reviews — For show" />,
+                element: <Performance />,
               },
             ],
           },

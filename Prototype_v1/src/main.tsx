@@ -10,9 +10,6 @@
  *   2. Imports the root App component and React
  *   3. Mounts the React application into the #root div in index.html
  *
-
- *
- * NOTE: StrictMode is enabled in development only.
  */
 
 import React from "react";
@@ -30,15 +27,11 @@ const rootElement = document.getElementById("root")!;
 
 /* Create the React root and render the application.
    createRoot is the React 18 concurrent-mode API. */
-ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
-    {/*
-      The App component is the topmost React component.
-      It contains:
-        - AuthProvider (global auth state)
-        - NotificationProvider (global notification state)
-        - RouterProvider (all page routes)
-    */}
-    <App />
-  </React.StrictMode>
-);
+/*
+  The App component is the topmost React component.
+  It contains:
+    - AuthProvider (global auth state)
+    - NotificationProvider (global notification state)
+    - RouterProvider (all page routes)
+*/
+ReactDOM.createRoot(rootElement).render(<App />);

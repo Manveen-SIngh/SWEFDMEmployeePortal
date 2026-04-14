@@ -2,7 +2,6 @@
  * Header.tsx
  * ----------
  * The horizontal top bar displayed across all authenticated pages.
- * Sits to the right of the Navbar, spanning the full content area width.
  */
 
 import React, { useState } from "react";
@@ -13,11 +12,11 @@ import type { Notification } from "../../models/interfaces";
 import "./Header.css";
 
 // ---------------------------------------------------------------------------
-// Route → page title mapping
+// Route -> page title mapping
 // ---------------------------------------------------------------------------
 /**
  * Maps URL path prefixes to human-readable page titles.
- * Used to populate the header breadcrumb/title area.
+ * Used to populate the header title area.
  * Order matters — more specific paths must come before general ones.
  */
 const PAGE_TITLES: { path: string; title: string }[] = [
@@ -42,7 +41,7 @@ const PAGE_TITLES: { path: string; title: string }[] = [
 // Relative time formatter
 // ---------------------------------------------------------------------------
 /**
- * Converts a Date to a human-friendly relative string.
+ * Converts a Date to a human-friendly string.
  * Examples: "just now", "5 min ago", "2 hours ago", "3 days ago"
  *
  * @param date - The timestamp to format
@@ -63,7 +62,7 @@ function formatRelativeTime(date: Date): string {
 }
 
 // ---------------------------------------------------------------------------
-// Notification type → icon colour
+// Notification type -> icon colour
 // ---------------------------------------------------------------------------
 /**
  * Maps notification type to its CSS colour variable.
@@ -86,7 +85,7 @@ export default function Header() {
   const location = useLocation();
   const { notifications, unreadCount, markAllRead } = useNotifications();
 
-  /* Whether the notification dropdown panel is open */
+  // Whether the notification dropdown panel is open 
   const [notifOpen, setNotifOpen] = useState(false);
 
   // -------------------------------------------------------------------------
@@ -103,13 +102,13 @@ export default function Header() {
     const opening = !notifOpen;
     setNotifOpen(opening);
     if (opening && unreadCount > 0) {
-      /* Mark all notifications as read when the panel is opened */
+      // Mark all notifications as read when the panel is opened 
       markAllRead();
     }
   };
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual rendering
   // -------------------------------------------------------------------------
   return (
     <header className="app-header" role="banner">

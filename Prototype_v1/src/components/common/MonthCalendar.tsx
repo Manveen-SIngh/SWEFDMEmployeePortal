@@ -1,26 +1,16 @@
 /**
  * MonthCalendar.tsx
  * -----------------
- * A fully self-contained month-view calendar component.
- * This is the shared calendar used in THREE places across the portal:
+ * A fully self-contained month-view calendar component. *
  *
- *   1. Absence & Holidays page   → shows leave request states on each day
- *   2. Schedule → Planner page   → shows work days / shift info on each day
- *   3. Consultant Dashboard      → compact weekly planner card
- *      (the dashboard uses its own simpler strip — this full calendar is for the pages)
- *
- * DESIGN:
- *   - Month grid, Sun → Sat columns (standard UK calendar layout)
- *   - Left / Right arrow navigation between months
- *   - Current month name + year as heading
- *   - 3-dot (⋯) button → quick-jump dropdown listing the next 12 months
- *   - Day cells receive a `dayState` prop array that determines their appearance:
- *       "approved"  → green background  (approved leave or scheduled work)
- *       "pending"   → amber background  (pending leave request)
- *       "rejected"  → red strikethrough (rejected leave — faint, not bold)
- *       "working"   → subtle highlight  (planner: scheduled work day)
- *       "today"     → dark border ring  (the current real-world date)
- *       "other"     → greyed out        (days from the prev/next month)
+ *   
+ * Day cells receive a `dayState` prop array that determines their appearance:
+ *    "approved"  -> green background  (approved leave or scheduled work)
+ *    "pending"   -> amber background  (pending leave request)
+ *    "rejected"  -> red strikethrough (rejected leave — faint, not bold)
+ *    "working"   -> subtle highlight  (planner: scheduled work day)
+ *    "today"     -> dark border ring  (the current real-world date)
+ *    "other"     -> greyed out        (days from the prev/next month)
  *
  * PROPS:
  *   @param year          - Currently displayed year (controlled by parent)
@@ -35,7 +25,7 @@
  *                          Receives the Date of the clicked day
  *   @param renderDayTooltip - Optional function returning tooltip content for a day
  *
- * WHY A CONTROLLED COMPONENT?
+ * This is a controlled component so:
  *   The parent page manages which month is displayed. This keeps the navigation
  *   logic in one place (the page), avoids duplicate state, and lets the Planner
  *   and Absence pages each control their own independently without interference.
@@ -88,21 +78,21 @@ const MONTH_NAMES = [
  * @returns     - Array of Date objects filling the calendar grid
  */
 function buildCalendarGrid(year: number, month: number): Date[] {
-  /* First day of the target month */
+  // First day of the target month
   const firstOfMonth = new Date(year, month, 1);
 
-  /* Find the Sunday that starts this calendar grid */
+  // Find the Sunday that starts this calendar grid 
   const startDay = new Date(firstOfMonth);
   startDay.setDate(1 - firstOfMonth.getDay()); // Go back to the nearest Sunday
 
-  /* Last day of the target month */
+  // Last day of the target month 
   const lastOfMonth = new Date(year, month + 1, 0);
 
-  /* Find the Saturday that ends this calendar grid */
+  // Find the Saturday that ends this calendar grid 
   const endDay = new Date(lastOfMonth);
   endDay.setDate(lastOfMonth.getDate() + (6 - lastOfMonth.getDay()));
 
-  /* Build the array by stepping through each day */
+  // Build the array by stepping through each day 
   const grid: Date[] = [];
   const current = new Date(startDay);
 
@@ -118,15 +108,15 @@ function buildCalendarGrid(year: number, month: number): Date[] {
 // MonthCalendar props interface
 // ---------------------------------------------------------------------------
 interface MonthCalendarProps {
-  /** Currently displayed year — 4-digit number */
+  // Currently displayed year — 4-digit number 
   year: number;
-  /** Currently displayed month — 0-indexed (0 = January) */
+  // Currently displayed month — 0-indexed (0 = January) 
   month: number;
-  /** Called when the left arrow is clicked — parent decrements month */
+  // Called when the left arrow is clicked — parent decrements month 
   onPrevMonth: () => void;
-  /** Called when the right arrow is clicked — parent increments month */
+  // Called when the right arrow is clicked — parent increments month
   onNextMonth: () => void;
-  /** Called when user selects a month from the quick-jump dropdown */
+  // Called when user selects a month from the quick-jump dropdown
   onQuickJump: (year: number, month: number) => void;
   /**
    * Returns the visual state(s) for a given calendar day.
@@ -153,14 +143,14 @@ export default function MonthCalendar({
   getDayStates,
   onDayClick,
 }: MonthCalendarProps) {
-  /* Whether the quick-jump month dropdown is open */
+  // Whether the quick-jump month dropdown is open 
   const [quickJumpOpen, setQuickJumpOpen] = useState(false);
 
-  /* Today's date — used to identify the current real-world day */
+  // Today's date — used to identify the current real-world day 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  /* Build the grid for the current month/year */
+  // Build the grid for the current month/year
   const calendarGrid = buildCalendarGrid(year, month);
 
   // -------------------------------------------------------------------------
@@ -168,8 +158,7 @@ export default function MonthCalendar({
   // -------------------------------------------------------------------------
   /**
    * Generates a list of the next 12 months (starting from today's month)
-   * for the quick-jump dropdown. Allows jumping more than one month ahead
-   * without repeatedly clicking the arrow.
+   * for the quick-jump dropdown.
    */
   const quickJumpOptions = Array.from({ length: 12 }, (_, i) => {
     const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
@@ -177,12 +166,12 @@ export default function MonthCalendar({
   });
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual rendering
   // -------------------------------------------------------------------------
   return (
     <div className="month-cal">
 
-      {/* ---- Calendar header: prev arrow, month+year, quick-jump, next arrow ---- */}
+      {/* Calendar header: prev arrow, month+year, quick-jump, next arrow */}
       <div className="month-cal__header">
         {/* Previous month */}
         <button
@@ -279,15 +268,15 @@ export default function MonthCalendar({
         {calendarGrid.map((date, index) => {
           const isOtherMonth = date.getMonth() !== month;
 
-          /* Get the states for this day from the parent page */
+          // Get the states for this day from the parent page 
           const states = getDayStates(date, isOtherMonth);
 
-          /* Build the CSS class string from the states array */
+          // Build the CSS class string from the states array
           const stateClasses = states
             .map((s) => `month-cal__day--${s}`)
             .join(" ");
 
-          /* Is this cell clickable? */
+          // Check if the cell is clickable
           const isClickable = !!onDayClick && !isOtherMonth;
 
           return (

@@ -179,7 +179,7 @@ export default function ITDashboard() {
           <div className="it-stat-card__sublabel">
             {stats.lockedAccounts === 0
               ? "All accounts active"
-              : "require IT action (RQ6)"}
+              : "require IT action"}
           </div>
         </div>
 
@@ -351,7 +351,7 @@ export default function ITDashboard() {
             </svg>
           </div>
           <span className="dash-card__label">Recent Audit Log</span>
-          <span className="dash-card__header-aside">Last 10 events (RQ40)</span>
+          <span className="dash-card__header-aside">Last 10 events</span>
         </div>
 
         {/* Table of the 10 most recent audit entries */}

@@ -45,10 +45,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { Role } from "./models/enums";
 
-/* ---- Page imports (to be implemented by other developers) ---- */
 /* These are imported lazily to avoid circular dependency issues.  */
-/* Each developer creates their page in src/pages/ and exports it */
-/* as a default export. Uncomment as pages are implemented.       */
 
 import LoginPage from "./pages/LoginPage";
 import AppLayout from "./components/layout/AppLayout";
@@ -120,8 +117,6 @@ function RoleRoute({ allowedRoles }: { allowedRoles: Role[] }) {
 /**
  * Renders the correct dashboard component based on the current user's role.
  * Placed inside AppLayout so it has access to the navbar and header.
- * As HR and IT dashboards are implemented (Dev 3), they are imported above
- * and added to the switch statement here.
  */
 function RoleDashboard() {
   const { currentUser } = useAuth();
@@ -143,10 +138,6 @@ function RoleDashboard() {
 // ---------------------------------------------------------------------------
 // Placeholder component for pages not yet implemented
 // ---------------------------------------------------------------------------
-/**
- * Temporary placeholder shown for pages assigned to other developers.
- * Replace with actual page imports as each developer completes their section.
- */
 function ComingSoon({ pageName }: { pageName: string }) {
   return (
     <div

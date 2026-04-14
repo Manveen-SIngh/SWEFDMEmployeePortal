@@ -1,19 +1,18 @@
 /**
  * AnnouncementFlow.tsx
  * --------------------
- * The post-login announcement modal sequence.
+ * The post-login announcement sequence.
  *
- * WHEN IT APPEARS:
  * The LoginPage checks for unacknowledged announcements after a successful
  * login. If any exist, it navigates to /announcements/flow instead of
- * /dashboard. This page renders the modal sequence over the AppLayout so
+ * /dashboard. This page renders the announcement sequence over the AppLayout so
  * the user sees the navbar and header behind the modal overlay.
  *
  
  * ROUTE:
  *   /announcements/flow
- *   Protected — must be logged in. Does NOT use AppLayout wrapper (it renders
- *   its own full-screen overlay), but it IS nested inside ProtectedRoute.
+ *   Protected — must be logged in. Does not use AppLayout wrapper (it renders
+ *   its own full-screen overlay), but it is nested inside ProtectedRoute.
  */
 
 import React, { useState, useMemo } from "react";
@@ -25,7 +24,7 @@ import type { Announcement } from "../../models/interfaces";
 import "./AnnouncementFlow.css";
 
 // ---------------------------------------------------------------------------
-// Helper: format a Date to "10 March 2026"
+// Helper: format a Date to something like "10 March 2026"
 // ---------------------------------------------------------------------------
 function formatDate(date: Date): string {
   return new Date(date).toLocaleDateString("en-GB", {
@@ -126,7 +125,7 @@ export default function AnnouncementFlow() {
     : "FDM Communications";
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual Rendering
   // -------------------------------------------------------------------------
   return (
     <div className="ann-flow">

@@ -65,7 +65,7 @@ export default function LoginPage() {
    * Handles form submission.
    * 1. Validates the form client-side
    * 2. Calls login() from AuthContext (which delegates to Registry.attemptLogin())
-   * 3. On success: checks for unacknowledged announcements → routes accordingly
+   * 3. On success: checks for unacknowledged announcements -> routes accordingly
    * 4. On failure: error is displayed via loginError from AuthContext
    */
   const handleSubmit = useCallback(
@@ -140,7 +140,7 @@ export default function LoginPage() {
     loginError.toLowerCase().includes("account locked — contact it support");
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual Rendering
   // -------------------------------------------------------------------------
   return (
     <div className="login-page">

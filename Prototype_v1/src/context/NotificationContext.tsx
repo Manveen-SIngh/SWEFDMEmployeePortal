@@ -3,7 +3,7 @@
  * -----------------------
  * Provides global notification state to the entire React application.
  *
- * DESIGN PATTERN: Observer 
+ * Design Pattern: Observer 
  * ----------------------------------------------------------
  * The class diagram defines Observer and Observable interfaces, with
  * LeaveRequest and Announcement implementing Observable — meaning they
@@ -18,14 +18,14 @@
  *   - The NotificationBell component in the header subscribes to this context
  *     and re-renders whenever the notification count changes
  *
- * HOW LIVE NOTIFICATIONS WORK WITHOUT A BACKEND:
+ * How live notifications will work without a backend:
  * When the user performs an action (e.g. HR approves a leave request), the
  * Registry immediately pushes a Notification object into its internal array.
  * Components call refreshNotifications() after any action to pull the latest
  * state from the Registry. This creates the appearance of live notifications
  * without any WebSocket or polling — all state lives in the Registry singleton.
  *
- * HOW COMPONENTS USE IT:
+ * HOw components use it:
  *   const { notifications, unreadCount, refreshNotifications, markAllRead } = useNotifications();
  */
 
@@ -66,7 +66,7 @@ interface NotificationContextType {
    * Pulls the latest notifications from the Registry into local state.
    * Call this after any action that might generate a new notification
    * (e.g. after submitting a leave request, after HR approves a request).
-   * This is the mechanism that makes notifications feel "live".
+   * This is the mechanism that makes notifications feel real-time.
    */
   refreshNotifications: () => void;
 
@@ -102,12 +102,6 @@ const NotificationContext = createContext<NotificationContextType | undefined>(
  * The provider automatically loads notifications when the current user changes
  * (i.e. on login) and clears them on logout.
  *
- * Usage in App.tsx (inside AuthProvider):
- *   <AuthProvider>
- *     <NotificationProvider>
- *       <RouterProvider router={router} />
- *     </NotificationProvider>
- *   </AuthProvider>
  */
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const { currentUser } = useAuth();
@@ -132,7 +126,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
    */
   const refreshNotifications = useCallback(() => {
     if (!currentUser) {
-      /* Nobody is logged in — clear all notification state */
+      // Nobody is logged in — clear all notification state
       setNotifications([]);
       setUnreadCount(0);
       return;
@@ -140,7 +134,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
     const registry = getRegistry();
 
-    /* Fetch this user's notifications from the Registry */
+    // Fetch this user's notifications from the Registr
     const userNotifications = registry.getNotificationsForUser(
       currentUser.employeeID
     );

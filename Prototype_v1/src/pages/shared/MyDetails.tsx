@@ -14,7 +14,7 @@ import type { AppUser, ConsultantUser, StaffUser } from "../../models/interfaces
 import "./MyDetails.css";
 
 // ---------------------------------------------------------------------------
-// Helper: format a Date to "14 March 1998"
+// Helper: format a Date to something like"14 March 1998"
 // ---------------------------------------------------------------------------
 function formatDate(date: Date): string {
   return new Date(date).toLocaleDateString("en-GB", {
@@ -64,7 +64,7 @@ function roleLabel(role: Role): string {
  * @param value    - The field value to display
  * @param mono     - If true, renders value in monospace (for IDs, numbers)
  * @param locked   - If true, shows a small lock icon beside the value
- *                   indicating this field cannot be self-edited (RQ11)
+ *                   indicating this field cannot be self-edited
  */
 function DetailRow({
   label,
@@ -127,51 +127,45 @@ function EditIconButton({ onClick, label }: { onClick: () => void; label: string
 export default function MyDetails() {
   const { currentUser, refreshCurrentUser } = useAuth();
 
-  // -------------------------------------------------------------------------
+  
   // Canvas open/close state — one boolean per canvas section
-  // -------------------------------------------------------------------------
   const [personalCanvasOpen,  setPersonalCanvasOpen]  = useState(false);
   const [contactCanvasOpen,   setContactCanvasOpen]   = useState(false);
   const [bankCanvasOpen,      setBankCanvasOpen]       = useState(false);
 
-  // -------------------------------------------------------------------------
+  
   // Canvas form field state — Personal Info
-  // -------------------------------------------------------------------------
   const [editFirstName,   setEditFirstName]   = useState("");
   const [editLastName,    setEditLastName]     = useState("");
   const [editGender,      setEditGender]       = useState("");
   const [editDOB,         setEditDOB]          = useState("");
 
-  // -------------------------------------------------------------------------
+  
   // Canvas form field state — Address & Contact
-  // -------------------------------------------------------------------------
   const [editAddress, setEditAddress] = useState("");
   const [editPhone,   setEditPhone]   = useState("");
   const [editMobile,  setEditMobile]  = useState("");
 
-  // -------------------------------------------------------------------------
+  
   // Canvas form field state — Bank Details
-  // -------------------------------------------------------------------------
   const [editBankName,          setEditBankName]          = useState("");
   const [editBankAccountName,   setEditBankAccountName]   = useState("");
   const [editBankAccountNumber, setEditBankAccountNumber] = useState("");
   const [editBankSortCode,      setEditBankSortCode]      = useState("");
 
-  // -------------------------------------------------------------------------
+  
   // Shared canvas UI state
-  // -------------------------------------------------------------------------
-  /** Which canvas section is saving — shows loading state on its submit button */
+  // Which canvas section is saving — shows loading state on its submit button 
   const [saving,        setSaving]        = useState(false);
-  /** Success message to flash briefly after a successful save */
+  // Success message to flash briefly after a successful save 
   const [saveSuccess,   setSaveSuccess]   = useState(false);
-  /** Error message if the save fails */
+  // Error message if the save fails 
   const [saveError,     setSaveError]     = useState("");
 
   if (!currentUser) return null;
 
-  // -------------------------------------------------------------------------
+  
   // Region name lookup
-  // -------------------------------------------------------------------------
   const region = getRegistry().getRegionByID(currentUser.regionID);
   const regionName = region?.regionName ?? currentUser.regionID;
 
@@ -220,7 +214,7 @@ export default function MyDetails() {
    * then calls AuthContext.refreshCurrentUser() with the returned updated user
    * so the Navbar avatar and name update immediately in the same render cycle.
    *
-   * Shows a 1.5s success state then closes the canvas.
+   * Shows a 2s success state then closes the canvas.
    *
    * @param updates   - The partial AppUser fields to save
    * @param onClose   - Callback to close the specific canvas after save
@@ -247,7 +241,7 @@ export default function MyDetails() {
           setTimeout(() => {
             onClose();
             setSaveSuccess(false);
-          }, 1200);
+          }, 2000);
         } else {
           setSaveError("Unable to save changes. Please try again.");
         }
@@ -298,7 +292,7 @@ export default function MyDetails() {
   };
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual Rendering
   // -------------------------------------------------------------------------
   return (
     <div className="my-details-page">
@@ -306,7 +300,7 @@ export default function MyDetails() {
       {/* =================================================================
           CARD 1 — PROFILE (full width)
           Shows the employee's core identity information.
-          Employee ID shown with a lock icon (non-editable, RQ11).
+          Employee ID shown with a lock icon..
           ================================================================= */}
       <div className="my-details-card my-details-card--profile">
         {/* Edit icon — opens Personal Info canvas */}
@@ -342,7 +336,7 @@ export default function MyDetails() {
             label="Employee ID"
             value={currentUser.employeeID}
             mono
-            locked /* Non-editable — RQ11 */
+            locked /* Non-editable*/
           />
           <DetailRow label="Username"       value={currentUser.username} mono locked />
           <DetailRow label="Gender"         value={currentUser.gender} />
@@ -485,7 +479,7 @@ export default function MyDetails() {
               can confirm which account they're editing */}
           <div className="my-details-canvas__locked-fields">
             <p className="my-details-canvas__locked-label">
-              Non-editable fields (RQ11)
+              Non-editable fields
             </p>
             <div className="my-details-canvas__locked-row">
               <span>Employee ID</span>

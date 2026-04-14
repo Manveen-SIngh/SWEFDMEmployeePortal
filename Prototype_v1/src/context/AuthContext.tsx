@@ -3,24 +3,24 @@
  * ---------------
  * Provides global authentication state to the entire React application.
  *
- * WHAT THIS DOES:
+ * WHat it does:
  * Wraps the application in a React Context that holds:
  *   - The currently logged-in user (or null if not logged in)
  *   - Functions to log in and log out
  *   - The last login error message (for display on the login screen)
  *   - A loading state for async operations
  *
- * WHY CONTEXT?
+ * Keeping the context is essential because:
  * Without a backend session, we need a way for every component in the app
  * to know who is logged in and what their role is — without passing props
  * through every level of the component tree. React Context solves this.
  *
- * HOW IT CONNECTS TO THE REGISTRY:
+ * How it connects to Registry:
  * AuthContext does NOT manage data directly. It delegates all authentication
  * logic (credential checking, account locking) to Registry.attemptLogin().
  * This keeps the Registry as the single source of truth.
  *
- * HOW COMPONENTS USE IT:
+ * How components use it:
  * Import the useAuth hook and call it inside any functional component:
  *   const { currentUser, login, logout } = useAuth();
  *
@@ -28,7 +28,7 @@
  * components can read currentUser.role to determine what to render,
  * and currentUser.employeeID to pass to Registry methods.
  *
- * PROTECTED ROUTES:
+ * Protected routes:
  * The router in App.tsx uses currentUser to redirect unauthenticated
  * users to the login page. Role-specific routes additionally check
  * currentUser.role to ensure the correct portal is shown.
@@ -119,11 +119,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  * Wrap the application root with this component to provide auth state
  * to all child components.
  *
- * Usage in App.tsx:
- *   <AuthProvider>
- *     <RouterProvider router={router} />
- *   </AuthProvider>
- *
  * @param children - The React node tree to provide context to
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -154,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoginError(""); // Clear any previous error
 
       try {
-        /* Simulate network latency for realism */
+        // Simulate network latency
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         const registry = getRegistry();

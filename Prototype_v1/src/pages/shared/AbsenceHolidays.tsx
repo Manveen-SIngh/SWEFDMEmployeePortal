@@ -98,15 +98,13 @@ export default function AbsenceHolidays() {
   const { currentUser } = useAuth();
   const { refreshNotifications } = useNotifications();
 
-  // -------------------------------------------------------------------------
+  
   // Calendar navigation state
-  // -------------------------------------------------------------------------
   const [calYear, setCalYear]   = useState(new Date().getFullYear());
   const [calMonth, setCalMonth] = useState(new Date().getMonth());
 
-  // -------------------------------------------------------------------------
+  
   // Booking canvas state
-  // -------------------------------------------------------------------------
   const [canvasOpen,    setCanvasOpen]    = useState(false);
   const [startDate,     setStartDate]     = useState("");
   const [endDate,       setEndDate]       = useState("");
@@ -115,9 +113,8 @@ export default function AbsenceHolidays() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isSubmitting,  setIsSubmitting]  = useState(false);
 
-  // -------------------------------------------------------------------------
+  
   // Re-render trigger (same pattern as HR/IT dashboards)
-  // -------------------------------------------------------------------------
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
@@ -230,7 +227,7 @@ export default function AbsenceHolidays() {
   }, []);
 
   // -------------------------------------------------------------------------
-  // Calendar day click → pre-fill start date and open canvas
+  // Calendar day click -> pre-fill start date and open canvas
   // -------------------------------------------------------------------------
   const handleDayClick = useCallback((date: Date) => {
     /* Only allow clicking future or current dates for booking */
@@ -337,7 +334,7 @@ export default function AbsenceHolidays() {
   ]);
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual Rendering
   // -------------------------------------------------------------------------
   return (
     <div className="absence-page">

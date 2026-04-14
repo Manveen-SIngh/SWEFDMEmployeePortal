@@ -207,7 +207,7 @@ export default function UserManagement() {
                       <button
                         className={`btn btn--sm ${user.isLocked ? "btn--success" : "btn--secondary"}`}
                         onClick={() => handleToggleLock(user)}
-                        title={user.isLocked ? "Unlock account (RQ6)" : "Lock account"}
+                        title={user.isLocked ? "Unlock account" : "Lock account"}
                       >
                         {user.isLocked ? "Unlock" : "Lock"}
                       </button>

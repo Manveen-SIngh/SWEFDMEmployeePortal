@@ -7,27 +7,19 @@
  * DESIGN PATTERN: Singleton
  * -------------------------
  * The Singleton pattern ensures only one instance of Registry exists at runtime.
- * This mirrors the Registry class in the Group 30 class diagram, which uses:
- *   - A private static `instance` attribute
- *   - A private constructor (preventing direct instantiation)
- *   - A public static `getInstance()` method (the only way to get the Registry)
  *
- * WHY SINGLETON HERE?
+ * Why Singleton?
  * Without a backend, all in-memory state changes (leave approvals, personal detail
  * updates, new queries, notification pushes) must persist within a single shared
  * data store for the duration of the session. If each component created its own
  * Registry instance, changes made in one component would not be visible in another.
  * The Singleton guarantees a single shared state across the entire application.
  *
- * HOW COMPONENTS USE REGISTRY:
+ * How components use Registry:
  * Components never import from mockData.ts directly.
  * They call Registry.getInstance() and then call methods on the returned instance.
- * Example:
- *   const registry = Registry.getInstance();
- *   const user = registry.getUserByID("FDM001");
- *   const leaves = registry.getLeaveRequestsForUser("FDM001");
  *
- * MUTABILITY:
+ * It is mutable:
  * All arrays are copied from mockData on first instantiation.
  * Mutations (add, update, delete) are performed on the Registry's own
  * internal copies — mockData.ts itself is never mutated.
@@ -70,9 +62,6 @@ import type {
 
 import { LeaveStatus, QueryStatus, EmploymentStatus } from "../models/enums";
 
-// ---------------------------------------------------------------------------
-// MAX_LOGIN_ATTEMPTS constant
-// ---------------------------------------------------------------------------
 /**
  * The maximum number of consecutive failed login attempts before an account
  * is automatically locked.
@@ -99,7 +88,7 @@ class Registry {
   /**
    * Deep copies of all seed data. These are the live working copies —
    * all reads and writes operate on these arrays.
-   * mockData.ts is only ever used as the initial seed and is not mutated.
+   * mockData.ts is only ever used as the initial seed and is not modified.
    */
   private users: AppUser[];
   private announcements: Announcement[];
@@ -157,10 +146,6 @@ class Registry {
   /**
    * Returns the single shared Registry instance, creating it on first call.
    * All subsequent calls return the same instance with its accumulated state.
-   *
-   * Usage: const registry = Registry.getInstance();
-   *
-   * Corresponds to: +getInstance() : Registry in the class diagram.
    */
   public static getInstance(): Registry {
     if (Registry.instance === null) {
@@ -178,13 +163,13 @@ class Registry {
    * Attempts to authenticate a user with the given username and password.
    * Implements account lock logic at 2 separate levels:
    *   
-   *   LEVEL 1 - SESSION-LEVEL BRUTE-FORCE PROTECTION (invalid usernames only):
+   *   LEVEL 1 - Session level brute force protection(invalid usernames only):
    *   - Tracks failed attempts against non-existent usernames
    *   - After MAX_LOGIN_ATTEMPTS failures with invalid usernames, blocks further attempts
    *   - This prevents unlimited brute-force guessing of username/password combinations
    *   - Does not interfere with known users attempting with wrong passwords
    *   
-   *   LEVEL 2 - USER-LEVEL ACCOUNT LOCKING (valid usernames only):
+   *   LEVEL 2 - user level account locking (valid usernames only):
    *   - Tracks failed password attempts for valid usernames
    *   - When a user's counter reaches MAX_LOGIN_ATTEMPTS, the account is locked
    *   - A locked account cannot log in even with the correct password
@@ -203,15 +188,15 @@ class Registry {
     username: string,
     password: string
   ): { user: AppUser | null; reason: string } {
-    /* Find user by username — usernames are unique (RQ7) */
+    // Find user by username — usernames are unique 
     const userIndex = this.users.findIndex((u) => u.username === username);
 
     if (userIndex === -1) {
-      /* Username not found — increment ONLY the global/session counter */
-      /* This protects against brute-force guessing of username/password combinations */
+      // Username not found — increment ONLY the global/session counter 
+      // This protects against brute-force guessing of username/password combinations 
       this.globalFailedLoginAttempts += 1;
 
-      /* Block further invalid username attempts after MAX_LOGIN_ATTEMPTS */
+      // Block further invalid username attempts after MAX_LOGIN_ATTEMPTS
       if (this.globalFailedLoginAttempts >= MAX_LOGIN_ATTEMPTS) {
         return {
           user: null,
@@ -220,16 +205,15 @@ class Registry {
         };
       }
 
-      /* Do not reveal whether username exists (security best practice) */
       return { user: null, reason: "Invalid username or password." };
     }
 
     const user = this.users[userIndex];
 
-    /* Once a valid username is found, the global session counter no longer applies */
-    /* This user can attempt up to MAX_LOGIN_ATTEMPTS for their own account */
+    // Once a valid username is found, the global session counter no longer applies
+    // This user can attempt up to MAX_LOGIN_ATTEMPTS for their own account
 
-    /* Check if the account is already locked  */
+    // Check if the account is already locked
     if (user.isLocked) {
       this.addAuditLog(
         user.employeeID,
@@ -242,27 +226,27 @@ class Registry {
       };
     }
 
-    /* Validate password (plain string comparison — demo only, no real hashing) */
+    // Validate password (plain string comparison — demo only, no real hashing)
     if (user.passwordHash !== password) {
-      /* Increment the USER-LEVEL counter only (not global session counter) */
+      // Increment the USER-LEVEL counter only (not global session counter)
       const newAttempts = user.failedLoginAttempts + 1;
       const shouldLock = newAttempts >= MAX_LOGIN_ATTEMPTS;
 
-      /* Update the user record in our internal array */
+      // Update the user record in our internal array 
       this.users[userIndex] = {
         ...user,
         failedLoginAttempts: newAttempts,
         isLocked: shouldLock,
       };
 
-      /* Log the failed attempt */
+      // Log the failed attempt
       this.addAuditLog(
         user.employeeID,
         `Failed login attempt (${newAttempts} of ${MAX_LOGIN_ATTEMPTS})`
       );
 
       if (shouldLock) {
-        /* Log the lock event separately */
+        // Log the lock event separately 
         this.addAuditLog(
           user.employeeID,
           "Account automatically locked after 5 consecutive failed login attempts"
@@ -280,14 +264,14 @@ class Registry {
       };
     }
 
-    /* Successful login — reset both counters */
+    // Successful login — reset both counters
     this.globalFailedLoginAttempts = 0;
     this.users[userIndex] = {
       ...user,
       failedLoginAttempts: 0,
     };
 
-    /* Log the successful login  */
+    // Log the successful login 
     this.addAuditLog(user.employeeID, "User logged in successfully");
 
     return { user: this.users[userIndex], reason: "" };
@@ -310,9 +294,7 @@ class Registry {
    * Returns a user by their unique employee ID.
    * Used by the HR Employee Directory, profile views, and the Registry itself.
    *
-   * Corresponds to: +getUserByID(userID : String) : User in the class diagram.
-   *
-   * @param userID - The employeeID to look up (e.g. "FDM001")
+   * @param userID - The employeeID to look up 
    * @returns The matching AppUser, or undefined if not found
    */
   public getUserByID(userID: string): AppUser | undefined {
@@ -322,9 +304,6 @@ class Registry {
   /**
    * Searches for users matching the given optional filter criteria.
    * Used by HR Employee Directory and IT Support User Management.
-   *
-   * Mirrors the findUsers() method signature from the class diagram:
-   *   +findUsers(firstName?, lastName?, email?, role?, employmentStatus?, region?) : List<User>
    *
    * All parameters are optional — calling with no arguments returns all users.
    * Matching is case-insensitive partial string matching for name/email fields.
@@ -387,8 +366,6 @@ class Registry {
    *
    * Logs the update event to the audit trail .
    *
-   * Corresponds to: +updatePersonalDetails() : void in the class diagram.
-   *
    * @param userID  - The employeeID of the user to update
    * @param updates - Partial User object containing only the changed fields
    * @returns The updated AppUser, or undefined if userID not found
@@ -414,8 +391,6 @@ class Registry {
    * Locks a user account. Called by IT Support from the User Management page.
    * Also triggered automatically by attemptLogin after MAX_LOGIN_ATTEMPTS failures.
    *
-   * Corresponds to: +lockAccount() in the class diagram (User method).
-   *
    * @param userID - The employeeID of the account to lock
    */
   public lockAccount(userID: string): void {
@@ -429,8 +404,6 @@ class Registry {
    * Unlocks a user account. Called by IT Support from the User Management page
    * or the locked accounts card on the IT Support dashboard.
    * Also resets the failed login attempt counter.
-   *
-   * Corresponds to: +unlockAccount() in the class diagram (User method, IT Support).
    *
    * @param userID - The employeeID of the account to unlock
    */
@@ -459,7 +432,7 @@ class Registry {
 
   /**
    * Returns all regions in the system.
-   * Used by HR when assigning a consultant to a region (RQ27)
+   * Used by HR when assigning a consultant to a region
    * and as filter options in the Employee Directory.
    */
   public getRegions(): Region[] {
@@ -580,8 +553,6 @@ class Registry {
    * Validates that the user has sufficient leave balance before accepting.
    * Dispatches a notification to all HR users.
    *
-   * Corresponds to: +submitLeaveRequest() in the class diagram (User method).
-   *
    * @param leaveRequest - The leave request to submit (without leaveRequestID)
    * @returns Object containing the new request (if successful) or an error message
    */
@@ -598,7 +569,7 @@ class Registry {
 
     const user = this.users[userIndex];
 
-    /* Check sufficient leave balance */
+    // Check sufficient leave balance
     if (leaveRequest.numberOfDays > user.leaveBalance) {
       return {
         success: false,
@@ -606,7 +577,7 @@ class Registry {
       };
     }
 
-    /* Check for date conflicts with existing approved/pending requests */
+    // Check for date conflicts with existing approved/pending requests
     const conflictingRequest = this.leaveRequests.find((lr) => {
       if (lr.userID !== leaveRequest.userID) return false;
       if (
@@ -614,7 +585,7 @@ class Registry {
         lr.status === LeaveStatus.CANCELLED
       )
         return false;
-      /* Check if date ranges overlap */
+      // Check if date ranges overlap 
       return (
         leaveRequest.startDate <= lr.endDate &&
         leaveRequest.endDate >= lr.startDate
@@ -628,7 +599,7 @@ class Registry {
       };
     }
 
-    /* All checks passed — create the leave request */
+    // All checks passed — create the leave request 
     const newID = `LR${String(this.leaveRequests.length + 1).padStart(3, "0")}`;
     const newRequest: LeaveRequest = {
       ...leaveRequest,
@@ -643,7 +614,7 @@ class Registry {
       `Leave request ${newID} submitted (${leaveRequest.type}, ${leaveRequest.numberOfDays} days)`
     );
 
-    /* Notify all HR users of the new request */
+    // Notify all HR users of the new request 
     const hrUsers = this.users.filter((u) => u.role === "HUMAN_RESOURCES");
     hrUsers.forEach((hr) => {
       this.pushNotification({
@@ -660,8 +631,6 @@ class Registry {
    * Approves a leave request. Called by HR from the Leave Management page.
    * Deducts the approved days from the employee's leave balance.
    * Dispatches a success notification to the requesting employee.
-   *
-   * Corresponds to: +approveLeave() in the class diagram (HumanResources method).
    *
    * @param leaveRequestID - The ID of the request to approve
    * @param approverID     - The employeeID of the HR staff approving it
@@ -681,7 +650,7 @@ class Registry {
       status: LeaveStatus.APPROVED,
     };
 
-    /* Deduct days from user's leave balance */
+    // Deduct days from user's leave balance 
     const userIndex = this.users.findIndex(
       (u) => u.employeeID === leaveRequest.userID
     );
@@ -700,7 +669,7 @@ class Registry {
       `Leave request ${leaveRequestID} approved (${leaveRequest.numberOfDays} days for user ${leaveRequest.userID})`
     );
 
-    /* Notify the requesting employee — Observer pattern */
+    // Notify the requesting employee — Observer pattern
     this.pushNotification({
       userID: leaveRequest.userID,
       message: `Your leave request (${leaveRequest.numberOfDays} days from ${leaveRequest.startDate.toLocaleDateString("en-GB")}) has been approved.`,
@@ -714,8 +683,6 @@ class Registry {
    * Rejects a leave request. HR must provide a rejection reason.
    * sendds a warning notification to the requesting employee.
    *
-   * Corresponds to: +rejectLeave(request, reason) in the class diagram.
-   *
    * @param leaveRequestID  - The ID of the request to reject
    * @param rejectionReason - The mandatory reason for rejection
    * @param approverID      - The employeeID of the HR staff rejecting it
@@ -726,7 +693,7 @@ class Registry {
     approverID: string
   ): boolean {
     if (!rejectionReason || rejectionReason.trim() === "") {
-      /* Rejection reason is mandatory */
+      // Rejection reason is mandatory
       console.error("Registry.rejectLeaveRequest: rejectionReason is required");
       return false;
     }
@@ -748,7 +715,7 @@ class Registry {
       `Leave request ${leaveRequestID} rejected — rejection reason recorded`
     );
 
-    /* Notify the requesting employee — Observer pattern */
+    // Notify the requesting employee — Observer pattern 
     this.pushNotification({
       userID: leaveRequest.userID,
       message: `Your leave request has been rejected. Please check the leave history for the reason.`,
@@ -781,9 +748,7 @@ class Registry {
 
   /**
    * Returns all payslips for a specific user, newest first.
-   * Used on the Payments → Payslips page and the dashboard payslip card.
-   *
-   * Corresponds to: +getPayslips(userID : String) : List<Payslip> in the class diagram.
+   * Used on the Payments -> Payslips page and the dashboard payslip card.
    *
    * @param userID - The employeeID of the user
    * @returns Payslips sorted by payDate descending
@@ -800,9 +765,7 @@ class Registry {
 
   /**
    * Returns the schedule for a specific user.
-   * Used on the Schedule → Planner calendar and the dashboard planner card.
-   *
-   * Corresponds to: +getSchedule(userID : String) : Schedule in the class diagram.
+   * Used on the Schedule -> Planner calendar and the dashboard planner card.
    *
    * @param userID - The employeeID of the user
    * @returns The user's Schedule, or undefined if no schedule exists
@@ -826,9 +789,6 @@ class Registry {
    * Returns all training records for a specific consultant.
    * Used on the Learning & Development page (consultant-only).
    *
-   * Corresponds to: +getTrainingRecords(userID : String) : List<TrainingRecord>
-   * in the class diagram.
-   *
    * @param userID - The employeeID of the consultant
    * @returns The consultant's training records
    */
@@ -843,9 +803,6 @@ class Registry {
   /**
    * Returns all performance reviews for a specific consultant.
    * Used on the Performance Review page (consultant read-only view).
-   *
-   * Corresponds to: +getPerformanceReview(userID : String) : List<PerformanceReview>
-   * in the class diagram.
    *
    * @param userID - The employeeID of the consultant being reviewed
    * @returns The consultant's performance reviews, newest first
@@ -865,7 +822,7 @@ class Registry {
 
   /**
    * Returns all audit log entries, newest first.
-   * Used on the IT Support Audit Log full-page view (RQ40).
+   * Used on the IT Support Audit Log full-page view.
    *
    * @returns All AuditLog entries sorted by timeStamp descending
    */
@@ -890,7 +847,7 @@ class Registry {
    * Called automatically by every Registry method that performs
    * a significant system action. Components never call this directly.
    *
-   * Corresponds to: AuditLog class recording events (RQ39).
+   * Corresponds to: AuditLog class recording events.
    *
    * @param userID - The employeeID of the user who triggered the event
    * @param action - Human-readable description of the action taken
@@ -995,9 +952,7 @@ class Registry {
   /**
    * Creates a new user account in the system. Called by IT Support.
    * Generates a unique employeeID and sets default values.
-   * Logs the creation in the audit trail (RQ35, RQ39).
-   *
-   * Corresponds to: +createUserAccount() : User in the IT Support class.
+   * Logs the creation in the audit trail.
    *
    * @param data - Partial user data: firstName, lastName, username, role, regionID
    * @param creatorID - The employeeID of the IT Support staff creating the account
@@ -1013,18 +968,18 @@ class Registry {
     },
     creatorID: string
   ): AppUser | undefined {
-    /* Check username uniqueness */
+    // Check username uniqueness 
     const usernameExists = this.users.some((u) => u.username === data.username);
     if (usernameExists) return undefined;
 
-    /* Generate the next employeeID sequentially */
+    // Generate the next employeeID sequentially 
     const lastID = this.users
       .map((u) => parseInt(u.employeeID.replace("FDM", ""), 10))
       .filter((n) => !isNaN(n))
       .reduce((max, n) => Math.max(max, n), 0);
     const newID = `FDM${String(lastID + 1).padStart(3, "0")}`;
 
-    /* Build the new user — defaults appropriate for a fresh account */
+    // Build the new user — defaults appropriate for a fresh account 
     const newUser: AppUser = {
       employeeID:          newID,
       username:            data.username,
@@ -1049,7 +1004,7 @@ class Registry {
       bankAccountNumber:   "",
       bankSortCode:        "",
       bankName:            "",
-      /* Role-specific field — populated based on role */
+      // Role-specific field — populated based on role 
       ...(data.role === "CONSULTANT"
         ? { jobTitle: "Consultant" }
         : { department: data.role === "HUMAN_RESOURCES" ? "Human Resources" : "IT Operations" }),
@@ -1067,8 +1022,6 @@ class Registry {
   /**
    * Resets a user's password to a new value. Called by IT Support.
    * Logs the reset in the audit trail.
-   *
-   * Corresponds to: +resetUserPassword() in the IT Support class.
    *
    * @param userID      - The employeeID of the account to reset
    * @param newPassword - The new password to set
@@ -1102,8 +1055,6 @@ class Registry {
    * Assigns a role to a user account. Called by IT Support.
    * Logs the role assignment in the audit trail.
    *
-   * Corresponds to: +assignRole() in the IT Support class.
-   *
    * @param userID    - The employeeID of the user to update
    * @param newRole   - The new Role enum value to assign
    * @param assignerID - The employeeID of the IT Support staff making the change
@@ -1125,8 +1076,6 @@ class Registry {
    * Updates an employee's employment record (status, region, job title).
    * Called by HR from the Employee Directory.
    * Logs the update in the audit trail.
-   *
-   * Corresponds to: +updateEmploymentRecord() in HumanResources.
    *
    * @param userID  - The employeeID of the employee to update
    * @param updates - Fields to update: employmentStatus, regionID, jobTitle/department
@@ -1174,7 +1123,7 @@ class Registry {
 
     const consultants = this.users.filter((u) => u.role === "CONSULTANT");
 
-    /* Count consultants with an APPROVED leave request covering today */
+    // Count consultants with an APPROVED leave request covering today
     const onLeaveToday = this.leaveRequests.filter((lr) => {
       if (lr.status !== LeaveStatus.APPROVED) return false;
       const start = new Date(lr.startDate);
@@ -1227,10 +1176,10 @@ class Registry {
 }
 
 // ---------------------------------------------------------------------------
-// Export the getInstance method directly for convenient usage
+// Export the getInstance method directly for convenience
 // ---------------------------------------------------------------------------
 /**
- * Convenience export — components can do:
+ * Do this:
  *   import { getRegistry } from '../services/Registry';
  *   const registry = getRegistry();
  *

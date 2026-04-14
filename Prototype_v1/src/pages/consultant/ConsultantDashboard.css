@@ -1,8 +1,4 @@
-/**
- * ConsultantDashboard.css
- * -----------------------
- * Styles for the consultant dashboard page.
- */
+/* styles for the consultant dashboard page */
 
 .consultant-dash {
   display: flex;
@@ -10,7 +6,8 @@
   gap: var(--space-6);
 }
 
-/* ---- Welcome header ---- */
+/* welcome header */
+
 .consultant-dash__welcome {
   display: flex;
   align-items: flex-start;
@@ -22,13 +19,13 @@
 .consultant-dash__greeting {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   letter-spacing: -0.01em;
 }
 
 .consultant-dash__sub {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   margin-top: var(--space-1);
 }
 
@@ -39,7 +36,8 @@
   flex-shrink: 0;
 }
 
-/* ---- Grid rows ---- */
+/* grid rows */
+
 .consultant-dash__row {
   display: grid;
   gap: var(--space-6);
@@ -53,31 +51,26 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* ===========================================================================
-   DASH CARD — base card component
-   =========================================================================== */
+/* dash card - base card component */
 
 .dash-card {
-  background-color: var(--color-card);
+  background-color: var(--bg-card);
   border-radius: var(--radius-xl);
   padding: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   transition: box-shadow var(--transition-base);
   animation: fadeInUp var(--transition-base) ease both;
-}
-
-.dash-card--wide {
-  /* Full width card — used for Weekly Planner */
 }
 
 .dash-card--span2 {
   grid-column: span 2;
 }
 
-/* ---- Card header row ---- */
+/* card header row */
+
 .dash-card__header {
   display: flex;
   align-items: center;
@@ -87,7 +80,7 @@
 .dash-card__label {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   flex: 1;
@@ -95,10 +88,11 @@
 
 .dash-card__header-aside {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 
-/* Coloured icon circle */
+/* coloured icon circle */
+
 .dash-card__icon {
   width: 36px;
   height: 36px;
@@ -134,38 +128,40 @@
   color: var(--color-info);
 }
 
-/* ---- Card values ---- */
+/* card values */
+
 .dash-card__value {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   letter-spacing: -0.01em;
   line-height: 1.1;
 }
 
 .dash-card__value--muted {
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
 }
 
 .dash-card__sub {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   margin-top: calc(-1 * var(--space-1));
 }
 
 .dash-card__empty {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 
-/* ---- "View …" link at card bottom ---- */
+/* "view …" link button at the bottom of each card */
+
 .dash-card__link {
   margin-top: auto;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   background: none;
   border: none;
   cursor: pointer;
@@ -176,12 +172,10 @@
 }
 
 .dash-card__link:hover {
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
-/* ===========================================================================
-   WEEKLY PLANNER STRIP
-   =========================================================================== */
+/* weekly planner strip */
 
 .weekly-planner {
   display: grid;
@@ -196,15 +190,15 @@
   gap: var(--space-1);
   padding: var(--space-3) var(--space-2);
   border-radius: var(--radius-md);
-  background-color: var(--color-white);
-  border: 1.5px solid var(--color-border);
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border);
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast);
 }
 
 .weekly-planner__day--today {
-  border-color: var(--color-text-primary);
+  border-color: var(--text-primary);
 }
 
 .weekly-planner__day--leave {
@@ -218,15 +212,15 @@
 }
 
 .weekly-planner__day--off {
-  background-color: var(--color-card);
-  border-color: var(--color-border);
+  background-color: var(--bg-card);
+  border-color: var(--border);
   opacity: 0.6;
 }
 
 .weekly-planner__day-name {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -234,18 +228,18 @@
 .weekly-planner__day-num {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .weekly-planner__day--today .weekly-planner__day-num {
-  color: var(--color-navbar);
+  color: var(--accent);
 }
 
 .weekly-planner__day-status {
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -258,9 +252,7 @@
   color: var(--color-warning-text);
 }
 
-/* ===========================================================================
-   PAYSLIP LIST
-   =========================================================================== */
+/* payslip list */
 
 .payslip-list {
   display: flex;
@@ -274,9 +266,9 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--color-white);
+  background-color: var(--bg-input);
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   gap: var(--space-4);
 }
 
@@ -289,12 +281,12 @@
 .payslip-list__month {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 .payslip-list__tax-year {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 
 .payslip-list__amounts {
@@ -307,19 +299,17 @@
 .payslip-list__gross {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   font-family: var(--font-family-mono);
 }
 
 .payslip-list__net {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   font-family: var(--font-family-mono);
 }
 
-/* ===========================================================================
-   TRAINING PROGRESS
-   =========================================================================== */
+/* training progress */
 
 .training-summary {
   display: flex;
@@ -336,33 +326,33 @@
 .training-summary__done {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .training-summary__total {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 
 .training-summary__bar-track {
   width: 100%;
   height: 6px;
-  background-color: var(--color-border);
+  background-color: var(--border);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .training-summary__bar-fill {
   height: 100%;
-  background-color: var(--color-primary);
+  background-color: var(--accent);
   border-radius: var(--radius-full);
   transition: width var(--transition-slow) ease;
 }
 
 .training-summary__pct {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 
 .training-modules {
@@ -378,21 +368,19 @@
   justify-content: space-between;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  background-color: var(--color-white);
+  background-color: var(--bg-input);
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
 }
 
 .training-modules__name {
   font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   flex: 1;
   line-height: var(--line-height-base);
 }
 
-/* ===========================================================================
-   RESPONSIVE
-   =========================================================================== */
+/* responsive */
 
 @media (max-width: 1100px) {
   .consultant-dash__row--3col {

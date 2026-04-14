@@ -1,23 +1,15 @@
-/**
- * MyDetails.css
- * -------------
- * Styles for the My Details personal information page.
- * Four cards: Profile (full width), Address & Contact + Employment (side-by-side),
- * Bank Details (full width).
- */
+/* my details styles */
 
-/* ===========================================================================
-   PAGE CONTAINER
-   =========================================================================== */
-
+/* page container */
 .my-details-page {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
   max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-/* Two-column row used for Address+Employment cards */
 .my-details-row {
   display: grid;
   gap: var(--space-6);
@@ -27,10 +19,7 @@
   grid-template-columns: 1fr 1fr;
 }
 
-/* ===========================================================================
-   BASE CARD
-   =========================================================================== */
-
+/* base card */
 .my-details-card {
   background-color: var(--color-card);
   border-radius: var(--radius-xl);
@@ -40,7 +29,6 @@
   animation: fadeInUp var(--transition-base) ease both;
 }
 
-/* Card header row — title on left, edit icon on right */
 .my-details-card__header {
   display: flex;
   align-items: center;
@@ -60,14 +48,12 @@
   font-style: italic;
 }
 
-/* Field grid inside cards */
 .my-details-card__fields {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
 }
 
-/* Bank details note below the grid */
 .my-details-card__bank-note {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
@@ -77,8 +63,7 @@
   line-height: var(--line-height-relaxed);
 }
 
-/* Edit icon button — positioned absolute top-right of the profile card,
-   inline in the header for other cards */
+/* edit icon */
 .edit-icon-btn {
   position: absolute;
   top: var(--space-5);
@@ -99,7 +84,6 @@
     border-color var(--transition-fast);
 }
 
-/* In header rows the button is inline, so reset the absolute positioning */
 .my-details-card__header .edit-icon-btn {
   position: static;
 }
@@ -115,12 +99,8 @@
   color: var(--color-primary);
 }
 
-/* ===========================================================================
-   PROFILE CARD — hero section
-   =========================================================================== */
-
+/* profile card */
 .my-details-card--profile {
-  /* Extra bottom padding to give breathing room */
   padding-bottom: var(--space-6);
 }
 
@@ -133,7 +113,6 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-/* Large avatar circle with initials */
 .profile-card__avatar {
   width: 72px;
   height: 72px;
@@ -174,17 +153,13 @@
   flex-wrap: wrap;
 }
 
-/* Detail rows grid inside profile card */
 .my-details-card__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-1);
 }
 
-/* ===========================================================================
-   DETAIL ROW — label + value pair
-   =========================================================================== */
-
+/* detail row */
 .detail-row {
   display: flex;
   align-items: center;
@@ -227,7 +202,6 @@
   letter-spacing: 0.02em;
 }
 
-/* Lock icon shown beside non-editable fields */
 .detail-row__lock {
   width: 12px;
   height: 12px;
@@ -236,17 +210,13 @@
   flex-shrink: 0;
 }
 
-/* ===========================================================================
-   CANVAS CONTENTS
-   =========================================================================== */
-
+/* canvas contents */
 .my-details-canvas {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
-/* Success alert */
 .my-details-canvas__success {
   display: flex;
   align-items: center;
@@ -267,7 +237,6 @@
   flex-shrink: 0;
 }
 
-/* Error alert */
 .my-details-canvas__error {
   display: flex;
   align-items: flex-start;
@@ -287,7 +256,6 @@
   margin-top: 1px;
 }
 
-/* Non-editable fields section (shown for context, greyed out) */
 .my-details-canvas__locked-fields {
   background-color: var(--color-card);
   border-radius: var(--radius-lg);
@@ -326,7 +294,6 @@
   color: var(--color-text-secondary);
 }
 
-/* Bank details warning banner */
 .my-details-canvas__bank-warning {
   display: flex;
   gap: var(--space-3);
@@ -358,10 +325,7 @@
   line-height: var(--line-height-relaxed);
 }
 
-/* ===========================================================================
-   RESPONSIVE
-   =========================================================================== */
-
+/* responsive */
 @media (max-width: 800px) {
   .my-details-row--2col {
     grid-template-columns: 1fr;

@@ -1,42 +1,114 @@
-.learning-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px;
-    color: #333;
+/* learning & development styles */
+
+.learning-page {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
 }
 
-.learning-container h1 {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 20px;
+.learning-header h2 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
 }
 
-.learning-container h2 {
-    font-size: 22px;
-    font-weight: 600;
-    margin-top: 30px;
-    margin-bottom: 15px;
-    color: #444;
+.learning-header p {
+  color: var(--color-text-secondary);
 }
 
-
-.course-item {
-    background: #ffffff;
-    border: 1px solid #dcdcdc;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 16px;
+.learning-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.course-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
 }
 
-.course-item h3 {
-    font-size: 18px;
-    font-weight: 600;
+.learning-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--space-4);
 }
 
+.learning-card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
 
+.learning-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
 
+.learning-card--completed:hover {
+  border-color: var(--color-success);
+}
+
+.learning-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.learning-card-header h4 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.learning-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  flex: 1;
+}
+
+.learning-card-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  flex: 1;
+}
+
+.learning-card-action {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.learning-empty {
+  background-color: var(--color-background);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .learning-grid {
+    grid-template-columns: 1fr;
+  }
+}

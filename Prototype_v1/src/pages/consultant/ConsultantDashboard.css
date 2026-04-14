@@ -1,4 +1,4 @@
-/* styles for the consultant dashboard page */
+/* consultant dashboard styles */
 
 .consultant-dash {
   display: flex;
@@ -7,7 +7,6 @@
 }
 
 /* welcome header */
-
 .consultant-dash__welcome {
   display: flex;
   align-items: flex-start;
@@ -19,13 +18,13 @@
 .consultant-dash__greeting {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   letter-spacing: -0.01em;
 }
 
 .consultant-dash__sub {
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   margin-top: var(--space-1);
 }
 
@@ -37,7 +36,6 @@
 }
 
 /* grid rows */
-
 .consultant-dash__row {
   display: grid;
   gap: var(--space-6);
@@ -51,16 +49,16 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* dash card - base card component */
-
+/* dash card */
 .dash-card {
-  background-color: var(--bg-card);
+  background-color: var(--color-card);
   border-radius: var(--radius-xl);
   padding: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   transition: box-shadow var(--transition-base);
   animation: fadeInUp var(--transition-base) ease both;
 }
@@ -69,8 +67,7 @@
   grid-column: span 2;
 }
 
-/* card header row */
-
+/* card header */
 .dash-card__header {
   display: flex;
   align-items: center;
@@ -80,7 +77,7 @@
 .dash-card__label {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   flex: 1;
@@ -88,11 +85,10 @@
 
 .dash-card__header-aside {
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
-/* coloured icon circle */
-
+/* coloured icon */
 .dash-card__icon {
   width: 36px;
   height: 36px;
@@ -109,8 +105,8 @@
 }
 
 .dash-card__icon--primary {
-  background-color: rgba(197, 255, 0, 0.15);
-  color: #5a7a00;
+  background-color: var(--color-navbar);
+  color: var(--color-primary);
 }
 
 .dash-card__icon--success {
@@ -129,39 +125,37 @@
 }
 
 /* card values */
-
 .dash-card__value {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   letter-spacing: -0.01em;
   line-height: 1.1;
 }
 
 .dash-card__value--muted {
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
 }
 
 .dash-card__sub {
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   margin-top: calc(-1 * var(--space-1));
 }
 
 .dash-card__empty {
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
-/* "view …" link button at the bottom of each card */
-
+/* card link */
 .dash-card__link {
   margin-top: auto;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   background: none;
   border: none;
   cursor: pointer;
@@ -172,11 +166,10 @@
 }
 
 .dash-card__link:hover {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
-/* weekly planner strip */
-
+/* weekly planner */
 .weekly-planner {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -190,15 +183,13 @@
   gap: var(--space-1);
   padding: var(--space-3) var(--space-2);
   border-radius: var(--radius-md);
-  background-color: var(--bg-card);
-  border: 1.5px solid var(--border);
-  transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast);
+  background-color: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .weekly-planner__day--today {
-  border-color: var(--text-primary);
+  border-color: var(--color-text-primary);
 }
 
 .weekly-planner__day--leave {
@@ -212,15 +203,15 @@
 }
 
 .weekly-planner__day--off {
-  background-color: var(--bg-card);
-  border-color: var(--border);
+  background-color: var(--color-card);
+  border-color: var(--color-border);
   opacity: 0.6;
 }
 
 .weekly-planner__day-name {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -228,18 +219,18 @@
 .weekly-planner__day-num {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   line-height: 1;
 }
 
 .weekly-planner__day--today .weekly-planner__day-num {
-  color: var(--accent);
+  color: var(--color-primary);
 }
 
 .weekly-planner__day-status {
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -252,8 +243,7 @@
   color: var(--color-warning-text);
 }
 
-/* payslip list */
-
+/* payslips */
 .payslip-list {
   display: flex;
   flex-direction: column;
@@ -266,9 +256,9 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--bg-input);
+  background-color: var(--color-background);
   border-radius: var(--radius-md);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   gap: var(--space-4);
 }
 
@@ -281,12 +271,12 @@
 .payslip-list__month {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .payslip-list__tax-year {
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
 .payslip-list__amounts {
@@ -299,18 +289,17 @@
 .payslip-list__gross {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   font-family: var(--font-family-mono);
 }
 
 .payslip-list__net {
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   font-family: var(--font-family-mono);
 }
 
-/* training progress */
-
+/* training */
 .training-summary {
   display: flex;
   flex-direction: column;
@@ -326,33 +315,33 @@
 .training-summary__done {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   line-height: 1;
 }
 
 .training-summary__total {
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
 .training-summary__bar-track {
   width: 100%;
   height: 6px;
-  background-color: var(--border);
+  background-color: var(--color-border);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .training-summary__bar-fill {
   height: 100%;
-  background-color: var(--accent);
+  background-color: var(--color-primary);
   border-radius: var(--radius-full);
   transition: width var(--transition-slow) ease;
 }
 
 .training-summary__pct {
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
 .training-modules {
@@ -368,20 +357,19 @@
   justify-content: space-between;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  background-color: var(--bg-input);
+  background-color: var(--color-background);
   border-radius: var(--radius-md);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
 }
 
 .training-modules__name {
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   flex: 1;
   line-height: var(--line-height-base);
 }
 
 /* responsive */
-
 @media (max-width: 1100px) {
   .consultant-dash__row--3col {
     grid-template-columns: 1fr 1fr;

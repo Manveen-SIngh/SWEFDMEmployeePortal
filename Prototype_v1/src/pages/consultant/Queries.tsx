@@ -1,39 +1,62 @@
 import React, { useState } from "react";
+// @ts-ignore
 import "./Queries.css";
 
-function Queries() {
-    const [queryText, setQueryText] = useState("");
-    const [submitted, setSubmitted] = useState(false);
-   
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (queryText.length < 1 || queryText.length > 500) {
-            alert("Query must be between 1 and 500 characters.");
-            setSubmitted(false);
-            return;
-        }
-        setSubmitted(true);
-        setQueryText("");
-        setTimeout(() => {
-            setSubmitted(false);}, 3000);
-    };
-    return (
-        <div className="queries-container">
-            <h2>Submit a Query</h2>
-            <form onSubmit={handleSubmit} className="query-form">
-                <textarea
-                    value={queryText}
-                    onChange={(e) => setQueryText(e.target.value)}
-                    placeholder="Enter your query here..."
-                    className="query-textarea"
-                    maxLength={500}
-                />
-                <button type="submit" className="submit-button">Submit</button>
-            </form> 
-            {submitted && <p className="confirmation-message">Your query has been submitted successfully!</p>}
-        </div>
-    );
+export default function Queries() {
+  const [query, setQuery] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      setSubmitted(true);
+      setQuery("");
+      // reset success message
+      setTimeout(() => setSubmitted(false), 3000);
+    }
+  };
+
+  return (
+    <div className="queries-page">
+      <div className="queries-header">
+        <h2>Helpdesk & Queries</h2>
+        <p>Submit a request to HR or IT Support.</p>
+      </div>
+
+      <div className="queries-card">
+        {submitted && (
+          <div className="queries-success">
+            ✓ Your query has been submitted successfully. A ticket has been created.
+          </div>
+        )}
+        <form className="query-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="queryType" className="form-label">Category</label>
+            <select id="queryType" className="form-select">
+              <option>Payroll & Expenses</option>
+              <option>IT & Technical Support</option>
+              <option>HR & Benefits</option>
+              <option>Other</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="queryText" className="form-label">Description</label>
+            <textarea
+              id="queryText"
+              className="form-textarea"
+              rows={5}
+              placeholder="Please describe your issue in detail..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="btn btn--primary" disabled={!query.trim()}>
+            Submit Query
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
-
-export default Queries;
-

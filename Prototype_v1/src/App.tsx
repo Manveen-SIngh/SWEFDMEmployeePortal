@@ -8,10 +8,10 @@
  * React Router v6 is used with the createBrowserRouter API.
  * Routes are divided into three categories:
  *
- *   1. PUBLIC routes — accessible without login (login page)
- *   2. PROTECTED routes — require any valid login (redirect to /login if not authenticated)
- *   3. ROLE-SPECIFIC routes — require a specific Role enum value
- *      (redirect to the correct dashboard if the wrong role tries to access)
+ * 1. PUBLIC routes — accessible without login (login page)
+ * 2. PROTECTED routes — require any valid login (redirect to /login if not authenticated)
+ * 3. ROLE-SPECIFIC routes — require a specific Role enum value
+ * (redirect to the correct dashboard if the wrong role tries to access)
  *
  * The <ProtectedRoute> component handles authentication gating.
  * The <RoleRoute> component handles role-based gating.
@@ -20,12 +20,12 @@
  * AuthProvider must wrap NotificationProvider because NotificationProvider
  * consumes AuthContext (it needs currentUser to fetch notifications).
  *
- *   <AuthProvider>                  -> manages login state
- *     <NotificationProvider>        -> reads currentUser from AuthContext
- *       <RouterProvider>            -> renders pages
- *       </RouterProvider>
- *     </NotificationProvider>
- *   </AuthProvider>
+ * <AuthProvider>                  -> manages login state
+ * <NotificationProvider>        -> reads currentUser from AuthContext
+ * <RouterProvider>            -> renders pages
+ * </RouterProvider>
+ * </NotificationProvider>
+ * </AuthProvider>
  *
  * LAYOUT:
  * Authenticated pages are wrapped in <AppLayout> which renders the
@@ -63,6 +63,7 @@ import Queries from "./pages/consultant/Queries";
 import Payslip from "./pages/consultant/Payslip";
 import Performance from "./pages/consultant/Performance";
 import Learning from "./pages/consultant/Learning";
+import Documents from "./pages/shared/Documents";
 
 // ---------------------------------------------------------------------------
 // ProtectedRoute
@@ -134,24 +135,14 @@ function RoleDashboard() {
   }
 }
 
-
 // ---------------------------------------------------------------------------
 // Placeholder component for pages not yet implemented
 // ---------------------------------------------------------------------------
 function ComingSoon({ pageName }: { pageName: string }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "60vh",
-        gap: "1rem",
-        color: "var(--color-text-muted)",
-      }}
-    >
+    <div className="coming-soon-wrapper">
       <svg
+        className="coming-soon-icon"
         width="48"
         height="48"
         viewBox="0 0 24 24"
@@ -165,10 +156,10 @@ function ComingSoon({ pageName }: { pageName: string }) {
           d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"
         />
       </svg>
-      <h2 style={{ fontSize: "var(--font-size-xl)", color: "var(--color-text-secondary)" }}>
+      <h2 className="coming-soon-title">
         {pageName}
       </h2>
-      <p style={{ fontSize: "var(--font-size-sm)" }}>
+      <p className="coming-soon-subtitle">
         This page is being implemented. Check back soon.
       </p>
     </div>
@@ -182,17 +173,17 @@ function ComingSoon({ pageName }: { pageName: string }) {
  * Defines all application routes.
  *
  * Route structure:
- *   /login                           -> LoginPage (public)
- *   /                                -> redirect to /dashboard
- *   /dashboard                       -> role-specific dashboard
-
- *   /my-details                      -> MyDetails (shared)
- *   /absence                         -> AbsenceHolidays (shared)
-
- *   /hr/employees                    -> EmployeeDirectory (HR only)
- *   /hr/leave-management             -> LeaveManagement (HR only)
- *   /it/user-management              -> UserManagement (IT only)
- *   /it/audit-log                    -> AuditLog (IT only)
+ * /login                           -> LoginPage (public)
+ * /                                -> redirect to /dashboard
+ * /dashboard                       -> role-specific dashboard
+ *
+ * /my-details                      -> MyDetails (shared)
+ * /absence                         -> AbsenceHolidays (shared)
+ *
+ * /hr/employees                    -> EmployeeDirectory (HR only)
+ * /hr/leave-management             -> LeaveManagement (HR only)
+ * /it/user-management              -> UserManagement (IT only)
+ * /it/audit-log                    -> AuditLog (IT only)
  */
 const router = createBrowserRouter([
   /* Public routes */
@@ -234,7 +225,7 @@ const router = createBrowserRouter([
           /* Shared employee pages — accessible by all roles */
           {
             path: "/announcements",
-            element: <ComingSoon pageName="Announcements — For show" />,
+            element: <ComingSoon pageName="Announcements" />,
           },
           {
             path: "/my-details",
@@ -246,11 +237,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/schedule/planner",
-            element: <ComingSoon pageName="SchedulePlanner — For show" />,
+            element: <ComingSoon pageName="Schedule Planner" />,
           },
           {
             path: "/schedule/timesheets",
-            element: <ComingSoon pageName="Timesheets — For show" />,
+            element: <ComingSoon pageName="Timesheets" />,
           },
           {
             path: "/payments/payslips",
@@ -261,12 +252,8 @@ const router = createBrowserRouter([
             element: <Queries />,
           },
           {
-            path: "/learning",
-            element: <Learning />,
-          },
-          {
             path: "/documents",
-            element: <ComingSoon pageName="Documents — For show" />,
+            element: <Documents />,
           },
 
           /* HR-only routes */
@@ -305,7 +292,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "/learning",
-                element: <ComingSoon pageName="Learning & Development — For show" />,
+                element: <Learning />,
               },
               {
                 path: "/performance",

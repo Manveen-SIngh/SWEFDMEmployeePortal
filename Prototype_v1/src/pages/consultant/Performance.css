@@ -1,41 +1,68 @@
-.performance-container {
-    padding: 24px;
-    margin: 0 auto;
-    max-width: 800px;
+/* performance styles */
+.performance-page {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
-.performance-container h1 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 24px;
+.performance-header h2 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
 }
 
-.review {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 24px;
+.performance-header p {
+  color: var(--color-text-secondary);
 }
 
-.review p {
-    margin: 8px 0;
-    font-size: 16px;
-    color: #555;
+.performance-card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
 }
 
-.request-review-button {
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+.performance-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.request-review-button:hover {
-    background-color: #0056b3;
+.performance-card-header h3 {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
 }
 
+.performance-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.performance-feedback {
+  background-color: var(--color-background);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+}
+
+.performance-feedback h4 {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.performance-feedback p {
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+  font-style: italic;
+}

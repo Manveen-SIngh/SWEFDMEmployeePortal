@@ -1,44 +1,42 @@
 import React from "react";
+// @ts-ignore
 import "./Performance.css";
-import { useAuth } from "../../context/AuthContext";
-import { getRegistry } from "../../services/Registry";
 
 export default function Performance() {
-    const { currentUser } = useAuth();
-    const registry = getRegistry();
-    const reviews = currentUser ? registry.getPerformanceReviewsForUser(currentUser.employeeID) : [];
+  return (
+    <div className="performance-page">
+      <div className="performance-header">
+        <h2>Performance Reviews</h2>
+        <p>Track your feedback and request evaluations.</p>
+      </div>
 
-    if (!reviews || reviews.length === 0) {
-        return (
-            <div className="performance-container">
-                <h1>Performance Reviews</h1>
-                <p>No performance reviews available.</p>
-            </div>
-        );
-    }
-
-    const [submitted, setSubmitted] = React.useState(false);
-    const handleRequestReview = () => {
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 3000);
-        alert("Your request for a new performance review has been submitted.");
-    };
-
-    const review = reviews[0];
-    return (
-        <div className="performance-container">
-            <h1>Performance Review</h1>
-            <div className="review">
-                <p><strong>Review Date:</strong> {review.reviewPeriodStart.toDateString()}-{review.reviewPeriodEnd.toDateString()}</p>
-                <p><strong>Rating:</strong> {review.rating}/5</p>
-                <p><strong>Evaluation:</strong> {review.writtenEvaluation}</p>
-            </div>
-            <button className="request-review-button" onClick={handleRequestReview}>
-                Request New Review on: {new Date().toDateString()}
-            </button>
-            {submitted && <p className="confirmation-message">Review request submitted!</p>}
+      <div className="performance-card">
+        <div className="performance-card-header">
+          <h3>Latest Review</h3>
+          <span className="badge badge--success">Completed</span>
         </div>
-    );
+        <div className="performance-details">
+          <div className="detail-row">
+            <span className="detail-row__label">Reviewer</span>
+            <span className="detail-row__value">Sarah Jenkins (Line Manager)</span>
+          </div>
+          <div className="detail-row">
+            <span className="detail-row__label">Date</span>
+            <span className="detail-row__value">12 Feb 2026</span>
+          </div>
+          <div className="detail-row">
+            <span className="detail-row__label">Rating</span>
+            <span className="detail-row__value">★★★★☆ (Exceeds Expectations)</span>
+          </div>
+        </div>
+        <div className="performance-feedback">
+          <h4>Feedback Comments</h4>
+          <p>"Excellent work on the recent client deployment. Communication skills have significantly improved over the last quarter."</p>
+        </div>
+        <div className="performance-actions">
+          <button className="btn btn--primary">Request New Review</button>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-

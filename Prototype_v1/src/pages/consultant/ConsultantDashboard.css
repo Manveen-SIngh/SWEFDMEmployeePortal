@@ -1,14 +1,10 @@
-/* styles for the consultant dashboard page */
-
-.consultant-dash {
+.consultant-dash { /* main container for the dashboard page */
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-/* welcome header */
-
-.consultant-dash__welcome {
+.consultant-dash__welcome { /* top welcome section */
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -16,20 +12,20 @@
   gap: var(--space-3);
 }
 
-.consultant-dash__greeting {
+.consultant-dash__greeting { /* "welcome back, [name]" text */
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--text-primary); 
   letter-spacing: -0.01em;
 }
 
-.consultant-dash__sub {
+.consultant-dash__sub { 
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin-top: var(--space-1);
 }
 
-.consultant-dash__meta {
+.consultant-dash__meta { /* right side meta info eg 3 new notifications */
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -38,7 +34,7 @@
 
 /* grid rows */
 
-.consultant-dash__row {
+.consultant-dash__row { /* individual rows within the dashboard */
   display: grid;
   gap: var(--space-6);
 }
@@ -53,7 +49,7 @@
 
 /* dash card - base card component */
 
-.dash-card {
+.dash-card { /* card styles for all cards in the dashboard */
   background-color: var(--bg-card);
   border-radius: var(--radius-xl);
   padding: var(--space-5);
@@ -71,13 +67,13 @@
 
 /* card header row */
 
-.dash-card__header {
+.dash-card__header { /* head row of each card */
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
-.dash-card__label {
+.dash-card__label { /* label text in card header */
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--text-secondary);
@@ -86,7 +82,7 @@
   flex: 1;
 }
 
-.dash-card__header-aside {
+.dash-card__header-aside { 
   font-size: var(--font-size-xs);
   color: var(--text-secondary);
 }
@@ -130,7 +126,7 @@
 
 /* card values */
 
-.dash-card__value {
+.dash-card__value { /* main value text in the card */
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -144,7 +140,7 @@
   font-weight: var(--font-weight-medium);
 }
 
-.dash-card__sub {
+.dash-card__sub { 
   font-size: var(--font-size-xs);
   color: var(--text-secondary);
   margin-top: calc(-1 * var(--space-1));

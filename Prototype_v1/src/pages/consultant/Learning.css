@@ -1,17 +1,17 @@
-.learning-container {
+.learning-container { /* Container for the learning page content */
     max-width: 900px;
     margin: 0 auto;
     padding: 24px;
     color: #333;
 }
 
-.learning-container h1 {
+.learning-container h1 { /* Main heading for the learning page */
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 20px;
 }
 
-.learning-container h2 {
+.learning-container h2 { /* Subheading */
     font-size: 22px;
     font-weight: 600;
     margin-top: 30px;
@@ -20,7 +20,7 @@
 }
 
 
-.course-item {
+.course-item { /* Individual course item styling */
     background: #ffffff;
     border: 1px solid #dcdcdc;
     border-radius: 10px;
@@ -28,12 +28,12 @@
     margin-bottom: 16px;
 }
 
-.course-item:hover {
+.course-item:hover { /* Hover effect for course items */
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.course-item h3 {
+.course-item h3 { 
     font-size: 18px;
     font-weight: 600;
 }

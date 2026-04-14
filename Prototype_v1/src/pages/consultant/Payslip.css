@@ -1,28 +1,28 @@
-.payslip-container {
+.payslip-container { /* Container for the payslip page content */
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
   padding: var(--space-6);
 }
 
-.payslip-container h1 {
+.payslip-container h1 { /* Main heading for the payslip page */
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
 }
 
-.filter {
+.filter { /* Container for the filter */
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
-.filter label {
+.filter label { /* Label for the filter */
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
 
-.filter select {
+.filter select { /* Dropdown for selecting month */
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
@@ -31,7 +31,7 @@
   color: var(--color-text-primary);
 }
 
-.payslip-table {
+.payslip-table { /* Table for displaying payslip information */
   width: 100%;
   border-collapse: collapse;
   background-color: var(--color-card);
@@ -40,7 +40,7 @@
   overflow: hidden;
 }
 
-.payslip-table th {
+.payslip-table th { /* Table headers */
   background-color: var(--color-card);
   padding: var(--space-3);
   font-size: var(--font-size-xs);
@@ -50,14 +50,14 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.payslip-table td {
+.payslip-table td { /* Table rows */
   padding: var(--space-3);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   border-bottom: 1px solid var(--color-border);
 }
-
-.summary {
+ 
+.summary { /* Container for the payslip summary section */
   margin-top: var(--space-4);
   padding: var(--space-4);
   background-color: var(--color-card);
@@ -65,7 +65,7 @@
   border-radius: var(--radius-xl);
 }
 
-.summary p {
+.summary p { /* summary text */
   font-size: var(--font-size-sm);
 }
 

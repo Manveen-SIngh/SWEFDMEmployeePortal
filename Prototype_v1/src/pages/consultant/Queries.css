@@ -1,28 +1,28 @@
-.queries-container {
+.queries-container { /* Container for the queries page content */
   padding: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.queries-container h2 {
+.queries-container h2 { /* Heading for the queries page */
   margin-bottom: 20px;
 }
 
-.query-form {
+.query-form { /* Form styling for submitting a new query */
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin-bottom: 30px;
 }
 
-.query-textarea {
+.query-textarea { /* Textarea style for entering the query */
   width: 100%;
   height: 100px;
   padding: 10px;
   font-size: 16px;
 }
 
-.submit-button {
+.submit-button { /* Style for the submit button */
   align-self: flex-start;
   padding: 10px 20px;
   font-size: 16px;
@@ -33,7 +33,7 @@
   cursor: pointer;
 }
 
-.submit-button:hover {
+.submit-button:hover {  /* Hover effect for the submit button */
   background-color: #0056b3;
 }
 

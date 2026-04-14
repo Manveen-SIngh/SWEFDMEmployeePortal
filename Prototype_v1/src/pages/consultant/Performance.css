@@ -1,17 +1,17 @@
-.performance-container {
+.performance-container { /* Container for the performance review page content */
     padding: 24px;
     margin: 0 auto;
     max-width: 800px;
 }
 
-.performance-container h1 {
+.performance-container h1 { /* Main heading for the performance review page */
     font-size: 32px;
     font-weight: bold;
     color: #333;
     margin-bottom: 24px;
 }
 
-.review {
+.review { /* Container for individual performance review */ 
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -19,13 +19,13 @@
     margin-bottom: 24px;
 }
 
-.review p {
+.review p { /* Paragraph styling for review comments */
     margin: 8px 0;
     font-size: 16px;
     color: #555;
 }
 
-.request-review-button {
+.request-review-button { /* Styling for the request review button */
     padding: 12px 24px;
     background-color: #007bff;
     color: white;
@@ -35,7 +35,7 @@
     cursor: pointer;
 }
 
-.request-review-button:hover {
+.request-review-button:hover { /* Hover effect for the request review button */
     background-color: #0056b3;
 }
 

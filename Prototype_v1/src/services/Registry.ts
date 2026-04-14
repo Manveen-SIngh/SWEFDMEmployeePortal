@@ -462,10 +462,6 @@ class Registry {
     return this.schedules.find((s) => s.userID === userID);
   }
 
-<<<<<<< HEAD
-  // training
-  
-=======
 
   // =========================================================================
   // TRAINING RECORD METHODS

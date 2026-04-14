@@ -4,9 +4,10 @@
  * Styles for the IT Support User Management page.
  */
 
+/* overall page layout */
 .user-mgmt { display: flex; flex-direction: column; gap: var(--space-5); }
 
-/* Top bar */
+/* top bar with search and create button */
 .user-mgmt__topbar {
   display: flex;
   align-items: center;
@@ -15,6 +16,7 @@
   flex-wrap: wrap;
 }
 
+/* wrapper around the search input */
 .user-mgmt__search-wrap {
   position: relative;
   min-width: 240px;
@@ -22,6 +24,7 @@
   flex: 1;
 }
 
+/* icon sitting inside the search box */
 .user-mgmt__search-icon {
   position: absolute;
   left: var(--space-3);
@@ -33,6 +36,7 @@
   pointer-events: none;
 }
 
+/* the search input */
 .user-mgmt__search {
   width: 100%;
   padding: var(--space-2) var(--space-3) var(--space-2) 2.25rem;
@@ -45,15 +49,17 @@
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+/* search box when focused */
 .user-mgmt__search:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(197, 255, 0, 0.15);
 }
 
+/* small text showing how many results are showing */
 .user-mgmt__count { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: calc(-1 * var(--space-2)); }
 
-/* Table */
+/* container around the table */
 .user-mgmt__table-wrap {
   background-color: var(--color-white);
   border-radius: var(--radius-xl);
@@ -62,17 +68,20 @@
   animation: fadeInUp var(--transition-base) ease both;
 }
 
+/* the table itself */
 .user-mgmt__table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--font-size-sm);
 }
 
+/* header row */
 .user-mgmt__table thead tr {
   background-color: var(--color-card);
   border-bottom: 1px solid var(--color-border);
 }
 
+/* column headers */
 .user-mgmt__table th {
   padding: var(--space-3) var(--space-4);
   text-align: left;
@@ -84,29 +93,36 @@
   white-space: nowrap;
 }
 
+/* a single user row */
 .user-mgmt__row {
   border-bottom: 1px solid var(--color-border);
   transition: background-color var(--transition-fast);
   animation: fadeInUp var(--transition-base) ease both;
 }
 
+/* last row has no border */
 .user-mgmt__row:last-child { border-bottom: none; }
+/* subtle hover highlight */
 .user-mgmt__row:hover { background-color: var(--color-card); }
+/* red tint for locked accounts */
 .user-mgmt__row--locked { background-color: rgba(220, 38, 38, 0.03); }
 .user-mgmt__row--locked:hover { background-color: rgba(220, 38, 38, 0.06); }
 
+/* general table cell */
 .user-mgmt__table td {
   padding: var(--space-3) var(--space-4);
   color: var(--color-text-secondary);
   vertical-align: middle;
 }
 
+/* avatar and name side by side */
 .user-mgmt__name-cell {
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
+/* initials avatar circle */
 .user-mgmt__avatar {
   width: 30px;
   height: 30px;
@@ -121,17 +137,20 @@
   flex-shrink: 0;
 }
 
+/* red avatar when account is locked */
 .user-mgmt__avatar--locked {
   background-color: var(--color-danger);
   color: var(--color-white);
 }
 
+/* employee full name */
 .user-mgmt__full-name {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   font-size: var(--font-size-sm);
 }
 
+/* employee ID and username badges */
 .user-mgmt__emp-id, .user-mgmt__username {
   font-family: var(--font-family-mono);
   font-size: 10px;
@@ -142,7 +161,7 @@
   border: 1px solid var(--color-border);
 }
 
-/* Inline role select */
+/* inline role dropdown */
 .user-mgmt__role-select {
   padding: var(--space-1) var(--space-2);
   border: 1.5px solid var(--color-border);
@@ -159,25 +178,28 @@
   border-color: var(--color-primary);
 }
 
+/* action buttons grouped together */
 .user-mgmt__actions {
   display: flex;
   gap: var(--space-2);
   flex-wrap: nowrap;
 }
 
+/* shown when no accounts match the search */
 .user-mgmt__empty-cell {
   text-align: center;
   padding: var(--space-10) !important;
   color: var(--color-text-muted);
 }
 
-/* Reset canvas */
+/* reset password side panel */
 .user-mgmt-reset-canvas {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
+/* info block showing who is being reset */
 .user-mgmt-reset-canvas__info {
   background-color: var(--color-card);
   border-radius: var(--radius-lg);
@@ -199,6 +221,7 @@
   border: 1px solid var(--color-border);
 }
 
+/* warning shown when the account is locked */
 .user-mgmt-reset-canvas__lock-note {
   background-color: var(--color-warning-light);
   color: var(--color-warning-text);
@@ -208,6 +231,7 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* error message in the panel */
 .user-mgmt-reset-canvas__error {
   background-color: var(--color-danger-light);
   color: var(--color-danger-text);
@@ -216,6 +240,7 @@
   font-size: var(--font-size-sm);
 }
 
+/* success state shown after an action completes */
 .user-mgmt-reset-canvas__success, .user-mgmt-create-success {
   display: flex;
   flex-direction: column;
@@ -251,4 +276,5 @@
   border: 1px solid var(--color-border);
 }
 
+/* create account side panel */
 .user-mgmt-create-canvas { display: flex; flex-direction: column; gap: var(--space-4); }

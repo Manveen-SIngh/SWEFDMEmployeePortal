@@ -169,11 +169,11 @@ export interface Acknowledgement {
  * Corresponds to: LeaveRequest class in the class diagram.
  *
  * Attributes:
- *   leaveRequestID  -> Unique identifier, auto-generated on submission (RQ15)
+ *   leaveRequestID  -> Unique identifier, auto-generated on submission 
  *   startDate       -> First day of requested leave (inclusive)
  *   endDate         -> Last day of requested leave (inclusive)
  *   status          -> Current approval state (see LeaveStatus enum)
- *   rejectionReason -> HR must provide this when rejecting a request (RQ19)
+ *   rejectionReason -> HR must provide this when rejecting a request 
  *                     Null/undefined when status is not REJECTED
  *   submissionDate  -> Date and time the request was submitted
  *   type            -> The category of leave being requested (see LeaveType enum)
@@ -252,9 +252,9 @@ export interface TrainingRecord {
  * Attributes:
  *   reviewID          -> Unique identifier for this review
  *   rating            -> Numeric score (e.g. 1-5) assigned by the reviewer
- *   writtenEvaluation -> Free-text narrative evaluation of performance (RQ29)
- *   reviewPeriodStart -> First day of the period being reviewed (RQ30)
- *   reviewPeriodEnd   -> Last day of the period being reviewed (RQ30)
+ *   writtenEvaluation -> Free-text narrative evaluation of performance 
+ *   reviewPeriodStart -> First day of the period being reviewed 
+ *   reviewPeriodEnd   -> Last day of the period being reviewed 
  *   userID            -> The employeeID of the consultant being reviewed
  *   reviewerID        -> The employeeID of the HR staff who wrote the review
  */

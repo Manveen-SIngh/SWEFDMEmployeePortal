@@ -54,23 +54,20 @@ function formatDate(date: Date): string {
 export default function EmployeeDirectory() {
   const { currentUser } = useAuth();
 
-  // -------------------------------------------------------------------------
+  
   // Filter state
-  // -------------------------------------------------------------------------
   const [searchTerm,    setSearchTerm]    = useState("");
   const [filterRole,    setFilterRole]    = useState("");
   const [filterRegion,  setFilterRegion]  = useState("");
   const [filterStatus,  setFilterStatus]  = useState("");
 
-  // -------------------------------------------------------------------------
+  
   // Re-render trigger
-  // -------------------------------------------------------------------------
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
-  // -------------------------------------------------------------------------
+  
   // View/Edit profile canvas
-  // -------------------------------------------------------------------------
   const [viewTarget,      setViewTarget]      = useState<AppUser | null>(null);
   const [editStatus,      setEditStatus]      = useState<string>("");
   const [editRegion,      setEditRegion]       = useState<string>("");
@@ -91,7 +88,7 @@ export default function EmployeeDirectory() {
   const employees = useMemo(() => {
     /* Parse search term into firstName/lastName/employeeID */
     const term = searchTerm.trim();
-    /* Also allow employee ID search (RQ28) */
+    /* Also allow employee ID search */
     const allUsers = registry.getAllUsers();
 
     let result = registry.findUsers({
@@ -135,7 +132,7 @@ export default function EmployeeDirectory() {
   }, []);
 
   // -------------------------------------------------------------------------
-  // Save employment record changes (RQ25)
+  // Save employment record changes
   // -------------------------------------------------------------------------
   const handleSaveEmploymentRecord = useCallback(async () => {
     if (!viewTarget) return;
@@ -178,7 +175,7 @@ export default function EmployeeDirectory() {
 
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual Rendering
   // -------------------------------------------------------------------------
   return (
     <div className="emp-dir">
@@ -186,7 +183,7 @@ export default function EmployeeDirectory() {
       {/* ---- Top bar ---- */}
       <div className="emp-dir__topbar">
         <div className="emp-dir__filters">
-          {/* Name / ID search (RQ28) */}
+          {/* Name / ID search */}
           <div className="emp-dir__search-wrap">
             <svg className="emp-dir__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -399,7 +396,7 @@ export default function EmployeeDirectory() {
               </div>
             </div>
 
-            {/* Editable employment record section (RQ25) */}
+            {/* Editable employment record section */}
             <div className="emp-dir-canvas__section emp-dir-canvas__section--edit">
               <h4 className="emp-dir-canvas__section-title">
                 Employment Record

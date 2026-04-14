@@ -3,17 +3,14 @@
  * ---------------
  */
 
-/* ===========================================================================
-   PAGE CONTAINER
-   =========================================================================== */
-
+/* overall page layout */
 .it-dash {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-/* ---- Welcome header ---- */
+/* welcome header at the top */
 .it-dash__welcome {
   display: flex;
   align-items: flex-start;
@@ -22,6 +19,7 @@
   gap: var(--space-3);
 }
 
+/* greeting text */
 .it-dash__greeting {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
@@ -29,12 +27,14 @@
   letter-spacing: -0.01em;
 }
 
+/* subtitle below the greeting */
 .it-dash__sub {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin-top: var(--space-1);
 }
 
+/* badges shown on the right of the header */
 .it-dash__meta {
   display: flex;
   align-items: center;
@@ -42,17 +42,14 @@
   flex-shrink: 0;
 }
 
-/* ===========================================================================
-   STAT CARDS ROW — 3 equal columns
-   =========================================================================== */
-
+/* three stat cards side by side */
 .it-dash__stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-6);
 }
 
-/* Individual IT stat card */
+/* a single stat card */
 .it-stat-card {
   background-color: var(--color-card);
   border-radius: var(--radius-xl);
@@ -65,17 +62,18 @@
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+/* staggered fade-in for each card */
 .it-stat-card:nth-child(1) { animation-delay: 0ms; }
 .it-stat-card:nth-child(2) { animation-delay: 60ms; }
 .it-stat-card:nth-child(3) { animation-delay: 120ms; }
 
-/* Alert variant — red border when locked accounts exist */
+/* red tint when there are locked accounts */
 .it-stat-card--alert {
   border-color: rgba(220, 38, 38, 0.3);
   background-color: rgba(220, 38, 38, 0.02);
 }
 
-/* Coloured icon bubble — same themes as HRDashboard */
+/* coloured icon bubble at the top of a card */
 .it-stat-card__icon {
   width: 40px;
   height: 40px;
@@ -92,6 +90,7 @@
   height: 20px;
 }
 
+/* colour variants for the icon bubble */
 .it-stat-card__icon--primary {
   background-color: rgba(197, 255, 0, 0.15);
   color: #5a7a00;
@@ -117,6 +116,7 @@
   color: var(--color-info);
 }
 
+/* the big number */
 .it-stat-card__value {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
@@ -126,21 +126,20 @@
   animation: countUp var(--transition-slow) ease both;
 }
 
+/* short label under the number */
 .it-stat-card__label {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
 }
 
+/* even smaller helper text */
 .it-stat-card__sublabel {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
 }
 
-/* ===========================================================================
-   SPLIT ROW — Locked Accounts (50%) + Role Breakdown (50%)
-   =========================================================================== */
-
+/* two equal columns for the locked accounts and breakdown cards */
 .it-dash__split-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -148,10 +147,7 @@
   align-items: start;
 }
 
-/* ===========================================================================
-   EMPTY STATE
-   =========================================================================== */
-
+/* shown when there are no locked accounts */
 .it-dash__empty-state {
   display: flex;
   flex-direction: column;
@@ -174,16 +170,14 @@
   color: var(--color-text-muted);
 }
 
-/* ===========================================================================
-   LOCKED ACCOUNTS LIST
-   =========================================================================== */
-
+/* list of locked account rows */
 .it-locked-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
+/* a single locked account row */
 .it-locked-list__item {
   display: flex;
   align-items: center;
@@ -202,6 +196,7 @@
   border-color: rgba(220, 38, 38, 0.3);
 }
 
+/* left side holding avatar and details */
 .it-locked-list__info {
   display: flex;
   align-items: center;
@@ -210,7 +205,7 @@
   min-width: 0;
 }
 
-/* Avatar circle with initials — dark red tint for locked accounts */
+/* initials avatar — red for locked accounts */
 .it-locked-list__avatar {
   width: 34px;
   height: 34px;
@@ -233,6 +228,7 @@
   min-width: 0;
 }
 
+/* employee name */
 .it-locked-list__name {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -242,6 +238,7 @@
   text-overflow: ellipsis;
 }
 
+/* small badges row under the name */
 .it-locked-list__meta {
   display: flex;
   align-items: center;
@@ -249,6 +246,7 @@
   flex-wrap: wrap;
 }
 
+/* employee ID badge */
 .it-locked-list__id {
   font-family: var(--font-family-mono);
   font-size: 10px;
@@ -259,40 +257,42 @@
   border: 1px solid var(--color-border);
 }
 
-/* ===========================================================================
-   ROLE BREAKDOWN BAR CHART
-   =========================================================================== */
-
+/* role breakdown chart rows */
 .it-breakdown {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
+/* a single role row */
 .it-breakdown__row {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
 }
 
+/* role name and count on the same line */
 .it-breakdown__label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+/* role name */
 .it-breakdown__role {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
 }
 
+/* number of users in that role */
 .it-breakdown__count {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
 }
 
+/* grey background track behind the bar */
 .it-breakdown__bar-track {
   width: 100%;
   height: 8px;
@@ -301,13 +301,14 @@
   overflow: hidden;
 }
 
+/* the coloured fill that grows to match the percentage */
 .it-breakdown__bar-fill {
   height: 100%;
   border-radius: var(--radius-full);
   transition: width var(--transition-slow) ease;
 }
 
-/* Bar colours match the role themes */
+/* bar colours per role */
 .it-breakdown__bar-fill--primary {
   background-color: var(--color-primary);
 }
@@ -320,13 +321,14 @@
   background-color: var(--color-warning);
 }
 
+/* percentage label to the right of the bar */
 .it-breakdown__pct {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   text-align: right;
 }
 
-/* Summary row: X active, Y locked */
+/* active vs locked summary at the bottom of the breakdown */
 .it-breakdown__summary {
   display: flex;
   gap: var(--space-4);
@@ -343,6 +345,7 @@
   color: var(--color-text-secondary);
 }
 
+/* small coloured dot next to each summary item */
 .it-breakdown__summary-dot {
   width: 8px;
   height: 8px;
@@ -350,15 +353,12 @@
   flex-shrink: 0;
 }
 
-/* ===========================================================================
-   AUDIT LOG TABLE
-   =========================================================================== */
-
+/* audit log card at the bottom of the page */
 .it-dash__audit-card {
-  /* Inherits dash-card base styles */
+  /* inherits dash-card base styles */
 }
 
-/* Scrollable wrapper — prevents the table from overflowing on narrow screens */
+/* scrollable wrapper around the audit table */
 .it-audit-table-wrap {
   overflow-x: auto;
   border-radius: var(--radius-lg);
@@ -371,7 +371,7 @@
   font-size: var(--font-size-sm);
 }
 
-/* Table header */
+/* header row */
 .it-audit-table thead tr {
   background-color: var(--color-card);
   border-bottom: 1px solid var(--color-border);
@@ -388,7 +388,7 @@
   white-space: nowrap;
 }
 
-/* Table body rows */
+/* body rows */
 .it-audit-table tbody tr {
   border-bottom: 1px solid var(--color-border);
   transition: background-color var(--transition-fast);
@@ -403,7 +403,7 @@
   background-color: var(--color-card);
 }
 
-/* Row variant: failed login / lock events */
+/* row colour variants for notable events */
 .it-audit-table__row--warning {
   background-color: rgba(217, 119, 6, 0.04);
 }
@@ -426,7 +426,7 @@
   vertical-align: middle;
 }
 
-/* Timestamp column — monospace for alignment */
+/* timestamp in monospace so digits line up */
 .it-audit-table__timestamp {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
@@ -434,14 +434,14 @@
   white-space: nowrap;
 }
 
-/* Employee name */
+/* employee name */
 .it-audit-table__user {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   white-space: nowrap;
 }
 
-/* Employee ID — monospace code style */
+/* employee ID badge */
 .it-audit-table__id {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
@@ -452,7 +452,7 @@
   border: 1px solid var(--color-border);
 }
 
-/* Action column — truncated with full text on hover via title attribute */
+/* action text — truncated, full text shown on hover */
 .it-audit-table__action {
   max-width: 400px;
   overflow: hidden;
@@ -460,7 +460,7 @@
   white-space: nowrap;
 }
 
-/* Empty state row */
+/* shown when there are no log entries */
 .it-audit-table__empty {
   text-align: center;
   color: var(--color-text-muted);
@@ -468,10 +468,7 @@
   font-size: var(--font-size-sm);
 }
 
-/* ===========================================================================
-   RESPONSIVE
-   =========================================================================== */
-
+/* responsive adjustments */
 @media (max-width: 1100px) {
   .it-dash__stats-row {
     grid-template-columns: repeat(3, 1fr);

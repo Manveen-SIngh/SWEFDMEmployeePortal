@@ -50,22 +50,19 @@ export default function LeaveManagement() {
   const { currentUser } = useAuth();
   const { refreshNotifications } = useNotifications();
 
-  // -------------------------------------------------------------------------
+  
   // Tab state
-  // -------------------------------------------------------------------------
   const [activeTab, setActiveTab] = useState<"pending" | "all">("pending");
 
-  // -------------------------------------------------------------------------
+  
   // Reject canvas state
-  // -------------------------------------------------------------------------
   const [rejectTarget,   setRejectTarget]   = useState<LeaveRequest | null>(null);
   const [rejectReason,   setRejectReason]   = useState("");
   const [rejectError,    setRejectError]    = useState("");
   const [isRejecting,    setIsRejecting]    = useState(false);
 
-  // -------------------------------------------------------------------------
+  
   // Re-render trigger
-  // -------------------------------------------------------------------------
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
@@ -112,9 +109,8 @@ export default function LeaveManagement() {
     [currentUser.employeeID, registry, triggerRefresh, refreshNotifications]
   );
 
-  // -------------------------------------------------------------------------
+  
   // Open rejection canvas
-  // -------------------------------------------------------------------------
   const handleOpenReject = useCallback((lr: LeaveRequest) => {
     setRejectTarget(lr);
     setRejectReason("");
@@ -126,7 +122,7 @@ export default function LeaveManagement() {
   // -------------------------------------------------------------------------
   const handleConfirmReject = useCallback(async () => {
     if (!rejectReason.trim()) {
-      setRejectError("A rejection reason is required (RQ19).");
+      setRejectError("A rejection reason is required.");
       return;
     }
     if (!rejectTarget) return;
@@ -155,7 +151,7 @@ export default function LeaveManagement() {
   ]);
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual Rendering
   // -------------------------------------------------------------------------
   return (
     <div className="leave-mgmt">
@@ -351,14 +347,14 @@ export default function LeaveManagement() {
                 </dl>
               </div>
 
-              {/* Rejection reason — mandatory (RQ19) */}
+              {/* Rejection reason — mandatory */}
               <div className="form-group">
                 <label htmlFor="reject-reason-lm" className="form-label form-label--required">
                   Rejection Reason
                 </label>
                 <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-muted)", marginBottom: "var(--space-2)", lineHeight: "var(--line-height-relaxed)" }}>
                   This reason will be displayed to the employee in their leave history.
-                  A reason is mandatory before the rejection can be confirmed (RQ19).
+                  A reason is mandatory before the rejection can be confirmed.
                 </p>
                 <textarea
                   id="reject-reason-lm"

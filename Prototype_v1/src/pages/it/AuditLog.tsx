@@ -1,6 +1,5 @@
-/**
+/*
  * AuditLog.tsx
- * ------------
  * View the system audit log, showing all login activity.
  */
 
@@ -10,9 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { getRegistry } from "../../services/Registry";
 import "./AuditLog.css";
 
-// ---------------------------------------------------------------------------
-// Helper: format a Date to "29 Mar 2026, 08:45:02"
-// ---------------------------------------------------------------------------
+/* formats a date into a readable string */
 function formatDateTime(date: Date): string {
   return new Date(date).toLocaleString("en-GB", {
     day: "numeric",
@@ -24,6 +21,7 @@ function formatDateTime(date: Date): string {
   });
 }
 
+/* how many entries to show per page */
 const PAGE_SIZE = 25;
 
 // ---------------------------------------------------------------------------
@@ -32,6 +30,7 @@ const PAGE_SIZE = 25;
 export default function AuditLog() {
   const { currentUser } = useAuth();
 
+  /* state for the various filter controls */
   const [searchTerm,   setSearchTerm]   = useState("");
   const [filterUserID, setFilterUserID] = useState("");
   const [quickFilter,  setQuickFilter]  = useState<"all" | "logins" | "failures">("all");
@@ -42,18 +41,14 @@ export default function AuditLog() {
   const registry = getRegistry();
   const allUsers = registry.getAllUsers();
 
-  // -------------------------------------------------------------------------
-  // Build user ID → name map for the table
-  // -------------------------------------------------------------------------
+  /* build a lookup map so we can show names instead of IDs */
   const userNameMap = useMemo(() => {
     const map: Record<string, string> = {};
     allUsers.forEach((u) => { map[u.employeeID] = `${u.firstName} ${u.lastName}`; });
     return map;
   }, [allUsers]);
 
-  // -------------------------------------------------------------------------
-  // Fetch and filter the full audit log
-  // -------------------------------------------------------------------------
+  /* apply filters and search to the full log list */
   const filteredLogs = useMemo(() => {
     let logs = registry.getAuditLogs(); // Newest first
 
@@ -68,12 +63,12 @@ export default function AuditLog() {
       );
     }
 
-    /* User filter */
+    /* filter down to a specific person if selected */
     if (filterUserID) {
       logs = logs.filter((l) => l.userID === filterUserID);
     }
 
-    /* Search term — against action text */
+    /* match against the typed search term */
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
       logs = logs.filter(
@@ -87,26 +82,24 @@ export default function AuditLog() {
     return logs;
   }, [searchTerm, filterUserID, quickFilter, userNameMap]);
 
-  /* Pagination */
+  /* work out which page we are on */
   const totalPages = Math.max(1, Math.ceil(filteredLogs.length / PAGE_SIZE));
   const safePage   = Math.min(currentPage, totalPages);
   const pageLogs   = filteredLogs.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  /* Reset to page 1 when filters change */
+  /* reset to the first page whenever filters change */
   const applyFilter = (fn: () => void) => {
     setCurrentPage(1);
     fn();
   };
 
-  // -------------------------------------------------------------------------
-  // Render
-  // -------------------------------------------------------------------------
+
   return (
     <div className="audit-log">
 
       {/* ---- Filter bar ---- */}
       <div className="audit-log__filters">
-        {/* Search */}
+        {/* Search box */}
         <div className="audit-log__search-wrap">
           <svg className="audit-log__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -120,7 +113,7 @@ export default function AuditLog() {
           />
         </div>
 
-        {/* User filter */}
+        {/* Dropdown to filter by a specific person */}
         <select
           className="audit-log__select"
           value={filterUserID}
@@ -135,7 +128,7 @@ export default function AuditLog() {
           ))}
         </select>
 
-        {/* Quick filter toggle */}
+        {/* Quick filter buttons */}
         <div className="audit-log__quick-filters" role="group" aria-label="Quick filters">
           {(["all", "logins", "failures"] as const).map((f) => (
             <button
@@ -149,18 +142,15 @@ export default function AuditLog() {
         </div>
       </div>
 
-      {/* ---- Result count ---- */}
+      {/* ---- How many results are showing ---- */}
       <div className="audit-log__meta">
         <p className="audit-log__count">
           {filteredLogs.length.toLocaleString()} event{filteredLogs.length !== 1 ? "s" : ""}
           {searchTerm && ` matching "${searchTerm}"`}
         </p>
-        <p className="audit-log__rq-note">
-          System audit trail — RQ39 / RQ40
-        </p>
       </div>
 
-      {/* ---- Audit table ---- */}
+      {/* ---- The main log table ---- */}
       <div className="audit-log__table-wrap">
         <table className="audit-log__table" aria-label="System audit log">
           <thead>
@@ -173,6 +163,7 @@ export default function AuditLog() {
           </thead>
           <tbody>
             {pageLogs.length === 0 ? (
+              /* shown when nothing matches the current filters */
               <tr>
                 <td colSpan={4} className="audit-log__empty-cell">
                   No audit entries match your search criteria.
@@ -181,6 +172,7 @@ export default function AuditLog() {
             ) : (
               pageLogs.map((log, i) => {
                 const name = userNameMap[log.userID] ?? log.userID;
+                /* work out what kind of event this row represents */
                 const isFailure = log.action.toLowerCase().includes("failed");
                 const isLock    = log.action.toLowerCase().includes("locked") && !log.action.includes("unlocked");
                 const isUnlock  = log.action.toLowerCase().includes("unlocked");
@@ -196,24 +188,24 @@ export default function AuditLog() {
                     ].filter(Boolean).join(" ")}
                     style={{ animationDelay: `${i * 15}ms` }}
                   >
-                    {/* Timestamp */}
+                    {/* When it happened */}
                     <td className="audit-log__timestamp">
                       <time dateTime={new Date(log.timeStamp).toISOString()}>
                         {formatDateTime(log.timeStamp)}
                       </time>
                     </td>
 
-                    {/* Employee name */}
+                    {/* Who it was */}
                     <td className="audit-log__emp">{name}</td>
 
-                    {/* Employee ID */}
+                    {/* Their ID */}
                     <td>
                       <code className="audit-log__id">{log.userID}</code>
                     </td>
 
-                    {/* Action */}
+                    {/* What happened */}
                     <td className="audit-log__action" title={log.action}>
-                      {/* Severity icon for notable events */}
+                      {/* coloured dot for notable events */}
                       {(isLock || isFailure || isUnlock) && (
                         <span className={`audit-log__event-dot audit-log__event-dot--${isLock ? "danger" : isUnlock ? "success" : "warning"}`}
                           aria-hidden="true" />
@@ -228,7 +220,7 @@ export default function AuditLog() {
         </table>
       </div>
 
-      {/* ---- Pagination ---- */}
+      {/* ---- Page navigation ---- */}
       {totalPages > 1 && (
         <div className="audit-log__pagination">
           <button
@@ -239,10 +231,10 @@ export default function AuditLog() {
             ← Previous
           </button>
 
-          {/* Page number buttons — show up to 7 */}
+          {/* show up to 7 page number buttons */}
           <div className="audit-log__page-numbers">
             {Array.from({ length: Math.min(7, totalPages) }, (_, i) => {
-              /* Centre the window around the current page */
+              /* keep the window centred around the current page */
               const half   = 3;
               let start    = Math.max(1, safePage - half);
               const end    = Math.min(totalPages, start + 6);

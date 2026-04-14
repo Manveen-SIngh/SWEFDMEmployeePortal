@@ -26,7 +26,7 @@ function getGreeting(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Helper: format a Date to "3 Apr 2026" style
+// Helper: format a Date to something like"3 Apr 2026" 
 // ---------------------------------------------------------------------------
 function formatDate(date: Date): string {
   return new Date(date).toLocaleDateString("en-GB", {
@@ -233,10 +233,10 @@ export default function HRDashboard() {
    *   4. Logs the rejection in the audit trail with a note that reason was recorded
    */
   const handleConfirmRejection = useCallback(async () => {
-    /* Enforce mandatory rejection reason — RQ19 */
+    // Enforce mandatory rejection reason 
     if (!rejectionReason.trim()) {
       setRejectionError(
-        "A rejection reason is required (RQ19). Please explain why this request cannot be approved."
+        "A rejection reason is required. Please explain why this request cannot be approved."
       );
       return;
     }
@@ -294,7 +294,7 @@ export default function HRDashboard() {
   );
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual rendering
   // -------------------------------------------------------------------------
   return (
     <div className="hr-dash">
@@ -449,7 +449,7 @@ export default function HRDashboard() {
                       >
                         ✓
                       </button>
-                      {/* Reject — opens canvas for mandatory reason (RQ19) */}
+                      {/* Reject — opens canvas for mandatory reason */}
                       <button
                         className="btn btn--danger btn--sm"
                         onClick={() => handleOpenRejectCanvas(lr)}
@@ -661,7 +661,7 @@ export default function HRDashboard() {
               </dl>
             </div>
 
-            {/* Rejection reason field — mandatory per RQ19 */}
+            {/* Rejection reason field — mandatory per */}
             <div className="form-group">
               <label
                 htmlFor="rejection-reason"
@@ -672,7 +672,7 @@ export default function HRDashboard() {
               <p className="reject-canvas__reason-hint">
                 This reason will be visible to the employee in their leave
                 history. Please be clear and professional. A reason is required
-                before the rejection can be confirmed (RQ19).
+                before the rejection can be confirmed.
               </p>
               <textarea
                 id="rejection-reason"

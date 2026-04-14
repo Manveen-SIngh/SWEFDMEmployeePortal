@@ -3,14 +3,14 @@
  * -------------
   * The main application layout component.
  *
- * USAGE IN ROUTING:
+ * Used in routing:
  * AppLayout is the parent route element for all protected routes.
  * Child pages are rendered via <Outlet /> from React Router.
  * Each page component exports its content — AppLayout provides the frame.
  *
  * ANNOUNCEMENT FLOW:
- * The AnnouncementFlow modal sequence uses this layout as its background —
- * the modal renders on top of the layout rather than replacing it.
+ * The AnnouncementFlow sequence uses this layout as its background —
+ * the announcement renders on top of the layout rather than replacing it.
  */
 
 import React from "react";

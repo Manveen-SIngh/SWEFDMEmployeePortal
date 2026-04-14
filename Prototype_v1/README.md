@@ -1,7 +1,7 @@
 # FDM Employee Portal
 ## ECS506U Software Engineering Group Project — Group 30
 
-A fully functional React + TypeScript prototype of the FDM Group Employee Portal.
+A functional React + TypeScript prototype of the FDM Group Employee Portal.
 
 ---
 
@@ -44,57 +44,6 @@ All accounts use password: `Password1!`
 - **Vite** build tool
 - **No backend** — all data lives in the Registry singleton (in-memory)
 - **No external UI libraries** — all components built from scratch
-- **DM Sans + DM Mono** fonts (Google Fonts)
-- External CSS stylesheets per component (no Tailwind or CSS-in-JS)
-
----
-
-## Architecture Overview
-
-```
-src/
-├── models/
-│   ├── enums.ts          <- All <<enumeration>> types from the class diagram
-│   └── interfaces.ts     <- All entity interfaces from the class diagram
-├── data/
-│   └── mockData.ts       <- Seed data for all 9 users, all portal content
-├── services/
-│   └── Registry.ts       <- Singleton — single source of truth (class diagram)
-├── context/
-│   ├── AuthContext.tsx   <- Global login state + useAuth() hook
-│   └── NotificationContext.tsx <- Observer pattern — notification bell
-├── styles/
-│   └── global.css        <- CSS variables, shared utilities, animations
-├── components/
-│   ├── common/
-│   │   ├── MonthCalendar.tsx  <- Shared calendar (Absence + Planner)
-│   │   └── RightCanvas.tsx   <- Shared slide-in form panel
-│   └── layout/
-│       ├── AppLayout.tsx <- Authenticated page shell
-│       ├── Navbar.tsx    <- Dark left sidebar, role-aware nav items
-│       └── Header.tsx    <- Top bar with notification bell
-└── pages/
-    ├── LoginPage.tsx
-    ├── consultant/
-    │   └── ConsultantDashboard.tsx
-    ├── hr/
-    │   ├── HRDashboard.tsx
-    │   ├── EmployeeDirectory.tsx
-    │   └── LeaveManagement.tsx
-    ├── it/
-    │   ├── ITDashboard.tsx
-    │   ├── UserManagement.tsx
-    │   └── AuditLog.tsx
-    └── shared/
-        ├── AnnouncementFlow.tsx  <- Post-login modal sequence
-        ├── Announcements.tsx  <- Skipped for prototype
-        ├── MyDetails.tsx
-        ├── AbsenceHolidays.tsx
-        ├── SchedulePlanner.tsx  <- Skipped for prototype
-        ├── Timesheets.tsx  <- Skipped for prototype
-        ├── Payslips.tsx  <- Skipped for prototype
-        └── Queries.tsx  <- Skipped for prototype
-```
 
 ---
 
@@ -127,13 +76,10 @@ src/
 | RQ17 — View leave status | `AbsenceHolidays.tsx` history list + calendar |
 | RQ18 — HR approve/reject leave | `HRDashboard.tsx`, `LeaveManagement.tsx` |
 | RQ19 — Rejection reason mandatory | `Registry.rejectLeaveRequest()` + canvas validation |
-| RQ22 — HR create consultant profiles | `EmployeeDirectory.tsx` create button |
 | RQ25 — HR update employment records | `EmployeeDirectory.tsx` edit canvas |
 | RQ27 — HR assign region | Region dropdown in employment record canvas |
 | RQ28 — HR search by ID or name | `EmployeeDirectory.tsx` search input |
-| RQ35 — IT create accounts | `UserManagement.tsx` create button |
 | RQ36 — IT assign roles | Inline role select in `UserManagement.tsx` |
-| RQ37 — IT reset passwords | `UserManagement.tsx` reset canvas |
 | RQ38 — IT deactivate accounts | Lock button in `UserManagement.tsx` |
 | RQ39 — Log all login activity | `Registry.addAuditLog()` called on every significant action |
 | RQ40 — IT view audit logs | `AuditLog.tsx` |

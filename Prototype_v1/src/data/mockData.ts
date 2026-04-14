@@ -82,7 +82,7 @@ export const regions: Region[] = [
  * Pre-seeded with pending and approved leave requests, queries, and payslips.
  */
 export const consultantAisha: ConsultantUser = {
-  /* Identity & Access */
+  // Identity & Access 
   employeeID: "FDM001",
   username: "aisha.patel",
   passwordHash: "Password1!", // Plain string for demo — no real hashing in prototype
@@ -90,16 +90,16 @@ export const consultantAisha: ConsultantUser = {
   isLocked: false,
   role: Role.CONSULTANT,
 
-  /* Employment */
+  // Employment 
   employmentStatus: EmploymentStatus.ACTIVE,
   jobTitle: "Software Engineer",
   startDate: new Date("2023-09-04"),
   regionID: "R001", // London
 
-  /* Leave */
+  // Leave 
   leaveBalance: 18,
 
-  /* Personal Details */
+  // Personal Details
   firstName: "Aisha",
   lastName: "Patel",
   gender: "Female",
@@ -110,7 +110,7 @@ export const consultantAisha: ConsultantUser = {
   mobile: "07700 900123",
   address: "14 Canary Wharf Lane, Flat 3, London, E14 5AB",
 
-  /* Bank Details */
+  // Bank Details 
   bankAccountName: "Aisha Patel",
   bankAccountNumber: "12345678",
   bankSortCode: "20-15-40",
@@ -1046,7 +1046,6 @@ export const performanceReviews: PerformanceReview[] = [
  * System audit trail for the last 30 days of activity.
  * Displayed in full on the IT Support Audit Log page.
  * Summarised (most recent 8 entries) on the IT Support dashboard.
- * Satisfies RQ39 — records all user login activity.
  */
 export const auditLogs: AuditLog[] = [
   { logID: "AL001", userID: "FDM001", action: "User logged in successfully", timeStamp: new Date("2026-03-29T08:45:00") },

@@ -1,9 +1,9 @@
 /**
  * Navbar.tsx
  * ----------
- * The persistent left-side navigation bar shown on all authenticated pages. *
+ * The persistent left-side navigation bar shown on all authenticated pages. 
  *
- * EXPANDABLE SECTIONS:
+ * Exampandable sections:
  *   Schedule and Payments are parent items with children. Clicking the parent
  *   toggles a local expanded state that shows/hides the sub-items.
  *   If the current URL is under a parent's subtree, the parent auto-expands.
@@ -26,13 +26,13 @@ import "./Navbar.css";
  * Items with children are expandable parent sections (Schedule, Payments).
  */
 interface NavItem {
-  /** Human-readable label shown next to the icon */
+  // Human-readable label shown next to the icon
   label: string;
-  /** URL path this item navigates to (undefined for parent-only items) */
+  // URL path this item navigates to (undefined for parent only items)
   path?: string;
-  /** SVG icon path data (viewBox 0 0 24 24, stroke-based) */
+  // SVG icon path data (viewBox 0 0 24 24, stroke-based)
   icon: React.ReactNode;
-  /** Child items — present on Schedule and Payments only */
+  // Child items — present on Schedule and Payments only
   children?: NavChild[];
 }
 
@@ -154,7 +154,7 @@ const coreNavItems: NavItem[] = [
 // Role-specific extra nav items
 // ---------------------------------------------------------------------------
 
-/** Additional items shown only to CONSULTANT role */
+// Additional items shown only to CONSULTANT role 
 const consultantNavItems: NavItem[] = [
   {
     label: "Learning & Dev",
@@ -176,7 +176,7 @@ const consultantNavItems: NavItem[] = [
   },
 ];
 
-/** Additional items shown only to HUMAN_RESOURCES role */
+// Additional items shown only to HUMAN_RESOURCES role 
 const hrNavItems: NavItem[] = [
   {
     label: "Employee Directory",
@@ -198,7 +198,7 @@ const hrNavItems: NavItem[] = [
   },
 ];
 
-/** Additional items shown only to IT_SUPPORT role */
+// Additional items shown only to IT_SUPPORT role 
 const itNavItems: NavItem[] = [
   {
     label: "User Management",
@@ -229,13 +229,13 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* Which expandable sections are currently open */
+  // Which expandable sections are currently open 
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
     Schedule: false,
     Payments: false,
   });
 
-  /* Whether the profile/logout dropdown is open */
+  // Whether the profile/logout dropdown is open 
   const [profileOpen, setProfileOpen] = useState(false);
 
   // -------------------------------------------------------------------------
@@ -244,7 +244,6 @@ export default function Navbar() {
   /**
    * When the current URL is under a parent's subtree (e.g. /schedule/planner),
    * automatically expand that parent section so the active child is visible.
-   * Runs on mount and whenever the URL changes.
    */
   useEffect(() => {
     const path = location.pathname;
@@ -265,7 +264,7 @@ export default function Navbar() {
   const getNavItems = (): NavItem[] => {
     if (!currentUser) return coreNavItems;
 
-    /* Splice role-specific items before "Documents" (last core item) */
+    // Splice role-specific items before "Documents" the last core item
     const roleItems =
       currentUser.role === Role.CONSULTANT
         ? consultantNavItems
@@ -273,7 +272,7 @@ export default function Navbar() {
         ? hrNavItems
         : itNavItems;
 
-    /* Insert before the last core item (Documents) */
+    // Insert before the last core item (Documents) 
     const withRoleItems = [
       ...coreNavItems.slice(0, -1), // All core items except Documents
       ...roleItems,
@@ -324,7 +323,7 @@ export default function Navbar() {
       : "IT Support";
 
   // -------------------------------------------------------------------------
-  // Render
+  // Actual rendering
   // -------------------------------------------------------------------------
   return (
     <nav className="navbar" aria-label="Main navigation">
@@ -339,7 +338,7 @@ export default function Navbar() {
         {navItems.map((item) => {
           const hasChildren = item.children && item.children.length > 0;
           const isExpanded = hasChildren && expanded[item.label];
-          /* A parent is "active" if any child is active */
+          // A parent is "active" if any child is active 
           const parentActive =
             hasChildren &&
             item.children!.some((child) => isActive(child.path));
@@ -357,7 +356,7 @@ export default function Navbar() {
                 }`}
                 onClick={() => {
                   if (hasChildren) {
-                    /* Toggle the expanded state for this parent section */
+                    // Toggle the expanded state for this parent section 
                     setExpanded((prev) => ({
                       ...prev,
                       [item.label]: !prev[item.label],
@@ -398,7 +397,7 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Child items — only rendered when expanded */}
+              {/* Child items only rendered when expanded */}
               {hasChildren && isExpanded && (
                 <ul className="navbar__children" role="list">
                   {item.children!.map((child) => (

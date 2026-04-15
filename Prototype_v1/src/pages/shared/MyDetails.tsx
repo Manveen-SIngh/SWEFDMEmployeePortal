@@ -161,6 +161,7 @@ export default function MyDetails() {
   const [saveSuccess,   setSaveSuccess]   = useState(false);
   // Error message if the save fails 
   const [saveError,     setSaveError]     = useState("");
+  const [nameError, setNameError] = useState("");
 
   if (!currentUser) return null;
 
@@ -184,6 +185,7 @@ export default function MyDetails() {
     setEditDOB(toInputDate(currentUser.dateOfBirth));
     setSaveError("");
     setSaveSuccess(false);
+    setNameError("");
     setPersonalCanvasOpen(true);
   }, [currentUser]);
 
@@ -501,10 +503,24 @@ export default function MyDetails() {
               type="text"
               className="form-input"
               value={editFirstName}
-              onChange={(e) => setEditFirstName(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (/[^A-Za-z]/.test(value)) {
+                  setNameError("Only letters are allowed");
+                } else {
+                  setNameError("");
+                }
+
+                setEditFirstName(value.replace(/[^A-Za-z]/g, ""));
+              }}
+              
               disabled={saving}
               autoComplete="given-name"
             />
+            {nameError && (
+              <p className="field-error">{nameError}</p>
+            )}
           </div>
 
           <div className="form-group">
@@ -516,10 +532,24 @@ export default function MyDetails() {
               type="text"
               className="form-input"
               value={editLastName}
-              onChange={(e) => setEditLastName(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+              
+                if (/[^A-Za-z]/.test(value)) {
+                  setNameError("Only letters are allowed");
+                } else {
+                  setNameError("");
+                }
+              
+                setEditLastName(value.replace(/[^A-Za-z]/g, ""));
+              }}
+              
               disabled={saving}
               autoComplete="family-name"
             />
+            {nameError && (
+              <p className="field-error">{nameError}</p>
+            )}
           </div>
 
           <div className="form-group">

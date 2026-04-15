@@ -11,6 +11,9 @@ A functional React + TypeScript prototype of the FDM Group Employee Portal.
 # Install dependencies
 npm install
 
+# Go into Prototype_v1 folder
+cd Prototype_v1
+
 # Start the development server
 npm run dev
 ```

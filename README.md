@@ -8,11 +8,11 @@ A functional React + TypeScript prototype of the FDM Group Employee Portal.
 ## Quick Start
 
 ```bash
-# Install dependencies
-npm install
-
 # Go into Prototype_v1 folder
 cd Prototype_v1
+
+# Install dependencies
+npm install
 
 # Start the development server
 npm run dev

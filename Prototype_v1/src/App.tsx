@@ -64,6 +64,8 @@ import Payslip from "./pages/consultant/Payslip";
 import Performance from "./pages/consultant/Performance";
 import Learning from "./pages/consultant/Learning";
 import Documents from "./pages/shared/Documents";
+import SchedulePlanner from "./pages/shared/SchedulePlanner";
+import Timesheets from "./pages/shared/Timesheets";
 
 // ---------------------------------------------------------------------------
 // ProtectedRoute
@@ -237,11 +239,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/schedule/planner",
-            element: <ComingSoon pageName="Schedule Planner" />,
+            element: <SchedulePlanner />,
           },
           {
             path: "/schedule/timesheets",
-            element: <ComingSoon pageName="Timesheets" />,
+            element: <Timesheets />,
           },
           {
             path: "/payments/payslips",

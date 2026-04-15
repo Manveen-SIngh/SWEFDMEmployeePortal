@@ -1,0 +1,211 @@
+/* styles for the consultant timesheets page */
+
+/* page header */
+.timesheets-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.timesheets-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.timesheets-page__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.timesheets-page__sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* summary bar - strictly vertical */
+.timesheets-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+}
+
+.timesheets-summary__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.timesheets-summary__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+}
+
+.timesheets-summary__value {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* timesheet list */
+.timesheets-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.timesheets-list__empty {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-secondary);
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+}
+
+/* individual timesheet row card - strictly vertical */
+.timesheet-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  text-align: left;
+}
+
+.timesheet-card__left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.timesheet-card__id {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.timesheet-card__week {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.timesheet-card__right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.timesheet-card__hours {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.timesheet-card__cta {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+/* canvas contents */
+.timesheet-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.timesheet-canvas__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timesheet-canvas__section-label,
+.timesheet-canvas__hours-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.timesheet-canvas__section-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.timesheet-canvas__hours-block {
+  align-items: center;
+  background-color: var(--color-info-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  border-bottom: none;
+}
+
+.timesheet-canvas__hours-num {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+/* daily breakdown rows - strictly vertical */
+.timesheet-canvas__days {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.timesheet-canvas__day-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.timesheet-canvas__day-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.timesheet-canvas__day-bar-wrap {
+  width: 6px;
+  height: 60px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.timesheet-canvas__day-bar {
+  width: 100%;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+.timesheet-canvas__day-hours {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+}
